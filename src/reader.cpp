@@ -16,83 +16,69 @@
 
 #include "reader.hpp"
 
-#include <sstream>
+#include <filesystem>
 #include <fstream>
-#include <json/reader.h>
+#include <sstream>
 #include <utility>
 
+#include <json/reader.h>
 #include <logmich/log.hpp>
 #include <sexp/parser.hpp>
 
 #include "json_reader_impl.hpp"
-#include "reader_impl.hpp"
-#include "sexpr_reader_impl.hpp"
 #include "reader_collection.hpp"
+#include "reader_impl.hpp"
 #include "reader_mapping.hpp"
+#include "reader_object.hpp"
+#include "sexpr_reader_impl.hpp"
 
 namespace prio {
 
-ReaderObject
-Reader::parse_string(std::string const& text)
+ReaderDocument
+ReaderDocument::from_string(std::string_view text)
 {
-  std::istringstream in(text);
-  return Reader::parse(in);
+  std::istringstream in{std::string(text)};
+  return ReaderDocument::from_stream(in);
 }
 
-ReaderObject
-Reader::parse(std::istream& stream)
+ReaderDocument
+ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> const& filename)
 {
   int c = stream.get();
   stream.unget();
   if (c == '{')
-  {
+  { // json
     Json::CharReaderBuilder builder;
     std::string errs;
     Json::Value root;
-    if (Json::parseFromStream(builder, stream, &root, &errs))
-    {
-      return ReaderObject(std::make_shared<JsonReaderObjectImpl>(root));
-    }
-    else
-    {
-      log_error("json parse error: {}", errs);
-      return ReaderObject();
+    if (Json::parseFromStream(builder, stream, &root, &errs)) {
+      return ReaderDocument(ReaderObject(std::make_shared<JsonReaderObjectImpl>(root)), filename);
+    } else {
+      throw std::runtime_error(fmt::format("json parse error: {}", errs));
     }
   }
   else
-  {
-    try
-    {
-      auto sx = sexp::Parser::from_stream(stream);
-      return ReaderObject(std::make_shared<SExprReaderObjectImpl>(std::move(sx)));
-    }
-    catch(std::exception const& err)
-    {
-      log_error("sexp parse error: {}", err.what());
-      return ReaderObject();
-    }
+  { // sexp
+    auto sx = sexp::Parser::from_stream(stream);
+    return ReaderDocument(ReaderObject(std::make_shared<SExprReaderObjectImpl>(std::move(sx))), filename);
   }
 }
 
-ReaderObject
-Reader::parse(const std::string& filename)
+ReaderDocument
+ReaderDocument::from_file(const std::string& filename)
 {
   std::ifstream fin(filename);
-  if (!fin)
-  {
-    return ReaderObject();
-  }
-  else
-  {
-    return parse(fin);
+  if (!fin) {
+    throw std::runtime_error(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
+  } else {
+    return from_stream(fin, filename);
   }
 }
 
+#if 0
 std::vector<ReaderObject>
 Reader::parse_many(const std::string& pathname)
 {
-  return {};
-#if 0
   std::shared_ptr<lisp::Lisp> sexpr = lisp::Parser::parse(pathname.get_sys_path());
   if (sexpr)
   {
@@ -108,7 +94,45 @@ Reader::parse_many(const std::string& pathname)
   {
     return std::vector<Reader>();
   }
+}
 #endif
+
+ReaderDocument:: ReaderDocument() :
+  m_root(),
+  m_filename()
+{
+}
+
+ReaderDocument::ReaderDocument(ReaderObject root, std::optional<std::string> const& filename) :
+  m_root(root),
+  m_filename(filename)
+{
+}
+
+ReaderObject
+ReaderDocument::get_root() const
+{
+  return m_root;
+}
+
+std::string
+ReaderDocument::get_filename() const
+{
+  if (!m_filename) {
+    return "<unknown>";
+  } else {
+    return *m_filename;
+  }
+}
+
+std::string
+ReaderDocument::get_directory() const
+{
+  if (!m_filename) {
+    return std::filesystem::path("/");
+  } else {
+    return std::filesystem::path(*m_filename).parent_path();
+  }
 }
 
 } // namespace prio

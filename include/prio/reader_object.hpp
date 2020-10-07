@@ -17,7 +17,7 @@
 #ifndef HEADER_PRIO_READER_OBJECT_HPP
 #define HEADER_PRIO_READER_OBJECT_HPP
 
-#include "reader.hpp"
+#include <memory>
 
 namespace prio {
 

@@ -35,18 +35,18 @@ public:
   void SetUp() override
   {
     std::ifstream stream(GetParam());
-    doc = Reader::parse(stream);
-    body = doc.get_mapping();
+    doc = ReaderDocument::from_stream(stream);
+    body = doc.get_root().get_mapping();
   }
 
 public:
-  ReaderObject doc;
+  ReaderDocument doc;
   ReaderMapping body;
 };
 
 TEST_P(ReaderTest, parse)
 {
-  EXPECT_EQ("test-document", doc.get_name());
+  EXPECT_EQ("test-document", doc.get_root().get_name());
 }
 
 TEST_P(ReaderTest, read_bool)

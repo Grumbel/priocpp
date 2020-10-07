@@ -14,12 +14,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PRIO_READER_HPP
-#define HEADER_PRIO_READER_HPP
+#ifndef HEADER_PRIO_READER_DOCUMENT_HPP
+#define HEADER_PRIO_READER_DOCUMENT_HPP
 
 #include <memory>
-#include <vector>
+#include <optional>
 #include <string>
+#include <string_view>
+#include <vector>
 
 #include "reader_object.hpp"
 
@@ -33,19 +35,35 @@ class ReaderObjectImpl;
 class ReaderMappingImpl;
 class ReaderCollectionImpl;
 
-class Reader final // NOLINT
+class ReaderDocument final
 {
 public:
-  static ReaderObject parse(std::istream& stream);
-  static ReaderObject parse(const std::string& filename);
-  static ReaderObject parse_string(std::string const& text);
+  static ReaderDocument from_stream(std::istream& stream, std::optional<std::string> const& filename = {});
+  static ReaderDocument from_file(const std::string& filename);
+  static ReaderDocument from_string(std::string_view text);
 
+#if 0
   /** Reads multiple trees from a file, for use with files that don't
       contain a root element */
   static std::vector<ReaderObject> parse_many(const std::string& pathname);
+#endif
+
+public:
+  ReaderDocument();
+  ReaderDocument(ReaderObject root, std::optional<std::string> const& filename = {});
+
+  /** Returns the root object */
+  ReaderObject get_root() const;
+
+  /** Returns the filename of the document */
+  std::string get_filename() const;
+
+  /** Returns the directory of the document */
+  std::string get_directory() const;
 
 private:
-  Reader() = delete;
+  ReaderObject m_root;
+  std::optional<std::string> m_filename;
 };
 
 } // namespace prio
