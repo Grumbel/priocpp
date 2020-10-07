@@ -52,28 +52,28 @@ TEST_P(ReaderTest, parse)
 TEST_P(ReaderTest, read_bool)
 {
   bool boolvalue;
-  ASSERT_TRUE(body.read_bool("boolvalue", boolvalue));
+  ASSERT_TRUE(body.read("boolvalue", boolvalue));
   EXPECT_EQ(true, boolvalue);
 }
 
 TEST_P(ReaderTest, read_int)
 {
   int intvalue;
-  ASSERT_TRUE(body.read_int("intvalue", intvalue));
+  ASSERT_TRUE(body.read("intvalue", intvalue));
   EXPECT_EQ(5, intvalue);
 }
 
 TEST_P(ReaderTest, read_float)
 {
   float floatvalue;
-  ASSERT_TRUE(body.read_float("floatvalue", floatvalue));
+  ASSERT_TRUE(body.read("floatvalue", floatvalue));
   EXPECT_EQ(5.5f, floatvalue);
 }
 
 TEST_P(ReaderTest, read_string)
 {
   std::string stringvalue;
-  ASSERT_TRUE(body.read_string("stringvalue", stringvalue));
+  ASSERT_TRUE(body.read("stringvalue", stringvalue));
   EXPECT_EQ("Hello World", stringvalue);
 }
 
@@ -85,7 +85,7 @@ struct CustomType {
 
 bool read_custom(ReaderMapping const& mapping, char const* key, CustomType& value)
 {
-  return mapping.read_int(key, value.value);
+  return mapping.read(key, value.value);
 }
 
 } // namespace
@@ -100,15 +100,15 @@ TEST_P(ReaderTest, read_custom)
 TEST_P(ReaderTest, read_mapping)
 {
   ReaderMapping submap;
-  ASSERT_TRUE(body.read_mapping("submap", submap));
+  ASSERT_TRUE(body.read("submap", submap));
   {
     int intvalue;
-    ASSERT_TRUE(submap.read_int("int", intvalue));
+    ASSERT_TRUE(submap.read("int", intvalue));
     EXPECT_EQ(7, intvalue);
   }
   {
     float floatvalue;
-    ASSERT_TRUE(submap.read_float("float", floatvalue));
+    ASSERT_TRUE(submap.read("float", floatvalue));
     EXPECT_EQ(9.9f, floatvalue);
   }
 }
@@ -116,7 +116,7 @@ TEST_P(ReaderTest, read_mapping)
 TEST_P(ReaderTest, read_collection)
 {
   ReaderCollection collection;
-  ASSERT_TRUE(body.read_collection("collection", collection));
+  ASSERT_TRUE(body.read("collection", collection));
   EXPECT_EQ(3, collection.get_objects().size());
   auto objs = collection.get_objects();
   std::vector<std::string> result;
@@ -130,13 +130,13 @@ TEST_P(ReaderTest, read_collection)
 TEST_P(ReaderTest, read_object)
 {
   ReaderObject object;
-  ASSERT_TRUE(body.read_object("object", object));
+  ASSERT_TRUE(body.read("object", object));
   EXPECT_EQ("realthing", object.get_name());
   ReaderMapping object_mapping = object.get_mapping();
   int prop1 = 0;
   int prop2 = 0;
-  ASSERT_TRUE(object_mapping.read_int("prop1", prop1));
-  ASSERT_TRUE(object_mapping.read_int("prop2", prop2));
+  ASSERT_TRUE(object_mapping.read("prop1", prop1));
+  ASSERT_TRUE(object_mapping.read("prop2", prop2));
   EXPECT_EQ(5, prop1);
   EXPECT_EQ(7, prop2);
 }

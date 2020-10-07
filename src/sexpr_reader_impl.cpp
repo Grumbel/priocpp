@@ -119,7 +119,7 @@ SExprReaderMappingImpl::get_keys() const
 }
 
 bool
-SExprReaderMappingImpl::read_int(const char* key, int& value) const
+SExprReaderMappingImpl::read(const char* key, int& value) const
 {
   sexp::Value const* item = get_subsection_item(key);
   if (item && item->is_integer())
@@ -134,7 +134,7 @@ SExprReaderMappingImpl::read_int(const char* key, int& value) const
 }
 
 bool
-SExprReaderMappingImpl::read_float(const char* key, float& value) const
+SExprReaderMappingImpl::read(const char* key, float& value) const
 {
   sexp::Value const* item = get_subsection_item(key);
   if (item)
@@ -161,7 +161,7 @@ SExprReaderMappingImpl::read_float(const char* key, float& value) const
 }
 
 bool
-SExprReaderMappingImpl::read_bool(const char* key, bool& value) const
+SExprReaderMappingImpl::read(const char* key, bool& value) const
 {
   sexp::Value const* item = get_subsection_item(key);
   if (item && item->is_boolean())
@@ -181,7 +181,7 @@ SExprReaderMappingImpl::read_bool(const char* key, bool& value) const
 }
 
 bool
-SExprReaderMappingImpl::read_string(const char* key, std::string& value) const
+SExprReaderMappingImpl::read(const char* key, std::string& value) const
 {
   sexp::Value const* sub = get_subsection(key);
   if (sub)
@@ -207,7 +207,7 @@ SExprReaderMappingImpl::read_string(const char* key, std::string& value) const
 }
 
 bool
-SExprReaderMappingImpl::read_object(const char* key, ReaderObject& value) const
+SExprReaderMappingImpl::read(const char* key, ReaderObject& value) const
 {
   sexp::Value const* cur = get_subsection_item(key);
   if (cur)
@@ -222,7 +222,7 @@ SExprReaderMappingImpl::read_object(const char* key, ReaderObject& value) const
 }
 
 bool
-SExprReaderMappingImpl::read_collection(const char* key, ReaderCollection& value) const
+SExprReaderMappingImpl::read(const char* key, ReaderCollection& value) const
 {
   sexp::Value const* cur = get_subsection(key);
   if (cur)
@@ -237,7 +237,7 @@ SExprReaderMappingImpl::read_collection(const char* key, ReaderCollection& value
 }
 
 bool
-SExprReaderMappingImpl::read_mapping(const char* key, ReaderMapping& value) const
+SExprReaderMappingImpl::read(const char* key, ReaderMapping& value) const
 {
   sexp::Value const* cur = get_subsection(key);
   if (cur)

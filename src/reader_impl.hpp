@@ -51,14 +51,14 @@ public:
 
   virtual std::vector<std::string> get_keys() const = 0;
 
-  virtual bool read_bool(const char* key, bool&) const = 0;
-  virtual bool read_int(const char* key, int&) const = 0;
-  virtual bool read_float(const char* key, float&) const = 0;
-  virtual bool read_string(const char* key, std::string&) const = 0;
+  virtual bool read(const char* key, bool&) const = 0;
+  virtual bool read(const char* key, int&) const = 0;
+  virtual bool read(const char* key, float&) const = 0;
+  virtual bool read(const char* key, std::string&) const = 0;
 
-  virtual bool read_mapping(const char* key, ReaderMapping&) const = 0;
-  virtual bool read_collection(const char* key, ReaderCollection&) const = 0;
-  virtual bool read_object(const char* key, ReaderObject&) const = 0;
+  virtual bool read(const char* key, ReaderMapping&) const = 0;
+  virtual bool read(const char* key, ReaderCollection&) const = 0;
+  virtual bool read(const char* key, ReaderObject&) const = 0;
 };
 
 } // namespace prio

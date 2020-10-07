@@ -56,14 +56,14 @@ public:
 
   std::vector<std::string> get_keys() const override;
 
-  bool read_bool(const char* key, bool&) const override;
-  bool read_int(const char* key, int&) const override;
-  bool read_float(const char* key, float&) const override;
-  bool read_string(const char* key, std::string&) const override;
+  bool read(const char* key, bool&) const override;
+  bool read(const char* key, int&) const override;
+  bool read(const char* key, float&) const override;
+  bool read(const char* key, std::string&) const override;
 
-  bool read_mapping(const char* key, ReaderMapping&) const override;
-  bool read_collection(const char* key, ReaderCollection&) const override;
-  bool read_object(const char* key, ReaderObject&) const override;
+  bool read(const char* key, ReaderMapping&) const override;
+  bool read(const char* key, ReaderCollection&) const override;
+  bool read(const char* key, ReaderObject&) const override;
 
 private:
   sexp::Value const* get_subsection_item(const char* name) const;

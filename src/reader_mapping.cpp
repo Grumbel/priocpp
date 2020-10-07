@@ -33,68 +33,67 @@ ReaderMapping::ReaderMapping() :
 }
 
 bool
-ReaderMapping::read_int(const char* key, int& value) const
+ReaderMapping::read(const char* key, int& value) const
 {
   if (m_impl)
-    return m_impl->read_int(key, value);
+    return m_impl->read(key, value);
   else
     return false;
 }
 
 bool
-ReaderMapping::read_float (const char* key, float& value) const
+ReaderMapping::read (const char* key, float& value) const
 {
   if (m_impl)
-    return m_impl->read_float(key, value);
+    return m_impl->read(key, value);
   else
     return false;
 }
 
 bool
-ReaderMapping::read_bool  (const char* key, bool& value) const
+ReaderMapping::read  (const char* key, bool& value) const
 {
   if (m_impl)
-    return m_impl->read_bool(key, value);
+    return m_impl->read(key, value);
   else
     return false;
 }
 
 bool
-ReaderMapping::read_string(const char* key, std::string& value) const
+ReaderMapping::read(const char* key, std::string& value) const
 {
   if (m_impl)
-    return m_impl->read_string(key, value);
+    return m_impl->read(key, value);
   else
     return false;
 }
 
 bool
-ReaderMapping::read_object(const char* key, ReaderObject& object) const
+ReaderMapping::read(const char* key, ReaderObject& object) const
 {
   if (m_impl)
-    return m_impl->read_object(key, object);
+    return m_impl->read(key, object);
   else
     return false;
 }
 
 bool
-ReaderMapping::read_mapping(const char* key, ReaderMapping& mapping) const
+ReaderMapping::read(const char* key, ReaderMapping& mapping) const
 {
   if (m_impl)
-    return m_impl->read_mapping(key, mapping);
+    return m_impl->read(key, mapping);
   else
     return false;
 }
 
 bool
-ReaderMapping::read_collection(const char* key, ReaderCollection& collection) const
+ReaderMapping::read(const char* key, ReaderCollection& collection) const
 {
   if (m_impl)
-    return m_impl->read_collection(key, collection);
+    return m_impl->read(key, collection);
   else
     return false;
 }
-
 
 ReaderMapping
 ReaderMapping::read_mapping(const char* key) const
@@ -105,7 +104,7 @@ ReaderMapping::read_mapping(const char* key) const
   }
   {
     ReaderMapping result;
-    read_mapping(key, result);
+    read(key, result);
     return result;
   }
 }
@@ -119,7 +118,7 @@ ReaderMapping::read_collection(const char* key) const
   }
   {
     ReaderCollection result;
-    read_collection(key, result);
+    read(key, result);
     return result;
   }
 }
@@ -133,7 +132,7 @@ ReaderMapping::read_object(const char* key) const
   }
   {
     ReaderObject result;
-    read_object(key, result);
+    read(key, result);
     return result;
   }
 }

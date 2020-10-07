@@ -108,7 +108,7 @@ JsonReaderMappingImpl::get_keys() const
 }
 
 bool
-JsonReaderMappingImpl::read_int(const char* key, int& value) const
+JsonReaderMappingImpl::read(const char* key, int& value) const
 {
   const Json::Value& element = m_json[key];
   if (element.isInt())
@@ -123,7 +123,7 @@ JsonReaderMappingImpl::read_int(const char* key, int& value) const
 }
 
 bool
-JsonReaderMappingImpl::read_float(const char* key, float& value) const
+JsonReaderMappingImpl::read(const char* key, float& value) const
 {
   const Json::Value& element = m_json[key];
   if (element.isDouble())
@@ -138,7 +138,7 @@ JsonReaderMappingImpl::read_float(const char* key, float& value) const
 }
 
 bool
-JsonReaderMappingImpl::read_bool(const char* key, bool& value) const
+JsonReaderMappingImpl::read(const char* key, bool& value) const
 {
   const Json::Value& element = m_json[key];
   if (element.isBool())
@@ -153,7 +153,7 @@ JsonReaderMappingImpl::read_bool(const char* key, bool& value) const
 }
 
 bool
-JsonReaderMappingImpl::read_string(const char* key, std::string& value) const
+JsonReaderMappingImpl::read(const char* key, std::string& value) const
 {
   const Json::Value& element = m_json[key];
   if (element.isString())
@@ -168,7 +168,7 @@ JsonReaderMappingImpl::read_string(const char* key, std::string& value) const
 }
 
 bool
-JsonReaderMappingImpl::read_mapping(const char* key, ReaderMapping& value) const
+JsonReaderMappingImpl::read(const char* key, ReaderMapping& value) const
 {
   const Json::Value& element = m_json[key];
   if (element.isObject())
@@ -183,7 +183,7 @@ JsonReaderMappingImpl::read_mapping(const char* key, ReaderMapping& value) const
 }
 
 bool
-JsonReaderMappingImpl::read_collection(const char* key, ReaderCollection& value) const
+JsonReaderMappingImpl::read(const char* key, ReaderCollection& value) const
 {
   const Json::Value& element = m_json[key];
   if (element.isArray())
@@ -198,7 +198,7 @@ JsonReaderMappingImpl::read_collection(const char* key, ReaderCollection& value)
 }
 
 bool
-JsonReaderMappingImpl::read_object(const char* key, ReaderObject& value) const
+JsonReaderMappingImpl::read(const char* key, ReaderObject& value) const
 {
   const Json::Value& element = m_json[key];
   if (element.isObject())

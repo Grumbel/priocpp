@@ -49,60 +49,60 @@ public:
     return std::vector<std::string>(result.begin(), result.end());
   }
 
-  bool read_int(const char* name, int& v) const override
+  bool read(const char* name, int& v) const override
   {
-    if (m_overrides.read_int(name, v))
+    if (m_overrides.read(name, v))
     {
       return true;
     }
     else
     {
-      return m_reader.read_int(name, v);
+      return m_reader.read(name, v);
     }
   }
 
-  bool read_float(const char* name, float& v) const override
+  bool read(const char* name, float& v) const override
   {
-    if (m_overrides.read_float(name, v))
+    if (m_overrides.read(name, v))
     {
       return true;
     }
     else
     {
-      return m_reader.read_float(name, v);
+      return m_reader.read(name, v);
     }
   }
 
-  bool read_bool(const char* name, bool& v) const override
+  bool read(const char* name, bool& v) const override
   {
-    if (m_overrides.read_bool(name, v))
+    if (m_overrides.read(name, v))
     {
       return true;
     }
     else
     {
-      return m_reader.read_bool(name, v);
+      return m_reader.read(name, v);
     }
   }
 
-  bool read_string(const char* name, std::string& str) const override
+  bool read(const char* name, std::string& str) const override
   {
-    if (m_overrides.read_string(name, str))
+    if (m_overrides.read(name, str))
     {
       return true;
     }
     else
     {
-      return m_reader.read_string(name, str);
+      return m_reader.read(name, str);
     }
   }
 
-  bool read_mapping(const char* name, ReaderMapping& result) const override
+  bool read(const char* name, ReaderMapping& result) const override
   {
     ReaderMapping overwrite_result;
-    if (m_overrides.read_mapping(name, overwrite_result))
+    if (m_overrides.read(name, overwrite_result))
     {
-      if (m_reader.read_mapping(name, result))
+      if (m_reader.read(name, result))
       {
         result = make_override_mapping(result, overwrite_result);
         return true;
@@ -115,31 +115,31 @@ public:
     }
     else
     {
-      return m_reader.read_mapping(name, result);
+      return m_reader.read(name, result);
     }
   }
 
-  bool read_collection(const char* key, ReaderCollection& result) const override
+  bool read(const char* key, ReaderCollection& result) const override
   {
-    if (m_overrides.read_collection(key, result))
+    if (m_overrides.read(key, result))
     {
       return true;
     }
     else
     {
-      return m_reader.read_collection(key, result);
+      return m_reader.read(key, result);
     }
   }
 
-  bool read_object(const char* key, ReaderObject& result) const override
+  bool read(const char* key, ReaderObject& result) const override
   {
-    if (m_overrides.read_object(key, result))
+    if (m_overrides.read(key, result))
     {
       return true;
     }
     else
     {
-      return m_reader.read_object(key, result);
+      return m_reader.read(key, result);
     }
   }
 };

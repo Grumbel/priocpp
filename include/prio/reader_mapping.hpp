@@ -35,14 +35,14 @@ public:
 
   std::vector<std::string> get_keys() const;
 
-  bool read_bool(const char* key, bool& value) const;
-  bool read_int(const char* key, int& value) const;
-  bool read_float(const char* key, float& value) const;
-  bool read_string(const char* key, std::string& value) const;
+  bool read(const char* key, bool& value) const;
+  bool read(const char* key, int& value) const;
+  bool read(const char* key, float& value) const;
+  bool read(const char* key, std::string& value) const;
 
-  bool read_mapping(const char* key, ReaderMapping&) const;
-  bool read_collection(const char* key, ReaderCollection&) const;
-  bool read_object(const char* key, ReaderObject&) const;
+  bool read(const char* key, ReaderMapping&) const;
+  bool read(const char* key, ReaderCollection&) const;
+  bool read(const char* key, ReaderObject&) const;
 
   ReaderMapping read_mapping(const char* key) const;
   ReaderCollection read_collection(const char* key) const;
@@ -52,7 +52,7 @@ public:
   bool read_enum (const char* key, E& value, T enum2string) const
   {
     std::string str;
-    if(read_string(key, str))
+    if(read(key, str))
     {
       value = enum2string(str);
       return true;
