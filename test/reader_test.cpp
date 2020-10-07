@@ -47,6 +47,13 @@ TEST_P(ReaderTest, parse)
   EXPECT_EQ("test-document", doc.get_name());
 }
 
+TEST_P(ReaderTest, read_bool)
+{
+  bool boolvalue;
+  ASSERT_TRUE(body.read_bool("boolvalue", boolvalue));
+  EXPECT_EQ(true, boolvalue);
+}
+
 TEST_P(ReaderTest, read_int)
 {
   int intvalue;
@@ -59,6 +66,13 @@ TEST_P(ReaderTest, read_float)
   float floatvalue;
   ASSERT_TRUE(body.read_float("floatvalue", floatvalue));
   EXPECT_EQ(5.5f, floatvalue);
+}
+
+TEST_P(ReaderTest, read_string)
+{
+  std::string stringvalue;
+  ASSERT_TRUE(body.read_string("stringvalue", stringvalue));
+  EXPECT_EQ("Hello World", stringvalue);
 }
 
 TEST_P(ReaderTest, read_mapping)
