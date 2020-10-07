@@ -21,6 +21,8 @@
 
 #include "writer_impl.hpp"
 
+namespace prio {
+
 class SExprWriterImpl : public WriterImpl
 {
 private:
@@ -57,6 +59,8 @@ private:
   SExprWriterImpl(const SExprWriterImpl&);
   SExprWriterImpl& operator= (const SExprWriterImpl&);
 };
+
+} // namespace prio
 
 #endif
 

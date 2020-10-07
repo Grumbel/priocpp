@@ -20,6 +20,8 @@
 #include "json_writer_impl.hpp"
 #include "jsonpretty_writer_impl.hpp"
 
+namespace prio {
+
 Writer
 Writer::fastjson(std::ostream& out)
 {
@@ -111,5 +113,7 @@ Writer::write_string(const char* name, const std::string& value)
 {
   m_impl->write_string(name, value);
 }
+
+} // namespace prio
 
 /* EOF */

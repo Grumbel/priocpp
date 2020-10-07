@@ -23,6 +23,8 @@
 
 #include "reader_object.hpp"
 
+namespace prio {
+
 class ReaderObject;
 class ReaderMapping;
 class ReaderCollection;
@@ -45,6 +47,8 @@ public:
 private:
   Reader() = delete;
 };
+
+} // namespace prio
 
 #endif
 

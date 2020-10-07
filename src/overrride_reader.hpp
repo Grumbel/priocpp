@@ -19,7 +19,11 @@
 
 #include "reader_impl.hpp"
 
+namespace prio {
+
 ReaderMapping make_override_mapping(const ReaderMapping& reader, const ReaderMapping& overrides);
+
+} // namespace prio
 
 #endif
 

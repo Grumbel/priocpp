@@ -20,6 +20,8 @@
 #include <ostream>
 #include <assert.h>
 
+namespace prio {
+
 JsonPrettyWriterImpl::JsonPrettyWriterImpl(std::ostream& out) :
   m_out(out),
   m_depth(0),
@@ -220,5 +222,7 @@ JsonPrettyWriterImpl::write_quoted_string(const std::string& str)
 {
   write_quoted_string(str.c_str());
 }
+
+} // namespace prio
 
 /* EOF */

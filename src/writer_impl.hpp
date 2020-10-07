@@ -19,6 +19,8 @@
 
 #include <string>
 
+namespace prio {
+
 /** Interface to write out name/value pairs out of some kind of file or
     structure */
 class WriterImpl
@@ -41,6 +43,8 @@ public:
   virtual void write_float  (const char* name, float) = 0;
   virtual void write_string (const char* name, const std::string&) = 0;
 };
+
+} // namespace prio
 
 #endif
 

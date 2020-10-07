@@ -19,6 +19,8 @@
 
 #include "reader.hpp"
 
+namespace prio {
+
 class ReaderObjectImpl;
 class ReaderMapping;
 
@@ -34,6 +36,8 @@ public:
 private:
   std::shared_ptr<ReaderObjectImpl> m_impl;
 };
+
+} // namespace prio
 
 #endif
 

@@ -21,6 +21,8 @@
 
 #include "reader_impl.hpp"
 
+namespace prio {
+
 class SExprReaderObjectImpl : public ReaderObjectImpl
 {
 public:
@@ -70,6 +72,8 @@ private:
 private:
   sexp::Value m_sx;
 };
+
+} // namespace prio
 
 #endif
 

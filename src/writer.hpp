@@ -20,8 +20,8 @@
 #include <string>
 #include <memory>
 
-class Color;
-class Pathname;
+namespace prio {
+
 class WriterImpl;
 
 class Writer final
@@ -65,6 +65,8 @@ public:
 private:
   std::unique_ptr<WriterImpl> m_impl;
 };
+
+} // namespace prio
 
 #endif
 

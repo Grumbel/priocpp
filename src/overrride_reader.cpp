@@ -22,6 +22,8 @@
 #include "reader_mapping.hpp"
 #include "reader_impl.hpp"
 
+namespace prio {
+
 class OverrideReaderMappingImpl : public ReaderMappingImpl
 {
 private:
@@ -148,5 +150,7 @@ make_override_mapping(const ReaderMapping& reader, const ReaderMapping& override
 {
   return ReaderMapping(std::make_shared<OverrideReaderMappingImpl>(reader, overrides));
 }
+
+} // namespace prio
 
 /* EOF */

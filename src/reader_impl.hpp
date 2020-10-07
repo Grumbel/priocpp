@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-class Color;
+namespace prio {
 
 class ReaderCollection;
 class ReaderMapping;
@@ -60,6 +60,8 @@ public:
   virtual bool read_collection(const char* key, ReaderCollection&) const = 0;
   virtual bool read_object(const char* key, ReaderObject&) const = 0;
 };
+
+} // namespace prio
 
 #endif
 

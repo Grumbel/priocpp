@@ -21,6 +21,8 @@
 
 #include <json/value.h>
 
+namespace prio {
+
 class JsonReaderObjectImpl final : public ReaderObjectImpl
 {
 public:
@@ -66,6 +68,8 @@ public:
 private:
   Json::Value m_json;
 };
+
+} // namespace prio
 
 #endif
 

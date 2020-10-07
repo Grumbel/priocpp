@@ -32,6 +32,8 @@ void syntax_error(Json::Value const& value, const char* message)
 
 } // namespace
 
+namespace prio {
+
 JsonReaderObjectImpl::JsonReaderObjectImpl(Json::Value const& json) :
   m_json(json)
 {
@@ -209,5 +211,7 @@ JsonReaderMappingImpl::read_object(const char* key, ReaderObject& value) const
     return false;
   }
 }
+
+} // namespace prio
 
 /* EOF */

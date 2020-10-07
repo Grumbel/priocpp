@@ -19,6 +19,8 @@
 
 #include <vector>
 
+namespace prio {
+
 class ReaderCollectionImpl;
 class ReaderObject;
 
@@ -33,6 +35,8 @@ public:
 private:
   std::shared_ptr<ReaderCollectionImpl> m_impl;
 };
+
+} // namespace prio
 
 #endif
 

@@ -22,6 +22,8 @@
 #include <prio/reader_collection.hpp>
 #include <prio/reader_mapping.hpp>
 
+using namespace prio;
+
 class ReaderTest : public ::testing::TestWithParam<std::string>
 {
 public:

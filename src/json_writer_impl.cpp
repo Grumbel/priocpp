@@ -22,6 +22,8 @@
 #include <ostream>
 #include <sstream>
 
+namespace prio {
+
 JsonWriterImpl::JsonWriterImpl(std::ostream& out) :
   m_out(out),
   m_root(Json::objectValue),
@@ -179,5 +181,7 @@ JsonWriterImpl::flush()
     writer->write(m_stack.back(), &m_out);
   }
 }
+
+} // namespace prio
 
 /* EOF */

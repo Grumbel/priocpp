@@ -23,6 +23,8 @@
 
 #include "writer_impl.hpp"
 
+namespace prio {
+
 class JsonWriterImpl final : public WriterImpl
 {
 private:
@@ -58,6 +60,8 @@ private:
   JsonWriterImpl(const JsonWriterImpl&) = delete;
   JsonWriterImpl& operator=(const JsonWriterImpl&) = delete;
 };
+
+} // namespace prio
 
 #endif
 

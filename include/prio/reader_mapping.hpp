@@ -17,6 +17,8 @@
 #ifndef HEADER_PRIO_READER_MAPPING_HPP
 #define HEADER_PRIO_READER_MAPPING_HPP
 
+namespace prio {
+
 class ReaderMapping final
 {
 public:
@@ -59,6 +61,8 @@ public:
 private:
   std::shared_ptr<ReaderMappingImpl> m_impl;
 };
+
+} // namespace prio
 
 #endif
 

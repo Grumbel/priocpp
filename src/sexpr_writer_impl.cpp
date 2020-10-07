@@ -18,6 +18,8 @@
 
 #include <map>
 
+namespace prio {
+
 SExprWriterImpl::SExprWriterImpl(std::ostream& out_) :
   out(&out_),
   level(0)
@@ -124,5 +126,6 @@ SExprWriterImpl::write_string(const char* name, const std::string& value)
   (*out) << "\n" << indent() << "(" << name << " \"" << new_value << "\")";
 }
 
+} // namespace prio
 
 /* EOF */

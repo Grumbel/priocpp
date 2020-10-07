@@ -27,6 +27,8 @@
 #include "reader_mapping.hpp"
 #include "reader_impl.hpp"
 
+namespace prio {
+
 SExprReaderObjectImpl::SExprReaderObjectImpl(sexp::Value const& sx) :
   m_sx(sx) // FIXME: all this copying is unnecessary
 {
@@ -290,5 +292,7 @@ SExprReaderMappingImpl::get_subsection(const char* key) const
 
   return result;
 }
+
+} // namespace prio
 
 /* EOF */

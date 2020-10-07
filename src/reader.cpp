@@ -30,6 +30,8 @@
 #include "reader_collection.hpp"
 #include "reader_mapping.hpp"
 
+namespace prio {
+
 ReaderMapping::ReaderMapping(std::shared_ptr<ReaderMappingImpl> impl_) :
   m_impl(std::move(impl_))
 {
@@ -280,5 +282,7 @@ Reader::parse_many(const std::string& pathname)
   }
 #endif
 }
+
+} // namespace prio
 
 /* EOF */
