@@ -44,7 +44,7 @@ public:
   ReaderMapping get_mapping() const override;
 
 private:
-  Json::Value m_json;
+  Json::Value const& m_json;
 };
 
 class JsonReaderCollectionImpl final : public ReaderCollectionImpl
@@ -56,7 +56,7 @@ public:
   std::vector<ReaderObject> get_objects() const override;
 
 private:
-  Json::Value m_json;
+  Json::Value const& m_json;
 };
 
 class JsonReaderMappingImpl final : public ReaderMappingImpl
@@ -82,7 +82,7 @@ public:
   bool read(const char* key, ReaderObject&) const override;
 
 private:
-  Json::Value m_json;
+  Json::Value const& m_json;
 };
 
 } // namespace prio

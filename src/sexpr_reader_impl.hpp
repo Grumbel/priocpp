@@ -44,7 +44,7 @@ public:
   ReaderMapping get_mapping() const override;
 
 private:
-  sexp::Value m_sx;
+  sexp::Value const& m_sx;
 };
 
 class SExprReaderCollectionImpl final : public ReaderCollectionImpl
@@ -56,7 +56,7 @@ public:
   std::vector<ReaderObject> get_objects() const override;
 
 private:
-  sexp::Value m_sx;
+  sexp::Value const& m_sx;
 };
 
 class SExprReaderMappingImpl final : public ReaderMappingImpl
@@ -87,7 +87,7 @@ private:
   sexp::Value const* get_subsection(const char* name) const;
 
 private:
-  sexp::Value m_sx;
+  sexp::Value const& m_sx;
 };
 
 } // namespace prio
