@@ -59,7 +59,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
   }
   else
   { // sexp
-    auto sx = sexp::Parser::from_stream(stream /*, sexp::Parser::USE_ARRAYS */); // FIXME
+    auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
     return ReaderDocument(ReaderObject(std::make_shared<SExprReaderObjectImpl>(std::move(sx))), filename);
   }
 }
