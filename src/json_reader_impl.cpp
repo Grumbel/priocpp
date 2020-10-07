@@ -108,6 +108,21 @@ JsonReaderMappingImpl::get_keys() const
 }
 
 bool
+JsonReaderMappingImpl::read(const char* key, bool& value) const
+{
+  const Json::Value& element = m_json[key];
+  if (element.isBool())
+  {
+    value = element.asBool();
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool
 JsonReaderMappingImpl::read(const char* key, int& value) const
 {
   const Json::Value& element = m_json[key];
@@ -138,21 +153,6 @@ JsonReaderMappingImpl::read(const char* key, float& value) const
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, bool& value) const
-{
-  const Json::Value& element = m_json[key];
-  if (element.isBool())
-  {
-    value = element.asBool();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
 JsonReaderMappingImpl::read(const char* key, std::string& value) const
 {
   const Json::Value& element = m_json[key];
@@ -165,6 +165,58 @@ JsonReaderMappingImpl::read(const char* key, std::string& value) const
   {
     return false;
   }
+}
+
+bool
+JsonReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
+{
+  const Json::Value& element = m_json[key];
+  if (!element.isArray()) return false;
+
+  values.resize(element.size());
+  for(int i = 0; i < element.size(); ++i) {
+    values[i] = element[i].asBool();
+  }
+  return true;
+}
+
+bool
+JsonReaderMappingImpl::read(const char* key, std::vector<int>& values) const
+{
+  const Json::Value& element = m_json[key];
+  if (!element.isArray()) return false;
+
+  values.resize(element.size());
+  for(int i = 0; i < element.size(); ++i) {
+    values[i] = element[i].asInt();
+  }
+  return true;
+}
+
+bool
+JsonReaderMappingImpl::read(const char* key, std::vector<float>& values) const
+{
+  const Json::Value& element = m_json[key];
+  if (!element.isArray()) return false;
+
+  values.resize(element.size());
+  for(int i = 0; i < element.size(); ++i) {
+    values[i] = element[i].asFloat();
+  }
+  return true;
+}
+
+bool
+JsonReaderMappingImpl::read(const char* key, std::vector<std::string>& values) const
+{
+  const Json::Value& element = m_json[key];
+  if (!element.isArray()) return false;
+
+  values.resize(element.size());
+  for(int i = 0; i < element.size(); ++i) {
+    values[i] = element[i].asString();
+  }
+  return true;
 }
 
 bool

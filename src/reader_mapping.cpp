@@ -33,6 +33,15 @@ ReaderMapping::ReaderMapping() :
 }
 
 bool
+ReaderMapping::read  (const char* key, bool& value) const
+{
+  if (m_impl)
+    return m_impl->read(key, value);
+  else
+    return false;
+}
+
+bool
 ReaderMapping::read(const char* key, int& value) const
 {
   if (m_impl)
@@ -51,7 +60,7 @@ ReaderMapping::read (const char* key, float& value) const
 }
 
 bool
-ReaderMapping::read  (const char* key, bool& value) const
+ReaderMapping::read(const char* key, std::string& value) const
 {
   if (m_impl)
     return m_impl->read(key, value);
@@ -60,10 +69,37 @@ ReaderMapping::read  (const char* key, bool& value) const
 }
 
 bool
-ReaderMapping::read(const char* key, std::string& value) const
+ReaderMapping::read  (const char* key, std::vector<bool>& values) const
 {
   if (m_impl)
-    return m_impl->read(key, value);
+    return m_impl->read(key, values);
+  else
+    return false;
+}
+
+bool
+ReaderMapping::read(const char* key, std::vector<int>& values) const
+{
+  if (m_impl)
+    return m_impl->read(key, values);
+  else
+    return false;
+}
+
+bool
+ReaderMapping::read (const char* key, std::vector<float>& values) const
+{
+  if (m_impl)
+    return m_impl->read(key, values);
+  else
+    return false;
+}
+
+bool
+ReaderMapping::read(const char* key, std::vector<std::string>& values) const
+{
+  if (m_impl)
+    return m_impl->read(key, values);
   else
     return false;
 }

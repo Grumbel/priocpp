@@ -61,6 +61,11 @@ public:
   bool read(const char* key, float&) const override;
   bool read(const char* key, std::string&) const override;
 
+  bool read(const char* key, std::vector<bool>& v) const override;
+  bool read(const char* key, std::vector<int>& v) const override;
+  bool read(const char* key, std::vector<float>& v) const override;
+  bool read(const char* key, std::vector<std::string>& v) const override;
+
   bool read(const char* key, ReaderMapping&) const override;
   bool read(const char* key, ReaderCollection&) const override;
   bool read(const char* key, ReaderObject&) const override;

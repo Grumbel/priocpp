@@ -56,6 +56,11 @@ public:
   virtual bool read(const char* key, float&) const = 0;
   virtual bool read(const char* key, std::string&) const = 0;
 
+  virtual bool read(const char* key, std::vector<bool>& v) const = 0;
+  virtual bool read(const char* key, std::vector<int>& v) const = 0;
+  virtual bool read(const char* key, std::vector<float>& v) const = 0;
+  virtual bool read(const char* key, std::vector<std::string>& v) const = 0;
+
   virtual bool read(const char* key, ReaderMapping&) const = 0;
   virtual bool read(const char* key, ReaderCollection&) const = 0;
   virtual bool read(const char* key, ReaderObject&) const = 0;

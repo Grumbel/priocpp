@@ -119,6 +119,26 @@ SExprReaderMappingImpl::get_keys() const
 }
 
 bool
+SExprReaderMappingImpl::read(const char* key, bool& value) const
+{
+  sexp::Value const* item = get_subsection_item(key);
+  if (item && item->is_boolean())
+  {
+    value = item->as_bool();
+    return true;
+  }
+  else if (item && item->is_integer()) // FIXME: remove this, be explicit
+  {
+    value = item->as_int();
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool
 SExprReaderMappingImpl::read(const char* key, int& value) const
 {
   sexp::Value const* item = get_subsection_item(key);
@@ -161,26 +181,6 @@ SExprReaderMappingImpl::read(const char* key, float& value) const
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, bool& value) const
-{
-  sexp::Value const* item = get_subsection_item(key);
-  if (item && item->is_boolean())
-  {
-    value = item->as_bool();
-    return true;
-  }
-  else if (item && item->is_integer())
-  {
-    value = item->as_int();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
 SExprReaderMappingImpl::read(const char* key, std::string& value) const
 {
   sexp::Value const* sub = get_subsection(key);
@@ -204,6 +204,110 @@ SExprReaderMappingImpl::read(const char* key, std::string& value) const
   {
     return false;
   }
+}
+
+bool
+SExprReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
+{
+#if 0
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_array()) return false;
+
+  values.resize(item->as_array().size());
+  for (size_t i = 0; i < values.size(); ++i) {
+    values[i] = item->as_array()[i].as_bool();
+  }
+  return true;
+#else
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_cons()) return false;
+
+  values.resize(sexp::list_length(*item));
+  int i = 0;
+  for(auto const& sx : sexp::ListAdapter(*item)) {
+    values[i] = sx.as_bool();
+    i += 1;
+  }
+  return true;
+#endif
+}
+
+bool
+SExprReaderMappingImpl::read(const char* key, std::vector<int>& values) const
+{
+#if 0
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_array()) return false;
+
+  values.resize(item->as_array().size());
+  for (size_t i = 0; i < values.size(); ++i) {
+    values[i] = item->as_array()[i].as_int();
+  }
+  return true;
+#else
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_cons()) return false;
+
+  values.resize(sexp::list_length(*item));
+  int i = 0;
+  for(auto const& sx : sexp::ListAdapter(*item)) {
+    values[i] = sx.as_int();
+    i += 1;
+  }
+  return true;
+#endif
+}
+
+bool
+SExprReaderMappingImpl::read(const char* key, std::vector<float>& values) const
+{
+#if 0
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_array()) return false;
+
+  values.resize(item->as_array().size());
+  for (size_t i = 0; i < values.size(); ++i) {
+    values[i] = item->as_array()[i].as_float();
+  }
+  return true;
+#else
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_cons()) return false;
+
+  values.resize(sexp::list_length(*item));
+  int i = 0;
+  for(auto const& sx : sexp::ListAdapter(*item)) {
+    values[i] = sx.as_float();
+    i += 1;
+  }
+  return true;
+#endif
+}
+
+bool
+SExprReaderMappingImpl::read(const char* key, std::vector<std::string>& values) const
+{
+#if 0
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_array()) return false;
+
+  values.resize(item->as_array().size());
+  for (size_t i = 0; i < values.size(); ++i) {
+    values[i] = item->as_array()[i].as_string();
+  }
+  return true;
+#else
+  sexp::Value const* item = get_subsection_items(key);
+  if (!item || !item->is_cons()) return false;
+
+  values.resize(sexp::list_length(*item));
+  int i = 0;
+  for(auto const& sx : sexp::ListAdapter(*item)) {
+    values[i] = sx.as_string();
+    i += 1;
+  }
+  return true;
+#endif
 }
 
 bool
@@ -266,6 +370,17 @@ SExprReaderMappingImpl::get_subsection_item(const char* key) const
   }
   else
   {
+    return nullptr;
+  }
+}
+
+sexp::Value const*
+SExprReaderMappingImpl::get_subsection_items(const char* key) const
+{
+  sexp::Value const* sub = get_subsection(key);
+  if (sub && sexp::list_length(*sub) >= 1) {
+    return sub;
+  } else {
     return nullptr;
   }
 }

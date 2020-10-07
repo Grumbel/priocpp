@@ -40,6 +40,11 @@ public:
   bool read(const char* key, float& value) const;
   bool read(const char* key, std::string& value) const;
 
+  bool read(const char* key, std::vector<bool>& value) const;
+  bool read(const char* key, std::vector<int>& value) const;
+  bool read(const char* key, std::vector<float>& value) const;
+  bool read(const char* key, std::vector<std::string>& value) const;
+
   bool read(const char* key, ReaderMapping&) const;
   bool read(const char* key, ReaderCollection&) const;
   bool read(const char* key, ReaderObject&) const;

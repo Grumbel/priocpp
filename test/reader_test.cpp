@@ -77,6 +77,34 @@ TEST_P(ReaderTest, read_string)
   EXPECT_EQ("Hello World", stringvalue);
 }
 
+TEST_P(ReaderTest, read_bools)
+{
+  std::vector<bool> boolvalues;
+  ASSERT_TRUE(body.read("boolvalues", boolvalues));
+  EXPECT_EQ(std::vector<bool>({true, false, true}), boolvalues);
+}
+
+TEST_P(ReaderTest, read_ints)
+{
+  std::vector<int> intvalues;
+  ASSERT_TRUE(body.read("intvalues", intvalues));
+  EXPECT_EQ(std::vector<int>({1, 2, 3, 4}), intvalues);
+}
+
+TEST_P(ReaderTest, read_floats)
+{
+  std::vector<float> floatvalues;
+  ASSERT_TRUE(body.read("floatvalues", floatvalues));
+  EXPECT_EQ(std::vector<float>({1.0f, 2.0f, 3.0f, 4.0f}), floatvalues);
+}
+
+TEST_P(ReaderTest, read_strings)
+{
+  std::vector<std::string> stringvalues;
+  ASSERT_TRUE(body.read("stringvalues", stringvalues));
+  EXPECT_EQ(std::vector<std::string>({"Hello", "World"}), stringvalues);
+}
+
 namespace {
 
 struct CustomType {

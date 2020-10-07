@@ -49,6 +49,18 @@ public:
     return std::vector<std::string>(result.begin(), result.end());
   }
 
+  bool read(const char* name, bool& v) const override
+  {
+    if (m_overrides.read(name, v))
+    {
+      return true;
+    }
+    else
+    {
+      return m_reader.read(name, v);
+    }
+  }
+
   bool read(const char* name, int& v) const override
   {
     if (m_overrides.read(name, v))
@@ -73,18 +85,6 @@ public:
     }
   }
 
-  bool read(const char* name, bool& v) const override
-  {
-    if (m_overrides.read(name, v))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read(name, v);
-    }
-  }
-
   bool read(const char* name, std::string& str) const override
   {
     if (m_overrides.read(name, str))
@@ -95,6 +95,26 @@ public:
     {
       return m_reader.read(name, str);
     }
+  }
+
+  bool read(const char* name, std::vector<bool>& v) const override
+  {
+    return m_overrides.read(name, v) || m_reader.read(name, v);
+  }
+
+  bool read(const char* name, std::vector<int>& v) const override
+  {
+    return m_overrides.read(name, v) || m_reader.read(name, v);
+  }
+
+  bool read(const char* name, std::vector<float>& v) const override
+  {
+    return m_overrides.read(name, v) || m_reader.read(name, v);
+  }
+
+  bool read(const char* name, std::vector<std::string>& v) const override
+  {
+    return m_overrides.read(name, v) || m_reader.read(name, v);
   }
 
   bool read(const char* name, ReaderMapping& result) const override
