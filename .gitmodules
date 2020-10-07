@@ -1,0 +1,9 @@
+[submodule "external/cmake-modules"]
+	path = external/cmake-modules
+	url = https://gitlab.com/grumbel/cmake-modules.git
+[submodule "external/sexp-cpp"]
+	path = external/sexp-cpp
+	url = https://gitlab.com/lispparser/sexp-cpp.git
+[submodule "external/logmich"]
+	path = external/logmich
+	url = https://gitlab.com/logmich/logmich.git
