@@ -52,7 +52,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
     std::string errs;
     Json::Value root;
     if (Json::parseFromStream(builder, stream, &root, &errs)) {
-      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(root), filename);
+      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), filename));
     } else {
       throw std::runtime_error(fmt::format("json parse error: {}", errs));
     }
@@ -60,7 +60,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
   else
   { // sexp
     auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
-    return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx)), filename);
+    return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), filename));
   }
 }
 
@@ -98,14 +98,12 @@ Reader::parse_many(const std::string& pathname)
 #endif
 
 ReaderDocument:: ReaderDocument() :
-  m_impl(),
-  m_filename()
+  m_impl()
 {
 }
 
-ReaderDocument::ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename) :
-  m_impl(std::move(impl)),
-  m_filename(std::move(filename))
+ReaderDocument::ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl) :
+  m_impl(std::move(impl))
 {
 }
 
@@ -125,20 +123,20 @@ ReaderDocument::get_root() const
 std::string
 ReaderDocument::get_filename() const
 {
-  if (!m_filename) {
+  if (!m_impl->get_filename()) {
     return "<unknown>";
   } else {
-    return *m_filename;
+    return *m_impl->get_filename();
   }
 }
 
 std::string
 ReaderDocument::get_directory() const
 {
-  if (!m_filename) {
+  if (!m_impl->get_filename()) {
     return std::filesystem::path("/");
   } else {
-    return std::filesystem::path(*m_filename).parent_path();
+    return std::filesystem::path(*m_impl->get_filename()).parent_path();
   }
 }
 

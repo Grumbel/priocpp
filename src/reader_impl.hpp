@@ -17,6 +17,7 @@
 #ifndef HEADER_PRIO_READER_IMPL_HPP
 #define HEADER_PRIO_READER_IMPL_HPP
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -32,6 +33,7 @@ public:
   virtual ~ReaderDocumentImpl() {}
 
   virtual ReaderObject get_root() const = 0;
+  virtual std::optional<std::string> get_filename() const = 0;
 };
 
 class ReaderObjectImpl

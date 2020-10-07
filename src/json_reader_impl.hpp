@@ -26,12 +26,14 @@ namespace prio {
 class JsonReaderDocumentImpl final : public ReaderDocumentImpl
 {
 public:
-  JsonReaderDocumentImpl(Json::Value value);
+  JsonReaderDocumentImpl(Json::Value value, std::optional<std::string> filename);
 
   virtual ReaderObject get_root() const;
+  std::optional<std::string> get_filename() const { return m_filename; }
 
 private:
   Json::Value m_value;
+  std::optional<std::string> m_filename;
 };
 
 class JsonReaderObjectImpl final : public ReaderObjectImpl

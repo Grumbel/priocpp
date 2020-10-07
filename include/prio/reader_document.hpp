@@ -52,7 +52,7 @@ public:
 public:
   ReaderDocument();
   ReaderDocument(ReaderDocument&&) = default;
-  ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename = {});
+  ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl);
   ~ReaderDocument();
 
   ReaderDocument& operator=(ReaderDocument&&);
@@ -68,7 +68,6 @@ public:
 
 private:
   std::unique_ptr<ReaderDocumentImpl> m_impl;
-  std::optional<std::string> m_filename;
 };
 
 } // namespace prio

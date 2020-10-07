@@ -34,8 +34,9 @@ void syntax_error(Json::Value const& value, const char* message)
 
 namespace prio {
 
-JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value) :
-  m_value(std::move(value))
+JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, std::optional<std::string> filename) :
+  m_value(std::move(value)),
+  m_filename(filename)
 {
 }
 

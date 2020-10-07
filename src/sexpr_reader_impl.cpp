@@ -29,8 +29,9 @@
 
 namespace prio {
 
-SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx) :
-  m_sx(std::move(sx))
+SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx, std::optional<std::string> filename) :
+  m_sx(std::move(sx)),
+  m_filename(std::move(filename))
 {
 }
 
