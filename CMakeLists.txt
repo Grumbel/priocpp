@@ -75,7 +75,7 @@ if(BUILD_TESTS)
 
   enable_testing()
   add_test(NAME test_prio
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     COMMAND test_prio)
 endif()
 
