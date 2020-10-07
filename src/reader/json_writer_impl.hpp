@@ -20,7 +20,6 @@
 #include <functional>
 #include <json/json.h>
 #include <iosfwd>
-#include <geom/fwd.hpp>
 
 #include "reader/writer_impl.hpp"
 
@@ -47,16 +46,10 @@ public:
   void begin_mapping(const char* name) override;
   void end_mapping() override;
 
+  void write_bool(const char* name, bool) override;
   void write_int(const char* name, int) override;
   void write_float(const char* name, float) override;
-  void write_colorf(const char* name, const Color&) override;
-  void write_colori(const char* name, const Color&) override;
-  void write_bool(const char* name, bool) override;
   void write_string(const char* name, const std::string&) override;
-  void write_vector(const char* name, const Vector2f&, float) override;
-  void write_size(const char* name, const geom::isize&) override;
-  void write_vector2i(const char* name, const geom::ipoint&) override;
-  void write_path(const char* name, const Pathname&) override;
 
 private:
   void flush();

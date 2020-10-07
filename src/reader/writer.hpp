@@ -19,7 +19,6 @@
 
 #include <string>
 #include <memory>
-#include <geom/fwd.hpp>
 
 class Color;
 class Pathname;
@@ -52,16 +51,10 @@ public:
   void end_mapping();
 
   /** write a name/value pair inside a mapping */
+  void write_bool(const char* name, bool);
   void write_int(const char* name, int);
   void write_float(const char* name, float);
-  void write_colorf(const char* name, const Color&);
-  void write_colori(const char* name, const Color&);
-  void write_bool(const char* name, bool);
   void write_string(const char* name, const std::string&);
-  void write_vector(const char* name, const geom::fpoint&, float);
-  void write_size(const char* name, const geom::isize&);
-  void write_vector2i(const char* name, const geom::ipoint&);
-  void write_path(const char* name, const Pathname&);
 
   template<class E, class T>
   void write_enum(const char* name, E& value, T string2enum)

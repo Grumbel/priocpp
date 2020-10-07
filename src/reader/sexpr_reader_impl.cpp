@@ -16,17 +16,14 @@
 
 #include "reader/sexpr_reader_impl.hpp"
 
+#include <sstream>
+
 #include <logmich/log.hpp>
 #include <sexp/util.hpp>
 #include <sexp/io.hpp>
 
-#include "math/color.hpp"
-#include "math/rect.hpp"
-#include "math/vector2f.hpp"
-#include "pingus/res_descriptor.hpp"
 #include "reader/reader.hpp"
 #include "reader/reader_impl.hpp"
-#include "util/raise_exception.hpp"
 
 SExprReaderObjectImpl::SExprReaderObjectImpl(sexp::Value const& sx) :
   m_sx(sx) // FIXME: all this copying is unnecessary
@@ -46,8 +43,7 @@ SExprReaderObjectImpl::get_name() const
 {
   if (sexp::list_length(m_sx) < 1)
   {
-    raise_exception(std::runtime_error, "invalid syntax");
-    return {};
+    throw std::runtime_error("invalid syntax");
   }
   else
   {
@@ -198,132 +194,6 @@ SExprReaderMappingImpl::read_string(const char* key, std::string& value) const
         value += item.as_string();
       }
     }
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-SExprReaderMappingImpl::read_vector(const char* key, Vector2f& value, float& z_index) const
-{
-  sexp::Value const* sub = get_subsection(key);
-  if (sub && sexp::list_length(*sub) == 3)
-  {
-    value = Vector2f(sexp::list_ref(*sub, 0).as_float(),
-                     sexp::list_ref(*sub, 1).as_float());
-    z_index = sexp::list_ref(*sub, 2).as_float();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-SExprReaderMappingImpl::read_vectors(const char* key, std::vector<Vector2f>& values, std::vector<float>& z_indexes) const
-{
-  sexp::Value const* sub_lst = get_subsection(key);
-  if (sub_lst)
-  {
-    for(auto const& sub : sexp::ListAdapter(*sub_lst))
-    {
-      if (sexp::list_length(sub) == 3)
-      {
-        values.emplace_back(sexp::list_ref(sub, 0).as_float(),
-                            sexp::list_ref(sub, 1).as_float());
-        z_indexes.emplace_back(sexp::list_ref(sub, 2).as_float());
-      }
-    }
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-SExprReaderMappingImpl::read_size(const char* key, Size& value) const
-{
-  sexp::Value const* sub = get_subsection(key);
-  if (sub && sexp::list_length(*sub) == 2)
-  {
-    value = Size(sexp::list_ref(*sub, 0).as_int(),
-                 sexp::list_ref(*sub, 1).as_int());
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-SExprReaderMappingImpl::read_vector2i(const char* key, Vector2i& value) const
-{
-  sexp::Value const* sub = get_subsection(key);
-  if (sub && sexp::list_length(*sub) == 2)
-  {
-    value = Vector2i(sexp::list_ref(*sub, 0).as_int(),
-                     sexp::list_ref(*sub, 1).as_int());
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-SExprReaderMappingImpl::read_rect(const char* key, Rect& rect) const
-{
-  sexp::Value const* sub = get_subsection(key);
-  if (sub && sexp::list_length(*sub) == 4)
-  {
-    rect = Rect(sexp::list_ref(*sub, 0).as_int(),
-                sexp::list_ref(*sub, 1).as_int(),
-                sexp::list_ref(*sub, 2).as_int(),
-                sexp::list_ref(*sub, 3).as_int());
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-SExprReaderMappingImpl::read_colorf(const char* key, Color& value) const
-{
-  sexp::Value const* sub = get_subsection(key);
-  if (sub && sexp::list_length(*sub) == 4)
-  {
-    value = Color(static_cast<uint8_t>(sexp::list_ref(*sub, 0).as_float() * 255),
-                  static_cast<uint8_t>(sexp::list_ref(*sub, 1).as_float() * 255),
-                  static_cast<uint8_t>(sexp::list_ref(*sub, 2).as_float() * 255),
-                  static_cast<uint8_t>(sexp::list_ref(*sub, 3).as_float() * 255));
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-SExprReaderMappingImpl::read_colori(const char* key, Color& value) const
-{
-  sexp::Value const* sub = get_subsection(key);
-  if (sub && sexp::list_length(*sub) == 4)
-  {
-    value = Color(static_cast<uint8_t>(sexp::list_ref(*sub, 0).as_int()),
-                  static_cast<uint8_t>(sexp::list_ref(*sub, 1).as_int()),
-                  static_cast<uint8_t>(sexp::list_ref(*sub, 2).as_int()),
-                  static_cast<uint8_t>(sexp::list_ref(*sub, 3).as_int()));
     return true;
   }
   else

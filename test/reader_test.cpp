@@ -18,8 +18,7 @@
 
 #include <fstream>
 
-#include "math/vector2f.hpp"
-#include "util/reader.hpp"
+#include "reader/reader.hpp"
 
 class ReaderTest : public ::testing::TestWithParam<std::string>
 {
@@ -58,30 +57,6 @@ TEST_P(ReaderTest, read_float)
   float floatvalue;
   ASSERT_TRUE(body.read_float("floatvalue", floatvalue));
   EXPECT_EQ(5.5f, floatvalue);
-}
-
-TEST_P(ReaderTest, read_vector)
-{
-  Vector2f v;
-  float z_index;
-  ASSERT_TRUE(body.read_vector("vector", v, z_index));
-  EXPECT_EQ(1.0f, v.x());
-  EXPECT_EQ(2.0f, v.y());
-  EXPECT_EQ(3.0f, z_index);
-}
-
-TEST_P(ReaderTest, read_vectors)
-{
-  std::vector<Vector2f> vs;
-  std::vector<float> zs;
-  ASSERT_TRUE(body.read_vectors("vectors", vs, zs));
-  ASSERT_EQ(3, vs.size());
-  EXPECT_EQ(Vector2f(1, 2), vs[0]);
-  EXPECT_EQ(Vector2f(4, 5), vs[1]);
-  EXPECT_EQ(Vector2f(7, 8), vs[2]);
-  EXPECT_EQ(3, zs[0]);
-  EXPECT_EQ(6, zs[1]);
-  EXPECT_EQ(9, zs[2]);
 }
 
 TEST_P(ReaderTest, read_mapping)
@@ -129,6 +104,6 @@ TEST_P(ReaderTest, read_object)
 }
 
 INSTANTIATE_TEST_CASE_P(ParamReaderTest, ReaderTest,
-                        ::testing::Values("tests/sexpr.scm", "tests/json.json"));
+                        ::testing::Values("test/sexpr.scm", "test/json.json"));
 
 /* EOF */

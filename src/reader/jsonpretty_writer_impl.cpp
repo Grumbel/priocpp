@@ -20,12 +20,6 @@
 #include <ostream>
 #include <assert.h>
 
-#include "math/color.hpp"
-#include "math/size.hpp"
-#include "math/vector2i.hpp"
-#include "math/vector2f.hpp"
-#include "util/pathname.hpp"
-
 JsonPrettyWriterImpl::JsonPrettyWriterImpl(std::ostream& out) :
   m_out(out),
   m_depth(0),
@@ -145,6 +139,17 @@ JsonPrettyWriterImpl::end_mapping()
 }
 
 void
+JsonPrettyWriterImpl::write_bool(const char* name, bool value)
+{
+  assert(m_context.back() == Context::Mapping);
+
+  write_indent();
+  write_quoted_string(name);
+  m_out << ": " << (value ? "true" : "false");
+  write_separator();
+}
+
+void
 JsonPrettyWriterImpl::write_int(const char* name, int value)
 {
   assert(m_context.back() == Context::Mapping);
@@ -167,47 +172,6 @@ JsonPrettyWriterImpl::write_float(const char* name, float value)
 }
 
 void
-JsonPrettyWriterImpl::write_colorf(const char* name, const Color& value)
-{
-  assert(m_context.back() == Context::Mapping);
-
-  write_indent();
-  write_quoted_string(name);
-  m_out << ": [ "
-        << static_cast<float>(value.r) / 255.0f << ", "
-        << static_cast<float>(value.g) / 255.0f << ", "
-        << static_cast<float>(value.b) / 255.0f << ", "
-        << static_cast<float>(value.a) / 255.0f << " ]";
-  write_separator();
-}
-
-void
-JsonPrettyWriterImpl::write_colori(const char* name, const Color& value)
-{
-  assert(m_context.back() == Context::Mapping);
-
-  write_indent();
-  write_quoted_string(name);
-  m_out << ": [ "
-        << static_cast<int>(value.r) << ", "
-        << static_cast<int>(value.g) << ", "
-        << static_cast<int>(value.b) << ", "
-        << static_cast<int>(value.a) << " ]";
-  write_separator();
-}
-
-void
-JsonPrettyWriterImpl::write_bool(const char* name, bool value)
-{
-  assert(m_context.back() == Context::Mapping);
-
-  write_indent();
-  write_quoted_string(name);
-  m_out << ": " << (value ? "true" : "false");
-  write_separator();
-}
-
-void
 JsonPrettyWriterImpl::write_string(const char* name, const std::string& value)
 {
   assert(m_context.back() == Context::Mapping);
@@ -216,51 +180,6 @@ JsonPrettyWriterImpl::write_string(const char* name, const std::string& value)
   write_quoted_string(name);
   m_out << ": ";
   write_quoted_string(value);
-  write_separator();
-}
-
-void
-JsonPrettyWriterImpl::write_vector(const char* name, const Vector2f& value, float z_index)
-{
-  assert(m_context.back() == Context::Mapping);
-
-  write_indent();
-  write_quoted_string(name);
-  m_out << ": [ " << value.x() << ", " << value.y() << ", " <<  z_index << " ]";
-  write_separator();
-}
-
-void
-JsonPrettyWriterImpl::write_size(const char* name, const Size& value)
-{
-  assert(m_context.back() == Context::Mapping);
-
-  write_indent();
-  write_quoted_string(name);
-  m_out << ": [ " << value.width() << ", " << value.height() << " ]";
-  write_separator();
-}
-
-void
-JsonPrettyWriterImpl::write_vector2i(const char* name, const Vector2i& value)
-{
-  assert(m_context.back() == Context::Mapping);
-
-  write_indent();
-  write_quoted_string(name);
-  m_out << ": [ " << value.x() << ", " << value.y() << " ]";
-  write_separator();
-}
-
-void
-JsonPrettyWriterImpl::write_path(const char* name, const Pathname& value)
-{
-  assert(m_context.back() == Context::Mapping);
-
-  write_indent();
-  write_quoted_string(name);
-  m_out << ": ";
-  write_quoted_string(value.get_raw_path());
   write_separator();
 }
 

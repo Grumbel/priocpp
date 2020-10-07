@@ -20,12 +20,6 @@
 #include <ostream>
 #include <assert.h>
 
-#include "math/color.hpp"
-#include "math/size.hpp"
-#include "math/vector2i.hpp"
-#include "math/vector2f.hpp"
-#include "util/pathname.hpp"
-
 JsonWriterImpl::JsonWriterImpl(std::ostream& out) :
   m_out(out),
   m_root(Json::objectValue),
@@ -103,6 +97,15 @@ JsonWriterImpl::end_mapping()
 }
 
 void
+JsonWriterImpl::write_bool(const char* name, bool value)
+{
+  assert(!m_stack.empty());
+  assert(m_stack.back().get().type() == Json::objectValue);
+
+  m_stack.back().get()[name] = Json::Value(value);
+}
+
+void
 JsonWriterImpl::write_int(const char* name, int value)
 {
   assert(!m_stack.empty());
@@ -121,92 +124,12 @@ JsonWriterImpl::write_float(const char* name, float value)
 }
 
 void
-JsonWriterImpl::write_colorf(const char* name, const Color& value)
-{
-  assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
-
-  Json::Value array(Json::arrayValue);
-  array.append(Json::Value(static_cast<float>(value.r) / 255.0f));
-  array.append(Json::Value(static_cast<float>(value.g) / 255.0f));
-  array.append(Json::Value(static_cast<float>(value.b) / 255.0f));
-  array.append(Json::Value(static_cast<float>(value.a) / 255.0f));
-  m_stack.back().get()[name] = array;
-}
-
-void
-JsonWriterImpl::write_colori(const char* name, const Color& value)
-{
-  assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
-
-  Json::Value array(Json::arrayValue);
-  array.append(Json::Value(static_cast<int>(value.r)));
-  array.append(Json::Value(static_cast<int>(value.g)));
-  array.append(Json::Value(static_cast<int>(value.b)));
-  array.append(Json::Value(static_cast<int>(value.a)));
-  m_stack.back().get()[name] = array;
-}
-
-void
-JsonWriterImpl::write_bool(const char* name, bool value)
-{
-  assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
-
-  m_stack.back().get()[name] = Json::Value(value);
-}
-
-void
 JsonWriterImpl::write_string(const char* name, const std::string& value)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
 
   m_stack.back().get()[name] = Json::Value(value);
-}
-
-void
-JsonWriterImpl::write_vector(const char* name, const Vector2f& value, float z_index)
-{
-  assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
-
-  Json::Value array(Json::arrayValue);
-  array.append(Json::Value(value.x()));
-  array.append(Json::Value(value.y()));
-  array.append(Json::Value(z_index));
-  m_stack.back().get()[name] = array;
-}
-
-void
-JsonWriterImpl::write_size(const char* name, const Size& value)
-{
-  assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
-
-  Json::Value array(Json::arrayValue);
-  array.append(Json::Value(value.width()));
-  array.append(Json::Value(value.height()));
-  m_stack.back().get()[name] = array;
-}
-
-void
-JsonWriterImpl::write_vector2i(const char* name, const Vector2i& value)
-{
-  assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
-
-  Json::Value array(Json::arrayValue);
-  array.append(Json::Value(value.x()));
-  array.append(Json::Value(value.y()));
-  m_stack.back().get()[name] = array;
-}
-
-void
-JsonWriterImpl::write_path(const char* name, const Pathname& value)
-{
-  write_string(name, value.get_raw_path());
 }
 
 namespace {

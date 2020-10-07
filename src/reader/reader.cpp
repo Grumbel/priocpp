@@ -24,10 +24,7 @@
 #include <logmich/log.hpp>
 #include <sexp/parser.hpp>
 
-#include "math/size.hpp"
-#include "pingus/res_descriptor.hpp"
 #include "reader/reader_impl.hpp"
-#include "util/pathname.hpp"
 #include "reader/sexpr_reader_impl.hpp"
 #include "reader/json_reader_impl.hpp"
 
@@ -120,107 +117,6 @@ ReaderMapping::read_string(const char* key, std::string& value) const
 {
   if (m_impl)
     return m_impl->read_string(key, value);
-  else
-    return false;
-}
-
-bool
-ReaderMapping::read_path(const char* key, Pathname& value) const
-{
-  if (m_impl)
-  {
-    std::string filename;
-    if (m_impl->read_string(key, filename))
-    {
-      value = Pathname(filename, Pathname::DATA_PATH);
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-ReaderMapping::read_vector(const char* key, Vector2f& value, float& z_index) const
-{
-  if (m_impl)
-    return m_impl->read_vector(key, value, z_index);
-  else
-    return false;
-}
-
-bool
-ReaderMapping::read_vectors(const char* key, std::vector<Vector2f>& value, std::vector<float>& z_indexes) const
-{
-  if (m_impl)
-    return m_impl->read_vectors(key, value, z_indexes);
-  else
-    return false;
-}
-
-bool
-ReaderMapping::read_colorf(const char* key, Color& value) const
-{
-  if (m_impl)
-    return m_impl->read_colorf(key, value);
-  else
-    return false;
-}
-
-bool
-ReaderMapping::read_colori(const char* key, Color& value) const
-{
-  if (m_impl)
-    return m_impl->read_colori(key, value);
-  else
-    return false;
-}
-
-bool
-ReaderMapping::read_desc(const char* key, ResDescriptor& value) const
-{
-  ReaderMapping reader;
-  if (read_mapping(key, reader))
-  {
-    reader.read_string("image", value.res_name);
-    reader.read_enum("modifier", value.modifier, &ResourceModifier::from_string);
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool
-ReaderMapping::read_size  (const char* key, Size& value) const
-{
-  if (m_impl)
-    return m_impl->read_size(key, value);
-  else
-    return false;
-}
-
-bool
-ReaderMapping::read_vector2i(const char* key, Vector2i& value) const
-{
-  if (m_impl)
-    return m_impl->read_vector2i(key, value);
-  else
-    return false;
-}
-
-bool
-ReaderMapping::read_rect(const char* key, Rect& value)    const
-{
-  if (m_impl)
-    return m_impl->read_rect(key, value);
   else
     return false;
 }
@@ -360,14 +256,8 @@ Reader::parse(const std::string& filename)
   }
 }
 
-ReaderObject
-Reader::parse(const Pathname& pathname)
-{
-  return parse(pathname.get_sys_path());
-}
-
 std::vector<ReaderObject>
-Reader::parse_many(const Pathname& pathname)
+Reader::parse_many(const std::string& pathname)
 {
   return {};
 #if 0

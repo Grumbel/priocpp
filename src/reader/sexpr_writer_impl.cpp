@@ -18,8 +18,6 @@
 
 #include <map>
 
-#include "util/pathname.hpp"
-
 SExprWriterImpl::SExprWriterImpl(std::ostream& out_) :
   out(&out_),
   level(0)
@@ -84,6 +82,12 @@ SExprWriterImpl::end_mapping()
 }
 
 void
+SExprWriterImpl::write_bool(const char* name, bool value)
+{
+  (*out) << "\n" << indent() << "(" << name << " " << (value ? "#t" : "#f") << ")";
+}
+
+void
 SExprWriterImpl::write_int(const char* name, int value)
 {
   (*out) << "\n" << indent() << "(" << name << " " << value << ")";
@@ -93,32 +97,6 @@ void
 SExprWriterImpl::write_float(const char* name, float value)
 {
   (*out) << "\n" << indent() << "(" << name << " " << value << ")";
-}
-
-void
-SExprWriterImpl::write_colorf(const char* name, const Color& color)
-{
-  (*out) << "\n" << indent() << "(" << name << " "
-         << static_cast<float>(color.r)/255.0f << " "
-         << static_cast<float>(color.g)/255.0f << " "
-         << static_cast<float>(color.b)/255.0f << " "
-         << static_cast<float>(color.a)/255.0f << ")";
-}
-
-void
-SExprWriterImpl::write_colori(const char* name, const Color& color)
-{
-  (*out) << "\n" << indent() << "(" << name << " "
-         << static_cast<int>(color.r) << " "
-         << static_cast<int>(color.g) << " "
-         << static_cast<int>(color.b) << " "
-         << static_cast<int>(color.a) << ")";
-}
-
-void
-SExprWriterImpl::write_bool(const char* name, bool value)
-{
-  (*out) << "\n" << indent() << "(" << name << " " << (value ? "#t" : "#f") << ")";
 }
 
 void
@@ -146,29 +124,5 @@ SExprWriterImpl::write_string(const char* name, const std::string& value)
   (*out) << "\n" << indent() << "(" << name << " \"" << new_value << "\")";
 }
 
-void
-SExprWriterImpl::write_vector(const char* name, const Vector2f& value, float z_index)
-{
-  (*out) << "\n" << indent() << "(" << name << " "
-         << value.x() << " " << value.y() << " " << z_index << ")";
-}
-
-void
-SExprWriterImpl::write_size(const char* name, const Size& size)
-{
-  (*out) << "\n" << indent() << "(" << name << " " << size.width() << " " << size.height() << ")";
-}
-
-void
-SExprWriterImpl::write_vector2i(const char* name, const Vector2i& v)
-{
-  (*out) << "\n" << indent() << "(" << name << " " << v.x() << " " << v.y() << ")";
-}
-
-void
-SExprWriterImpl::write_path(const char* name, const Pathname& path)
-{
-  write_string(name, path.get_raw_path());
-}
 
 /* EOF */

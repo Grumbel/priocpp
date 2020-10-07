@@ -88,6 +88,11 @@ Writer::end_mapping()
   m_impl->end_mapping();
 }
 
+void
+Writer::write_bool(const char* name, bool value)
+{
+  m_impl->write_bool(name, value);
+}
 
 void
 Writer::write_int(const char* name, int value)
@@ -102,51 +107,9 @@ Writer::write_float(const char* name, float value)
 }
 
 void
-Writer::write_colorf(const char* name, const Color& value)
-{
-  m_impl->write_colorf(name, value);
-}
-
-void
-Writer::write_colori(const char* name, const Color& value)
-{
-  m_impl->write_colori(name, value);
-}
-
-void
-Writer::write_bool(const char* name, bool value)
-{
-  m_impl->write_bool(name, value);
-}
-
-void
 Writer::write_string(const char* name, const std::string& value)
 {
   m_impl->write_string(name, value);
-}
-
-void
-Writer::write_vector(const char* name, const Vector2f& value, float z_index)
-{
-  m_impl->write_vector(name, value, z_index);
-}
-
-void
-Writer::write_size(const char* name, const Size& value)
-{
-  m_impl->write_size(name, value);
-}
-
-void
-Writer::write_vector2i(const char* name, const Vector2i& value)
-{
-  m_impl->write_vector2i(name, value);
-}
-
-void
-Writer::write_path(const char* name, const Pathname& value)
-{
-  m_impl->write_path(name, value);
 }
 
 /* EOF */

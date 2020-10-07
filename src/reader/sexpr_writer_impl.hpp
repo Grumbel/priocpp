@@ -19,9 +19,6 @@
 
 #include <ostream>
 
-#include "math/color.hpp"
-#include "math/size.hpp"
-#include "math/vector2f.hpp"
 #include "reader/writer_impl.hpp"
 
 class SExprWriterImpl : public WriterImpl
@@ -45,16 +42,10 @@ public:
   void begin_mapping(const char* name) override;
   void end_mapping() override;
 
+  void write_bool(const char* name, bool) override;
   void write_int(const char* name, int) override;
   void write_float(const char* name, float) override;
-  void write_colorf(const char* name, const Color&) override;
-  void write_colori(const char* name, const Color&) override;
-  void write_bool(const char* name, bool) override;
   void write_string(const char* name, const std::string&) override;
-  void write_vector(const char* name, const Vector2f&, float) override;
-  void write_size(const char* name, const Size&) override;
-  void write_vector2i(const char* name, const Vector2i&) override;
-  void write_path(const char* name, const Pathname&) override;
 
   template<class E, class F>
   void write_enum(const char* name, E value, F enum2string)

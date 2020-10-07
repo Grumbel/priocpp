@@ -19,12 +19,6 @@
 
 #include <string>
 
-#include <geom/fwd.hpp>
-#include "math/vector2f.hpp"
-
-class Color;
-class Pathname;
-
 /** Interface to write out name/value pairs out of some kind of file or
     structure */
 class WriterImpl
@@ -42,16 +36,10 @@ public:
   virtual void begin_mapping(const char* name) = 0;
   virtual void end_mapping() = 0;
 
+  virtual void write_bool   (const char* name, bool) = 0;
   virtual void write_int    (const char* name, int) = 0;
   virtual void write_float  (const char* name, float) = 0;
-  virtual void write_colorf (const char* name, const Color&) = 0;
-  virtual void write_colori (const char* name, const Color&) = 0;
-  virtual void write_bool   (const char* name, bool) = 0;
   virtual void write_string (const char* name, const std::string&) = 0;
-  virtual void write_vector (const char* name, const Vector2f&, float) = 0;
-  virtual void write_size   (const char* name, const geom::isize&) = 0;
-  virtual void write_vector2i(const char* name, const geom::ipoint&) = 0;
-  virtual void write_path   (const char* name, const Pathname&) = 0;
 };
 
 #endif

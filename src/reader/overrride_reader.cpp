@@ -18,8 +18,6 @@
 
 #include <set>
 
-#include <geom/size.hpp>
-
 #include "reader/reader.hpp"
 #include "reader/reader_impl.hpp"
 
@@ -94,90 +92,6 @@ public:
     else
     {
       return m_reader.read_string(name, str);
-    }
-  }
-
-  bool read_vector(const char* name, Vector2f& vec, float& z_index) const override
-  {
-    if (m_overrides.read_vector(name, vec, z_index))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read_vector(name, vec, z_index);
-    }
-  }
-
-  bool read_vectors(const char* name, std::vector<Vector2f>& vec, std::vector<float>& z_indexes) const override
-  {
-    if (m_overrides.read_vectors(name, vec, z_indexes))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read_vectors(name, vec, z_indexes);
-    }
-  }
-
-  bool read_size(const char* name, geom::isize& size) const override
-  {
-    if (m_overrides.read_size(name, size))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read_size(name, size);
-    }
-  }
-
-  bool read_vector2i(const char* name, Vector2i& vec) const override
-  {
-    if (m_overrides.read_vector2i(name, vec))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read_vector2i(name, vec);
-    }
-  }
-
-  bool read_rect(const char* name, Rect& rect) const override
-  {
-    if (m_overrides.read_rect(name, rect))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read_rect(name, rect);
-    }
-  }
-
-  bool read_colorf(const char* name, Color& color) const override
-  {
-    if (m_overrides.read_colorf(name, color))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read_colorf(name, color);
-    }
-  }
-
-  bool read_colori(const char* name, Color& color) const override
-  {
-    if (m_overrides.read_colori(name, color))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read_colori(name, color);
     }
   }
 

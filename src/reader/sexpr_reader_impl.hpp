@@ -18,7 +18,7 @@
 #define HEADER_PINGUS_UTIL_SEXPR_READER_HPP
 
 #include <sexp/value.hpp>
-#include <geom/fwd.hpp>
+
 #include "reader/reader_impl.hpp"
 
 class SExprReaderObjectImpl : public ReaderObjectImpl
@@ -54,17 +54,10 @@ public:
 
   std::vector<std::string> get_keys() const override;
 
+  bool read_bool(const char* key, bool&) const override;
   bool read_int(const char* key, int&) const override;
   bool read_float(const char* key, float&) const override;
-  bool read_bool(const char* key, bool&) const override;
   bool read_string(const char* key, std::string&) const override;
-  bool read_vector(const char* key, Vector2f&, float& z_index) const override;
-  bool read_vectors(const char* key, std::vector<Vector2f>&, std::vector<float>& z_indexes) const override;
-  bool read_size(const char* key, geom::isize&) const override;
-  bool read_vector2i(const char* key, Vector2i&) const override;
-  bool read_rect(const char* key, Rect&) const override;
-  bool read_colorf(const char* key, Color&) const override;
-  bool read_colori(const char* key, Color&) const override;
 
   bool read_mapping(const char* key, ReaderMapping&) const override;
   bool read_collection(const char* key, ReaderCollection&) const override;

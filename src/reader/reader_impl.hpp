@@ -20,11 +20,6 @@
 #include <string>
 #include <vector>
 
-#include <geom/fwd.hpp>
-
-#include "math/rect.hpp"
-#include "math/vector2f.hpp"
-
 class Color;
 
 class ReaderCollection;
@@ -60,13 +55,6 @@ public:
   virtual bool read_float(const char* key, float&) const = 0;
   virtual bool read_bool(const char* key, bool&) const = 0;
   virtual bool read_string(const char* key, std::string&) const = 0;
-  virtual bool read_vector(const char* key, Vector2f&, float& z_index) const = 0;
-  virtual bool read_vectors(const char* key, std::vector<Vector2f>&, std::vector<float>& ) const = 0;
-  virtual bool read_size(const char* key, geom::isize&) const = 0;
-  virtual bool read_vector2i(const char* key, Vector2i&) const = 0;
-  virtual bool read_rect(const char* key, Rect&) const = 0;
-  virtual bool read_colorf(const char* key, Color&) const = 0;
-  virtual bool read_colori(const char* key, Color&) const = 0;
 
   virtual bool read_mapping(const char* key, ReaderMapping&) const = 0;
   virtual bool read_collection(const char* key, ReaderCollection&) const = 0;
