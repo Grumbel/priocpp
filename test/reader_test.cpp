@@ -141,6 +141,15 @@ TEST_P(ReaderTest, read_object)
   EXPECT_EQ(7, prop2);
 }
 
+TEST_P(ReaderTest, get)
+{
+  EXPECT_EQ(body.get("boolvalue", false), true);
+  EXPECT_EQ(body.get("intvalue", 0), 5);
+  EXPECT_EQ(body.get("floatvalue", 0.0f), 5.5f);
+  EXPECT_EQ(body.get("stringvalue", std::string()), "Hello World");
+  EXPECT_EQ(body.get("customvalue", CustomType{}).value, 5);
+}
+
 INSTANTIATE_TEST_CASE_P(ParamReaderTest, ReaderTest,
                         ::testing::Values("test/sexpr.scm", "test/json.json"));
 

@@ -66,6 +66,12 @@ public:
     return read_custom(*this, name, value);
   }
 
+  template<typename T>
+  T get(char const* name, T fallback) {
+    read(name, fallback);
+    return fallback;
+  }
+
 private:
   std::shared_ptr<ReaderMappingImpl> m_impl;
 };
