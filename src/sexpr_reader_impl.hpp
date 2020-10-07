@@ -26,43 +26,47 @@ namespace prio {
 class SExprReaderDocumentImpl final : public ReaderDocumentImpl
 {
 public:
-  SExprReaderDocumentImpl(sexp::Value sx);
+  SExprReaderDocumentImpl(sexp::Value sx, std::optional<std::string> filename);
 
-  ReaderObject get_root() const;
+  ReaderObject get_root() const override;
+  std::optional<std::string> get_filename() const override { return m_filename; }
 
 private:
   sexp::Value m_sx;
+  std::optional<std::string> m_filename;
 };
 
 class SExprReaderObjectImpl final : public ReaderObjectImpl
 {
 public:
-  SExprReaderObjectImpl(sexp::Value const& sx);
+  SExprReaderObjectImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& sx);
   ~SExprReaderObjectImpl() override;
 
   std::string get_name() const override;
   ReaderMapping get_mapping() const override;
 
 private:
+  SExprReaderDocumentImpl const& m_doc;
   sexp::Value const& m_sx;
 };
 
 class SExprReaderCollectionImpl final : public ReaderCollectionImpl
 {
 public:
-  SExprReaderCollectionImpl(sexp::Value const& m_sx);
+  SExprReaderCollectionImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& m_sx);
   ~SExprReaderCollectionImpl() override;
 
   std::vector<ReaderObject> get_objects() const override;
 
 private:
+  SExprReaderDocumentImpl const& m_doc;
   sexp::Value const& m_sx;
 };
 
 class SExprReaderMappingImpl final : public ReaderMappingImpl
 {
 public:
-  SExprReaderMappingImpl(sexp::Value const& m_sx);
+  SExprReaderMappingImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& m_sx);
   ~SExprReaderMappingImpl() override;
 
   std::vector<std::string> get_keys() const override;
@@ -87,6 +91,7 @@ private:
   sexp::Value const* get_subsection(const char* name) const;
 
 private:
+  SExprReaderDocumentImpl const& m_doc;
   sexp::Value const& m_sx;
 };
 

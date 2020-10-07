@@ -26,6 +26,7 @@
 #include "reader_impl.hpp"
 #include "reader_mapping.hpp"
 #include "reader_object.hpp"
+#include "sexpr_reader_error.hpp"
 
 namespace prio {
 
@@ -38,11 +39,12 @@ SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx, std::optional<s
 ReaderObject
 SExprReaderDocumentImpl::get_root() const
 {
-  return ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_sx));
+  return ReaderObject(std::make_unique<SExprReaderObjectImpl>(*this, m_sx));
 }
 
-SExprReaderObjectImpl::SExprReaderObjectImpl(sexp::Value const& sx) :
-  m_sx(sx) // FIXME: all this copying is unnecessary
+SExprReaderObjectImpl::SExprReaderObjectImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& sx) :
+  m_doc(doc),
+  m_sx(sx)
 {
   // Expects data in the format:
   // (objectname
@@ -70,11 +72,12 @@ SExprReaderObjectImpl::get_name() const
 ReaderMapping
 SExprReaderObjectImpl::get_mapping() const
 {
-  return ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_sx));
+  return ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_doc, m_sx));
 }
 
 
-SExprReaderCollectionImpl::SExprReaderCollectionImpl(sexp::Value const& sx) :
+SExprReaderCollectionImpl::SExprReaderCollectionImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& sx) :
+  m_doc(doc),
   m_sx(sx)
 {
 }
@@ -88,13 +91,14 @@ SExprReaderCollectionImpl::get_objects() const
 {
   std::vector<ReaderObject> lst;
   for (size_t i = 1; i < m_sx.as_array().size(); ++i) {
-    lst.push_back(ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_sx.as_array()[i])));
+    lst.push_back(ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_doc, m_sx.as_array()[i])));
   }
   return lst;
 }
 
 
-SExprReaderMappingImpl::SExprReaderMappingImpl(sexp::Value const& sx) :
+SExprReaderMappingImpl::SExprReaderMappingImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& sx) :
+  m_doc(doc),
   m_sx(sx)
 {
   if (!m_sx.is_array())
@@ -129,146 +133,70 @@ SExprReaderMappingImpl::get_keys() const
   return lst;
 }
 
+#define GET_VALUE_MACRO(type, checker, getter)         \
+  sexp::Value const* item = get_subsection_item(key);  \
+  if (!item || !item->checker()) { return false; }     \
+  assert_##checker(m_doc, *item);                      \
+  value = item->getter();                              \
+  return true;                                         \
+
 bool
 SExprReaderMappingImpl::read(const char* key, bool& value) const
 {
-  sexp::Value const* item = get_subsection_item(key);
-  if (item && item->is_boolean())
-  {
-    value = item->as_bool();
-    return true;
-  }
-  else if (item && item->is_integer()) // FIXME: remove this, be explicit
-  {
-    value = item->as_int();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("bool", is_boolean, as_bool);
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, int& value) const
 {
-  sexp::Value const* item = get_subsection_item(key);
-  if (item && item->is_integer())
-  {
-    value = item->as_int();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("int", is_integer, as_int);
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, float& value) const
 {
-  sexp::Value const* item = get_subsection_item(key);
-  if (item)
-  {
-    if (item->is_real())
-    {
-      value = item->as_float();
-      return true;
-    }
-    else if (item->is_integer())
-    {
-      value = static_cast<float>(item->as_int());
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("float", is_real, as_float);
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::string& value) const
 {
-  sexp::Value const* sub = get_subsection(key);
-  if (sub)
-  {
-    value = "";
-    for (size_t i = 1; i < sub->as_array().size(); ++i)
-    {
-      auto const& item = sub->as_array()[i];
-
-      if (item.is_string())
-      {
-        value += item.as_string();
-      }
-      else if (item.is_symbol())
-      {
-        value += item.as_string();
-      }
-    }
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("string", is_string, as_string);
 }
+
+#define GET_VALUES_MACRO(type, checker, getter)         \
+  sexp::Value const* item = get_subsection_items(key);  \
+  if (!item || !item->is_array()) { return false; }     \
+                                                        \
+  values.resize(item->as_array().size() - 1);           \
+  for (size_t i = 0; i < values.size(); ++i) {          \
+    assert_##checker(m_doc, item->as_array()[i + 1]);   \
+    values[i] = item->as_array()[i + 1].getter();       \
+  }                                                     \
+  return true;
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
 {
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_array()) return false;
-
-  values.resize(item->as_array().size() - 1);
-  for (size_t i = 0; i < values.size(); ++i) {
-    values[i] = item->as_array()[i + 1].as_bool();
-  }
-  return true;
+  GET_VALUES_MACRO("bool", is_boolean, as_bool);
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<int>& values) const
 {
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_array()) return false;
-
-  values.resize(item->as_array().size() - 1);
-  for (size_t i = 0; i < values.size(); ++i) {
-    values[i] = item->as_array()[i + 1].as_int();
-  }
-  return true;
+  GET_VALUES_MACRO("int", is_integer, as_int);
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<float>& values) const
 {
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_array()) return false;
-
-  values.resize(item->as_array().size() - 1);
-  for (size_t i = 0; i < values.size(); ++i) {
-    values[i] = item->as_array()[i + 1].as_float();
-  }
-  return true;
+  GET_VALUES_MACRO("float", is_real, as_float);
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<std::string>& values) const
 {
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_array()) return false;
-
-  values.resize(item->as_array().size() - 1);
-  for (size_t i = 0; i < values.size(); ++i) {
-    values[i] = item->as_array()[i + 1].as_string();
-  }
-  return true;
+  GET_VALUES_MACRO("string", is_string, as_string);
 }
 
 bool
@@ -277,7 +205,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderObject& value) const
   sexp::Value const* cur = get_subsection_item(key);
   if (cur)
   {
-    value = ReaderObject(std::make_unique<SExprReaderObjectImpl>(*cur));
+    value = ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_doc, *cur));
     return true;
   }
   else
@@ -292,7 +220,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderCollection& value) const
   sexp::Value const* cur = get_subsection(key);
   if (cur)
   {
-    value = ReaderCollection(std::make_unique<SExprReaderCollectionImpl>(*cur));
+    value = ReaderCollection(std::make_unique<SExprReaderCollectionImpl>(m_doc, *cur));
     return true;
   }
   else
@@ -307,7 +235,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderMapping& value) const
   sexp::Value const* cur = get_subsection(key);
   if (cur)
   {
-    value = ReaderMapping(std::make_unique<SExprReaderMappingImpl>(*cur));
+    value = ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_doc, *cur));
     return true;
   }
   else
