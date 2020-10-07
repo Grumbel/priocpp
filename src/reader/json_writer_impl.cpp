@@ -16,9 +16,11 @@
 
 #include "json_writer_impl.hpp"
 
-#include <sstream>
-#include <ostream>
 #include <assert.h>
+
+#include <memory>
+#include <ostream>
+#include <sstream>
 
 JsonWriterImpl::JsonWriterImpl(std::ostream& out) :
   m_out(out),
