@@ -51,7 +51,11 @@ public:
 
 public:
   ReaderDocument();
-  ReaderDocument(std::shared_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename = {});
+  ReaderDocument(ReaderDocument&&) = default;
+  ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename = {});
+  ~ReaderDocument();
+
+  ReaderDocument& operator=(ReaderDocument&&);
 
   /** Returns the root object */
   ReaderObject get_root() const;
@@ -63,7 +67,7 @@ public:
   std::string get_directory() const;
 
 private:
-  std::shared_ptr<ReaderDocumentImpl> m_impl;
+  std::unique_ptr<ReaderDocumentImpl> m_impl;
   std::optional<std::string> m_filename;
 };
 

@@ -42,7 +42,7 @@ JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value) :
 ReaderObject
 JsonReaderDocumentImpl::get_root() const
 {
-  return ReaderObject(std::make_shared<JsonReaderObjectImpl>(m_value));
+  return ReaderObject(std::make_unique<JsonReaderObjectImpl>(m_value));
 }
 
 JsonReaderObjectImpl::JsonReaderObjectImpl(Json::Value const& json) :
@@ -69,7 +69,7 @@ ReaderMapping
 JsonReaderObjectImpl::get_mapping() const
 {
   auto it = m_json.begin();
-  return ReaderMapping(std::make_shared<JsonReaderMappingImpl>(*it));
+  return ReaderMapping(std::make_unique<JsonReaderMappingImpl>(*it));
 }
 
 
@@ -92,7 +92,7 @@ JsonReaderCollectionImpl::get_objects() const
   std::vector<ReaderObject> result;
   for(Json::ArrayIndex i = 0; i < m_json.size(); ++i)
   {
-    result.push_back(ReaderObject(std::make_shared<JsonReaderObjectImpl>(m_json[i])));
+    result.push_back(ReaderObject(std::make_unique<JsonReaderObjectImpl>(m_json[i])));
   }
   return result;
 }
@@ -236,7 +236,7 @@ JsonReaderMappingImpl::read(const char* key, ReaderMapping& value) const
   const Json::Value& element = m_json[key];
   if (element.isObject())
   {
-    value = ReaderMapping(std::make_shared<JsonReaderMappingImpl>(element));
+    value = ReaderMapping(std::make_unique<JsonReaderMappingImpl>(element));
     return true;
   }
   else
@@ -251,7 +251,7 @@ JsonReaderMappingImpl::read(const char* key, ReaderCollection& value) const
   const Json::Value& element = m_json[key];
   if (element.isArray())
   {
-    value = ReaderCollection(std::make_shared<JsonReaderCollectionImpl>(element));
+    value = ReaderCollection(std::make_unique<JsonReaderCollectionImpl>(element));
     return true;
   }
   else
@@ -266,7 +266,7 @@ JsonReaderMappingImpl::read(const char* key, ReaderObject& value) const
   const Json::Value& element = m_json[key];
   if (element.isObject())
   {
-    value = ReaderObject(std::make_shared<JsonReaderObjectImpl>(element));
+    value = ReaderObject(std::make_unique<JsonReaderObjectImpl>(element));
     return true;
   }
   else

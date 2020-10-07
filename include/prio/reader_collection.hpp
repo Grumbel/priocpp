@@ -29,12 +29,16 @@ class ReaderCollection final
 {
 public:
   ReaderCollection();
-  ReaderCollection(std::shared_ptr<ReaderCollectionImpl> impl);
+  ReaderCollection(ReaderCollection&&) = default;
+  ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl);
+  ~ReaderCollection();
+
+  ReaderCollection& operator=(ReaderCollection&&);
 
   std::vector<ReaderObject> get_objects() const;
 
 private:
-  std::shared_ptr<ReaderCollectionImpl> m_impl;
+  std::unique_ptr<ReaderCollectionImpl> m_impl;
 };
 
 } // namespace prio

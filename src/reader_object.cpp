@@ -21,7 +21,7 @@
 
 namespace prio {
 
-ReaderObject::ReaderObject(std::shared_ptr<ReaderObjectImpl> impl) :
+ReaderObject::ReaderObject(std::unique_ptr<ReaderObjectImpl> impl) :
   m_impl(std::move(impl))
 {
 }
@@ -30,6 +30,13 @@ ReaderObject::ReaderObject() :
   m_impl()
 {
 }
+
+ReaderObject::~ReaderObject()
+{
+}
+
+ReaderObject&
+ReaderObject::operator=(ReaderObject&&) = default;
 
 std::string
 ReaderObject::get_name() const

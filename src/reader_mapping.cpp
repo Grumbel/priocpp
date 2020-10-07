@@ -22,8 +22,8 @@
 
 namespace prio {
 
-ReaderMapping::ReaderMapping(std::shared_ptr<ReaderMappingImpl> impl_) :
-  m_impl(std::move(impl_))
+ReaderMapping::ReaderMapping(std::unique_ptr<ReaderMappingImpl> impl) :
+  m_impl(std::move(impl))
 {
 }
 
@@ -32,8 +32,15 @@ ReaderMapping::ReaderMapping() :
 {
 }
 
+ReaderMapping::~ReaderMapping()
+{
+}
+
+ReaderMapping&
+ReaderMapping::operator=(ReaderMapping&&) = default;
+
 bool
-ReaderMapping::read  (const char* key, bool& value) const
+ReaderMapping::read(const char* key, bool& value) const
 {
   if (m_impl)
     return m_impl->read(key, value);

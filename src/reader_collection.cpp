@@ -21,7 +21,7 @@
 
 namespace prio {
 
-ReaderCollection::ReaderCollection(std::shared_ptr<ReaderCollectionImpl> impl) :
+ReaderCollection::ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl) :
   m_impl(std::move(impl))
 {
 }
@@ -30,6 +30,13 @@ ReaderCollection::ReaderCollection() :
   m_impl()
 {
 }
+
+ReaderCollection::~ReaderCollection()
+{
+}
+
+ReaderCollection&
+ReaderCollection::operator=(ReaderCollection&&) = default;
 
 std::vector<ReaderObject>
 ReaderCollection::get_objects() const

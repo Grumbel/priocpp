@@ -21,7 +21,7 @@
 
 namespace prio {
 
-ReaderMapping make_override_mapping(const ReaderMapping& reader, const ReaderMapping& overrides);
+ReaderMapping make_override_mapping(ReaderMapping const& reader, ReaderMapping const& overrides);
 
 } // namespace prio
 

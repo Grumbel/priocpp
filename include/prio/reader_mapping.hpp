@@ -31,7 +31,11 @@ class ReaderMapping final
 {
 public:
   ReaderMapping();
-  ReaderMapping(std::shared_ptr<ReaderMappingImpl> impl);
+  ReaderMapping(ReaderMapping&&) = default;
+  ReaderMapping(std::unique_ptr<ReaderMappingImpl> impl);
+  ~ReaderMapping();
+
+  ReaderMapping& operator=(ReaderMapping&&);
 
   std::vector<std::string> get_keys() const;
 
@@ -78,7 +82,7 @@ public:
   }
 
 private:
-  std::shared_ptr<ReaderMappingImpl> m_impl;
+  std::unique_ptr<ReaderMappingImpl> m_impl;
 };
 
 } // namespace prio

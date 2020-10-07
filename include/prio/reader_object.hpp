@@ -28,13 +28,17 @@ class ReaderObject final
 {
 public:
   ReaderObject();
-  ReaderObject(std::shared_ptr<ReaderObjectImpl> impl);
+  ReaderObject(ReaderObject&&) = default;
+  ReaderObject(std::unique_ptr<ReaderObjectImpl> impl);
+  ~ReaderObject();
+
+  ReaderObject& operator=(ReaderObject&&);
 
   std::string get_name() const;
   ReaderMapping get_mapping() const;
 
 private:
-  std::shared_ptr<ReaderObjectImpl> m_impl;
+  std::unique_ptr<ReaderObjectImpl> m_impl;
 };
 
 } // namespace prio

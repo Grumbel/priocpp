@@ -52,7 +52,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
     std::string errs;
     Json::Value root;
     if (Json::parseFromStream(builder, stream, &root, &errs)) {
-      return ReaderDocument(std::make_shared<JsonReaderDocumentImpl>(root), filename);
+      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(root), filename);
     } else {
       throw std::runtime_error(fmt::format("json parse error: {}", errs));
     }
@@ -60,7 +60,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
   else
   { // sexp
     auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
-    return ReaderDocument(std::make_shared<SExprReaderDocumentImpl>(std::move(sx)), filename);
+    return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx)), filename);
   }
 }
 
@@ -85,7 +85,7 @@ Reader::parse_many(const std::string& pathname)
     std::vector<Reader> sections;
     for(size_t i = 0; i < sexpr->get_list_size(); ++i)
     {
-      sections.push_back(Reader(std::make_shared<SExprReaderImpl>(sexpr->get_list_elem(i))));
+      sections.push_back(Reader(std::make_unique<SExprReaderImpl>(sexpr->get_list_elem(i))));
     }
 
     return sections;
@@ -103,11 +103,18 @@ ReaderDocument:: ReaderDocument() :
 {
 }
 
-ReaderDocument::ReaderDocument(std::shared_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename) :
+ReaderDocument::ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename) :
   m_impl(std::move(impl)),
   m_filename(std::move(filename))
 {
 }
+
+ReaderDocument::~ReaderDocument()
+{
+}
+
+ReaderDocument&
+ReaderDocument::operator=(ReaderDocument&&) = default;
 
 ReaderObject
 ReaderDocument::get_root() const

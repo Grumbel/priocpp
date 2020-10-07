@@ -32,6 +32,9 @@ public:
     body()
   {}
 
+  ~ReaderTest()
+  {}
+
   void SetUp() override
   {
     std::ifstream stream(GetParam());
@@ -43,6 +46,19 @@ public:
   ReaderDocument doc;
   ReaderMapping body;
 };
+
+TEST_P(ReaderTest, construction)
+{
+  ReaderDocument my_doc;
+  ReaderMapping my_mapping;
+  ReaderObject my_object;
+  ReaderCollection my_collection;
+
+  my_doc = ReaderDocument();
+  my_mapping = ReaderMapping();
+  my_object = ReaderObject();
+  my_collection = ReaderCollection();
+}
 
 TEST_P(ReaderTest, parse)
 {

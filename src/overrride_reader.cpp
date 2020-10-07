@@ -26,12 +26,12 @@ namespace prio {
 class OverrideReaderMappingImpl : public ReaderMappingImpl
 {
 private:
-  ReaderMapping m_reader;
-  ReaderMapping m_overrides;
+  ReaderMapping const& m_reader;
+  ReaderMapping const& m_overrides;
 
 public:
-  OverrideReaderMappingImpl(const ReaderMapping& reader,
-                            const ReaderMapping& overrides) :
+  OverrideReaderMappingImpl(ReaderMapping const& reader,
+                            ReaderMapping const& overrides) :
     m_reader(reader),
     m_overrides(overrides)
   {
@@ -129,7 +129,7 @@ public:
       }
       else
       {
-        result = overwrite_result;
+        result = std::move(overwrite_result);
         return true;
       }
     }
@@ -167,7 +167,7 @@ public:
 ReaderMapping
 make_override_mapping(const ReaderMapping& reader, const ReaderMapping& overrides)
 {
-  return ReaderMapping(std::make_shared<OverrideReaderMappingImpl>(reader, overrides));
+  return ReaderMapping(std::make_unique<OverrideReaderMappingImpl>(reader, overrides));
 }
 
 } // namespace prio

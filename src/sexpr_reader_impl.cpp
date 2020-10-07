@@ -37,7 +37,7 @@ SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx) :
 ReaderObject
 SExprReaderDocumentImpl::get_root() const
 {
-  return ReaderObject(std::make_shared<SExprReaderObjectImpl>(m_sx));
+  return ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_sx));
 }
 
 SExprReaderObjectImpl::SExprReaderObjectImpl(sexp::Value const& sx) :
@@ -69,7 +69,7 @@ SExprReaderObjectImpl::get_name() const
 ReaderMapping
 SExprReaderObjectImpl::get_mapping() const
 {
-  return ReaderMapping(std::make_shared<SExprReaderMappingImpl>(m_sx));
+  return ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_sx));
 }
 
 
@@ -87,7 +87,7 @@ SExprReaderCollectionImpl::get_objects() const
 {
   std::vector<ReaderObject> lst;
   for (size_t i = 1; i < m_sx.as_array().size(); ++i) {
-    lst.push_back(ReaderObject(std::make_shared<SExprReaderObjectImpl>(m_sx.as_array()[i])));
+    lst.push_back(ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_sx.as_array()[i])));
   }
   return lst;
 }
@@ -276,7 +276,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderObject& value) const
   sexp::Value const* cur = get_subsection_item(key);
   if (cur)
   {
-    value = ReaderObject(std::make_shared<SExprReaderObjectImpl>(*cur));
+    value = ReaderObject(std::make_unique<SExprReaderObjectImpl>(*cur));
     return true;
   }
   else
@@ -291,7 +291,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderCollection& value) const
   sexp::Value const* cur = get_subsection(key);
   if (cur)
   {
-    value = ReaderCollection(std::make_shared<SExprReaderCollectionImpl>(*cur));
+    value = ReaderCollection(std::make_unique<SExprReaderCollectionImpl>(*cur));
     return true;
   }
   else
@@ -306,7 +306,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderMapping& value) const
   sexp::Value const* cur = get_subsection(key);
   if (cur)
   {
-    value = ReaderMapping(std::make_shared<SExprReaderMappingImpl>(*cur));
+    value = ReaderMapping(std::make_unique<SExprReaderMappingImpl>(*cur));
     return true;
   }
   else
