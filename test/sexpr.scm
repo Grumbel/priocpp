@@ -2,6 +2,7 @@
  (boolvalue #t)
  (intvalue 5)
  (floatvalue 5.5)
+ (customvalue 5)
  (stringvalue "Hello World")
  (submap (int 7) (float 9.9))
  (collection (obj1) (obj2) (obj3))

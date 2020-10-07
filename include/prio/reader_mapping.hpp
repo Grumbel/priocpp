@@ -51,10 +51,14 @@ public:
     return false;
   }
 
+  template<typename T>
+  bool read(char const* name, T& value) const {
+    return read_custom(*this, name, value);
+  }
+
 private:
   std::shared_ptr<ReaderMappingImpl> m_impl;
 };
-
 
 #endif
 

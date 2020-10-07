@@ -75,6 +75,26 @@ TEST_P(ReaderTest, read_string)
   EXPECT_EQ("Hello World", stringvalue);
 }
 
+namespace {
+
+struct CustomType {
+  int value = 0;
+};
+
+bool read_custom(ReaderMapping const& mapping, char const* key, CustomType& value)
+{
+  return mapping.read_int(key, value.value);
+}
+
+} // namespace
+
+TEST_P(ReaderTest, read_custom)
+{
+  CustomType customvalue;
+  ASSERT_TRUE(body.read("customvalue", customvalue));
+  EXPECT_EQ(5, customvalue.value);
+}
+
 TEST_P(ReaderTest, read_mapping)
 {
   ReaderMapping submap;
