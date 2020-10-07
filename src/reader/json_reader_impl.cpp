@@ -18,7 +18,9 @@
 
 #include <logmich/log.hpp>
 
-#include "reader/reader.hpp"
+#include "reader.hpp"
+#include "reader_collection.hpp"
+#include "reader_mapping.hpp"
 #include "reader/reader_impl.hpp"
 
 namespace {

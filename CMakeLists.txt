@@ -48,7 +48,7 @@ set_target_properties(prio PROPERTIES
   CXX_STANDARD_REQUIRED ON
   CXX_EXTENSIONS OFF)
 target_include_directories(prio INTERFACE include/)
-target_include_directories(prio PRIVATE src/)
+target_include_directories(prio PRIVATE src/ include/prio/)
 set_target_properties(prio PROPERTIES PUBLIC_HEADER "${PRIO_HEADERS}")
 target_link_libraries(prio PUBLIC
   logmich

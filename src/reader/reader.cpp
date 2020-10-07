@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "reader/reader.hpp"
+#include "reader.hpp"
 
 #include <sstream>
 #include <fstream>
@@ -24,9 +24,11 @@
 #include <logmich/log.hpp>
 #include <sexp/parser.hpp>
 
+#include "reader/json_reader_impl.hpp"
 #include "reader/reader_impl.hpp"
 #include "reader/sexpr_reader_impl.hpp"
-#include "reader/json_reader_impl.hpp"
+#include "reader_collection.hpp"
+#include "reader_mapping.hpp"
 
 ReaderMapping::ReaderMapping(std::shared_ptr<ReaderMappingImpl> impl_) :
   m_impl(std::move(impl_))

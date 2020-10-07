@@ -22,7 +22,9 @@
 #include <sexp/util.hpp>
 #include <sexp/io.hpp>
 
-#include "reader/reader.hpp"
+#include "reader.hpp"
+#include "reader_collection.hpp"
+#include "reader_mapping.hpp"
 #include "reader/reader_impl.hpp"
 
 SExprReaderObjectImpl::SExprReaderObjectImpl(sexp::Value const& sx) :

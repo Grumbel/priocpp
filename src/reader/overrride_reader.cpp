@@ -18,7 +18,8 @@
 
 #include <set>
 
-#include "reader/reader.hpp"
+#include "reader.hpp"
+#include "reader_mapping.hpp"
 #include "reader/reader_impl.hpp"
 
 class OverrideReaderMappingImpl : public ReaderMappingImpl
