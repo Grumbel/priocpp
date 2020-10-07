@@ -27,21 +27,16 @@
 
 namespace prio {
 
-#define raise_exception(doc, sx, msg) raise_exception_real(__FILE__, __LINE__, doc, sx, msg)
-
 [[noreturn]]
 inline void
-raise_exception_real(const char* filename, int line,
-                     SExprReaderDocumentImpl const& doc, sexp::Value const& sx,
-                     const char* usermsg)
+raise_exception(SExprReaderDocumentImpl const& doc, sexp::Value const& sx, const char* msg)
 {
-  std::ostringstream msg;
-  msg << "[" << filename << ":" << line << "] "
-      << (doc.get_filename() ? *doc.get_filename() : "<unknown>")
+  std::ostringstream oss;
+  oss << (doc.get_filename() ? *doc.get_filename() : "<unknown>")
       << ":" << sx.get_line() << ": "
-      << usermsg << " in expression:"
+      << msg << " in expression:"
       << "\n    " << sx;
-  throw std::runtime_error(msg.str());
+  throw std::runtime_error(oss.str());
 }
 
 inline void assert_is_boolean(SExprReaderDocumentImpl const& doc, sexp::Value const& sx)
