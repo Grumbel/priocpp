@@ -210,7 +210,6 @@ SExprReaderMappingImpl::read(const char* key, std::string& value) const
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
 {
-#if 1
   sexp::Value const* item = get_subsection_items(key);
   if (!item || !item->is_array()) return false;
 
@@ -219,24 +218,11 @@ SExprReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
     values[i] = item->as_array()[i + 1].as_bool();
   }
   return true;
-#else
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_cons()) return false;
-
-  values.resize(sexp::list_length(*item));
-  int i = 0;
-  for(auto const& sx : sexp::ListAdapter(*item)) {
-    values[i] = sx.as_bool();
-    i += 1;
-  }
-  return true;
-#endif
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<int>& values) const
 {
-#if 1
   sexp::Value const* item = get_subsection_items(key);
   if (!item || !item->is_array()) return false;
 
@@ -245,24 +231,11 @@ SExprReaderMappingImpl::read(const char* key, std::vector<int>& values) const
     values[i] = item->as_array()[i + 1].as_int();
   }
   return true;
-#else
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_cons()) return false;
-
-  values.resize(sexp::list_length(*item));
-  int i = 0;
-  for(auto const& sx : sexp::ListAdapter(*item)) {
-    values[i] = sx.as_int();
-    i += 1;
-  }
-  return true;
-#endif
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<float>& values) const
 {
-#if 1
   sexp::Value const* item = get_subsection_items(key);
   if (!item || !item->is_array()) return false;
 
@@ -271,24 +244,11 @@ SExprReaderMappingImpl::read(const char* key, std::vector<float>& values) const
     values[i] = item->as_array()[i + 1].as_float();
   }
   return true;
-#else
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_cons()) return false;
-
-  values.resize(sexp::list_length(*item));
-  int i = 0;
-  for(auto const& sx : sexp::ListAdapter(*item)) {
-    values[i] = sx.as_float();
-    i += 1;
-  }
-  return true;
-#endif
 }
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<std::string>& values) const
 {
-#if 1
   sexp::Value const* item = get_subsection_items(key);
   if (!item || !item->is_array()) return false;
 
@@ -297,18 +257,6 @@ SExprReaderMappingImpl::read(const char* key, std::vector<std::string>& values) 
     values[i] = item->as_array()[i + 1].as_string();
   }
   return true;
-#else
-  sexp::Value const* item = get_subsection_items(key);
-  if (!item || !item->is_cons()) return false;
-
-  values.resize(sexp::list_length(*item));
-  int i = 0;
-  for(auto const& sx : sexp::ListAdapter(*item)) {
-    values[i] = sx.as_string();
-    i += 1;
-  }
-  return true;
-#endif
 }
 
 bool
