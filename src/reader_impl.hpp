@@ -25,7 +25,14 @@ namespace prio {
 class ReaderCollection;
 class ReaderMapping;
 class ReaderObject;
-class ResDescriptor;
+
+class ReaderDocumentImpl
+{
+public:
+  virtual ~ReaderDocumentImpl() {}
+
+  virtual ReaderObject get_root() const = 0;
+};
 
 class ReaderObjectImpl
 {

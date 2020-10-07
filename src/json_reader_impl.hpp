@@ -23,6 +23,17 @@
 
 namespace prio {
 
+class JsonReaderDocumentImpl final : public ReaderDocumentImpl
+{
+public:
+  JsonReaderDocumentImpl(Json::Value value);
+
+  virtual ReaderObject get_root() const;
+
+private:
+  Json::Value m_value;
+};
+
 class JsonReaderObjectImpl final : public ReaderObjectImpl
 {
 public:

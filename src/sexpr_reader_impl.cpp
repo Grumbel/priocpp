@@ -29,6 +29,17 @@
 
 namespace prio {
 
+SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx) :
+  m_sx(std::move(sx))
+{
+}
+
+ReaderObject
+SExprReaderDocumentImpl::get_root() const
+{
+  return ReaderObject(std::make_shared<SExprReaderObjectImpl>(m_sx));
+}
+
 SExprReaderObjectImpl::SExprReaderObjectImpl(sexp::Value const& sx) :
   m_sx(sx) // FIXME: all this copying is unnecessary
 {

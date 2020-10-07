@@ -34,6 +34,17 @@ void syntax_error(Json::Value const& value, const char* message)
 
 namespace prio {
 
+JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value) :
+  m_value(std::move(value))
+{
+}
+
+ReaderObject
+JsonReaderDocumentImpl::get_root() const
+{
+  return ReaderObject(std::make_shared<JsonReaderObjectImpl>(m_value));
+}
+
 JsonReaderObjectImpl::JsonReaderObjectImpl(Json::Value const& json) :
   m_json(json)
 {

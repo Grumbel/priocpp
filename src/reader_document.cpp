@@ -52,7 +52,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
     std::string errs;
     Json::Value root;
     if (Json::parseFromStream(builder, stream, &root, &errs)) {
-      return ReaderDocument(ReaderObject(std::make_shared<JsonReaderObjectImpl>(root)), filename);
+      return ReaderDocument(std::make_shared<JsonReaderDocumentImpl>(root), filename);
     } else {
       throw std::runtime_error(fmt::format("json parse error: {}", errs));
     }
@@ -60,7 +60,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
   else
   { // sexp
     auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
-    return ReaderDocument(ReaderObject(std::make_shared<SExprReaderObjectImpl>(std::move(sx))), filename);
+    return ReaderDocument(std::make_shared<SExprReaderDocumentImpl>(std::move(sx)), filename);
   }
 }
 
@@ -98,21 +98,21 @@ Reader::parse_many(const std::string& pathname)
 #endif
 
 ReaderDocument:: ReaderDocument() :
-  m_root(),
+  m_impl(),
   m_filename()
 {
 }
 
-ReaderDocument::ReaderDocument(ReaderObject root, std::optional<std::string> const& filename) :
-  m_root(root),
-  m_filename(filename)
+ReaderDocument::ReaderDocument(std::shared_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename) :
+  m_impl(std::move(impl)),
+  m_filename(std::move(filename))
 {
 }
 
 ReaderObject
 ReaderDocument::get_root() const
 {
-  return m_root;
+  return m_impl->get_root();
 }
 
 std::string

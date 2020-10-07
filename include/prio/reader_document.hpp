@@ -34,6 +34,7 @@ class ReaderCollection;
 class ReaderObjectImpl;
 class ReaderMappingImpl;
 class ReaderCollectionImpl;
+class ReaderDocumentImpl;
 
 class ReaderDocument final
 {
@@ -50,7 +51,7 @@ public:
 
 public:
   ReaderDocument();
-  ReaderDocument(ReaderObject root, std::optional<std::string> const& filename = {});
+  ReaderDocument(std::shared_ptr<ReaderDocumentImpl> impl, std::optional<std::string> const& filename = {});
 
   /** Returns the root object */
   ReaderObject get_root() const;
@@ -62,7 +63,7 @@ public:
   std::string get_directory() const;
 
 private:
-  ReaderObject m_root;
+  std::shared_ptr<ReaderDocumentImpl> m_impl;
   std::optional<std::string> m_filename;
 };
 

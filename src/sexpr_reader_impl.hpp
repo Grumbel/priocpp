@@ -23,7 +23,18 @@
 
 namespace prio {
 
-class SExprReaderObjectImpl : public ReaderObjectImpl
+class SExprReaderDocumentImpl final : public ReaderDocumentImpl
+{
+public:
+  SExprReaderDocumentImpl(sexp::Value sx);
+
+  ReaderObject get_root() const;
+
+private:
+  sexp::Value m_sx;
+};
+
+class SExprReaderObjectImpl final : public ReaderObjectImpl
 {
 public:
   SExprReaderObjectImpl(sexp::Value const& sx);
@@ -36,7 +47,7 @@ private:
   sexp::Value m_sx;
 };
 
-class SExprReaderCollectionImpl : public ReaderCollectionImpl
+class SExprReaderCollectionImpl final : public ReaderCollectionImpl
 {
 public:
   SExprReaderCollectionImpl(sexp::Value const& m_sx);
@@ -48,7 +59,7 @@ private:
   sexp::Value m_sx;
 };
 
-class SExprReaderMappingImpl : public ReaderMappingImpl
+class SExprReaderMappingImpl final : public ReaderMappingImpl
 {
 public:
   SExprReaderMappingImpl(sexp::Value const& m_sx);
