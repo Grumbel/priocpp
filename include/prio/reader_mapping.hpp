@@ -17,7 +17,15 @@
 #ifndef HEADER_PRIO_READER_MAPPING_HPP
 #define HEADER_PRIO_READER_MAPPING_HPP
 
+#include <memory>
+#include <vector>
+
 namespace prio {
+
+class ReaderCollection;
+class ReaderMapping;
+class ReaderMappingImpl;
+class ReaderObject;
 
 class ReaderMapping final
 {

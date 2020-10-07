@@ -51,9 +51,9 @@ public:
 
   virtual std::vector<std::string> get_keys() const = 0;
 
+  virtual bool read_bool(const char* key, bool&) const = 0;
   virtual bool read_int(const char* key, int&) const = 0;
   virtual bool read_float(const char* key, float&) const = 0;
-  virtual bool read_bool(const char* key, bool&) const = 0;
   virtual bool read_string(const char* key, std::string&) const = 0;
 
   virtual bool read_mapping(const char* key, ReaderMapping&) const = 0;

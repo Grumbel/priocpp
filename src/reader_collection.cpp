@@ -14,31 +14,32 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PRIO_READER_COLLECTION_HPP
-#define HEADER_PRIO_READER_COLLECTION_HPP
+#include "reader_collection.hpp"
 
-#include <memory>
-#include <vector>
+#include "reader_impl.hpp"
+#include "reader_object.hpp"
 
 namespace prio {
 
-class ReaderCollectionImpl;
-class ReaderObject;
-
-class ReaderCollection final
+ReaderCollection::ReaderCollection(std::shared_ptr<ReaderCollectionImpl> impl) :
+  m_impl(std::move(impl))
 {
-public:
-  ReaderCollection();
-  ReaderCollection(std::shared_ptr<ReaderCollectionImpl> impl);
+}
 
-  std::vector<ReaderObject> get_objects() const;
+ReaderCollection::ReaderCollection() :
+  m_impl()
+{
+}
 
-private:
-  std::shared_ptr<ReaderCollectionImpl> m_impl;
-};
+std::vector<ReaderObject>
+ReaderCollection::get_objects() const
+{
+  if (m_impl)
+    return m_impl->get_objects();
+  else
+    return {};
+}
 
 } // namespace prio
-
-#endif
 
 /* EOF */
