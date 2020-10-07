@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "reader/sexpr_reader_impl.hpp"
+#include "sexpr_reader_impl.hpp"
 
 #include <sstream>
 
@@ -25,7 +25,7 @@
 #include "reader.hpp"
 #include "reader_collection.hpp"
 #include "reader_mapping.hpp"
-#include "reader/reader_impl.hpp"
+#include "reader_impl.hpp"
 
 SExprReaderObjectImpl::SExprReaderObjectImpl(sexp::Value const& sx) :
   m_sx(sx) // FIXME: all this copying is unnecessary

@@ -24,9 +24,9 @@
 #include <logmich/log.hpp>
 #include <sexp/parser.hpp>
 
-#include "reader/json_reader_impl.hpp"
-#include "reader/reader_impl.hpp"
-#include "reader/sexpr_reader_impl.hpp"
+#include "json_reader_impl.hpp"
+#include "reader_impl.hpp"
+#include "sexpr_reader_impl.hpp"
 #include "reader_collection.hpp"
 #include "reader_mapping.hpp"
 

@@ -19,7 +19,7 @@
 
 #include <sexp/value.hpp>
 
-#include "reader/reader_impl.hpp"
+#include "reader_impl.hpp"
 
 class SExprReaderObjectImpl : public ReaderObjectImpl
 {

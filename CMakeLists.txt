@@ -40,7 +40,7 @@ build_dependencies()
 file(GLOB PRIO_HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
   include/prio/*.hpp)
 file(GLOB PRIO_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-  src/reader/*.cpp)
+  src/*.cpp)
 
 add_library(prio STATIC ${PRIO_SOURCES})
 set_target_properties(prio PROPERTIES

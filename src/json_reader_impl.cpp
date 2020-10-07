@@ -14,14 +14,14 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "reader/json_reader_impl.hpp"
+#include "json_reader_impl.hpp"
 
 #include <logmich/log.hpp>
 
 #include "reader.hpp"
 #include "reader_collection.hpp"
 #include "reader_mapping.hpp"
-#include "reader/reader_impl.hpp"
+#include "reader_impl.hpp"
 
 namespace {
 

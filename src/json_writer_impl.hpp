@@ -1,5 +1,5 @@
 // Pingus - A free Lemmings clone
-// Copyright (C) 2007 Jimmy Salmon
+// Copyright (C) 1998-2015 Ingo Ruhnke <grumbel@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,24 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PINGUS_UTIL_SEXPR_FILE_WRITER_HPP
-#define HEADER_PINGUS_UTIL_SEXPR_FILE_WRITER_HPP
+#ifndef HEADER_PINGUS_UTIL_JSON_FILE_WRITER_HPP
+#define HEADER_PINGUS_UTIL_JSON_FILE_WRITER_HPP
 
-#include <ostream>
+#include <functional>
+#include <json/json.h>
+#include <iosfwd>
 
-#include "reader/writer_impl.hpp"
+#include "writer_impl.hpp"
 
-class SExprWriterImpl : public WriterImpl
+class JsonWriterImpl final : public WriterImpl
 {
 private:
-  /** A reference to the output stream */
-  std::ostream* out;
-  size_t level;
-  std::string indent() const;
+  std::ostream& m_out;
+  Json::Value m_root;
+
+  // jsoncpp does copy-by-value, even for arrays and objects, so we
+  // have to use std::reference_wrapper<> instead of just Json::Value
+  std::vector<std::reference_wrapper<Json::Value> > m_stack;
 
 public:
-  SExprWriterImpl(std::ostream& out_);
-  ~SExprWriterImpl() override;
+  JsonWriterImpl(std::ostream& out);
+  ~JsonWriterImpl() override;
 
   void begin_collection(const char* name) override;
   void end_collection() override;
@@ -47,15 +51,12 @@ public:
   void write_float(const char* name, float) override;
   void write_string(const char* name, const std::string&) override;
 
-  template<class E, class F>
-  void write_enum(const char* name, E value, F enum2string)
-  {
-    (*out) << "\n" << indent() << "(" << name << " \"" << enum2string(value) << "\")";
-  }
+private:
+  void flush();
 
 private:
-  SExprWriterImpl(const SExprWriterImpl&);
-  SExprWriterImpl& operator= (const SExprWriterImpl&);
+  JsonWriterImpl(const JsonWriterImpl&) = delete;
+  JsonWriterImpl& operator=(const JsonWriterImpl&) = delete;
 };
 
 #endif

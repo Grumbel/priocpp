@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "reader/overrride_reader.hpp"
+#include "overrride_reader.hpp"
 
 #include <set>
 
 #include "reader.hpp"
 #include "reader_mapping.hpp"
-#include "reader/reader_impl.hpp"
+#include "reader_impl.hpp"
 
 class OverrideReaderMappingImpl : public ReaderMappingImpl
 {
