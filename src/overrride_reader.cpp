@@ -18,7 +18,6 @@
 
 #include <set>
 
-#include "reader.hpp"
 #include "reader_mapping.hpp"
 #include "reader_impl.hpp"
 

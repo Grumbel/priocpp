@@ -18,7 +18,7 @@
 
 #include <fstream>
 
-#include <prio/reader.hpp>
+#include <prio/reader_document.hpp>
 #include <prio/reader_collection.hpp>
 #include <prio/reader_mapping.hpp>
 
