@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PINGUS_UTIL_OVERRIDE_FILE_READER_HPP
-#define HEADER_PINGUS_UTIL_OVERRIDE_FILE_READER_HPP
+#ifndef HEADER_PRIO_OVERRIDE_FILE_READER_HPP
+#define HEADER_PRIO_OVERRIDE_FILE_READER_HPP
 
 #include "reader_impl.hpp"
 

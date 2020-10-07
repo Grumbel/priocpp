@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PINGUS_UTIL_SEXPR_FILE_WRITER_HPP
-#define HEADER_PINGUS_UTIL_SEXPR_FILE_WRITER_HPP
+#ifndef HEADER_PRIO_SEXPR_FILE_WRITER_HPP
+#define HEADER_PRIO_SEXPR_FILE_WRITER_HPP
 
 #include <ostream>
 
