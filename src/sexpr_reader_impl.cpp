@@ -133,15 +133,27 @@ SExprReaderMappingImpl::~SExprReaderMappingImpl()
 std::vector<std::string>
 SExprReaderMappingImpl::get_keys() const
 {
-  std::vector<std::string> lst;
+  std::vector<std::string> result;
 
-  for(auto const& cur : m_sx.as_array())
-  {
-    // assert if (cur.is_cons())
-    lst.push_back(cur.as_array()[0].as_string());
+  assert(m_sx.is_array());
+  for (size_t i = 1; i < m_sx.as_array().size(); ++i) {
+    sexp::Value const& keyvalue = m_sx.as_array()[i];
+    if (!keyvalue.is_array() || keyvalue.as_array().size() < 1) {
+      std::ostringstream oss;
+      oss << keyvalue << ": malformed mapping, expected array";
+      throw ReaderError(oss.str());
+    }
+
+    if (!keyvalue.as_array()[0].is_symbol()) {
+      std::ostringstream oss;
+      oss << keyvalue << ": malformed mapping, expected string";
+      throw ReaderError(oss.str());
+    }
+
+    result.emplace_back(keyvalue.as_array()[0].as_string());
   }
 
-  return lst;
+  return result;
 }
 
 #define GET_VALUE_MACRO(type, checker, getter)         \

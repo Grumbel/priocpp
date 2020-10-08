@@ -120,6 +120,18 @@ TEST_P(ReaderTest, read_bools_fail)
   EXPECT_EQ(original, boolvalues2);
 }
 
+TEST_P(ReaderTest, get_keys)
+{
+  auto const& keys = body.get_keys();
+  std::set<std::string> result(keys.begin(), keys.end());
+  std::set<std::string> expected({
+      "boolvalue", "intvalue", "floatvalue", "stringvalue",
+      "boolvalues", "intvalues", "floatvalues", "stringvalues",
+      "enumvalue", "customvalue", "submap",
+      "collection", "object", "vector", "vectors"});
+  ASSERT_EQ(expected, result);
+}
+
 TEST_P(ReaderTest, read_wrong)
 {
   bool bool_value;
