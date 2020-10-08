@@ -40,10 +40,10 @@ public:
 
   void SetUp() override
   {
-    doc = ReaderDocument::from_file(GetParam(), false);
+    doc = ReaderDocument::from_file("test/data/data" + GetParam(), false);
     body = doc.get_root().get_mapping();
 
-    doc_pedantic = ReaderDocument::from_file(GetParam(), true);
+    doc_pedantic = ReaderDocument::from_file("test/data/data" + GetParam(), true);
     body_pedantic = doc_pedantic.get_root().get_mapping();
   }
 
@@ -215,6 +215,6 @@ TEST_P(ReaderTest, get)
 }
 
 INSTANTIATE_TEST_CASE_P(ParamReaderTest, ReaderTest,
-                        ::testing::Values("test/sexpr.scm", "test/json.json"));
+                        ::testing::Values(".sexp", ".json"));
 
 /* EOF */
