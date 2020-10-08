@@ -10,6 +10,8 @@
         "floatvalues": [1.0, 2.0, 3.0, 4.0],
         "stringvalues": ["Hello", "World"],
 
+        "enumvalue": "C",
+
         "customvalue": 5,
         "submap": { "int": 7, "float": 9.9 },
         "collection": [ { "obj1": {}}, { "obj2": {}}, {"obj3": {}} ],

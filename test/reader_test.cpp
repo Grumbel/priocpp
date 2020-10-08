@@ -141,6 +141,21 @@ TEST_P(ReaderTest, read_strings)
   EXPECT_EQ(std::vector<std::string>({"Hello", "World"}), stringvalues);
 }
 
+TEST_P(ReaderTest, read_enum)
+{
+  enum class MyEnum { A, B, C };
+  auto string2enum = [](std::string_view text) {
+    if (text == "A") { return MyEnum::A; }
+    else if (text == "B") { return MyEnum::B; }
+    else if (text == "C") { return MyEnum::C; }
+    else { throw std::invalid_argument("couldn't convert enum"); }
+  };
+
+  MyEnum enumvalue;
+  ASSERT_TRUE(body.read("enumvalue", enumvalue, string2enum));
+  EXPECT_EQ(enumvalue, MyEnum::C);
+}
+
 namespace {
 
 struct CustomType {
