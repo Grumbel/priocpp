@@ -23,6 +23,7 @@
 #include <sexp/io.hpp>
 
 #include "reader_collection.hpp"
+#include "reader_error.hpp"
 #include "reader_impl.hpp"
 #include "reader_mapping.hpp"
 #include "reader_object.hpp"
@@ -46,7 +47,7 @@ void
 SExprReaderDocumentImpl::error(sexp::Value const& sx, char const* message) const
 {
   if (m_pedantic) {
-    throw std::runtime_error(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));
+    throw ReaderError(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));
   } else {
     log_error("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message);
   }
@@ -71,7 +72,7 @@ SExprReaderObjectImpl::get_name() const
 {
   if (m_sx.as_array().size() < 1)
   {
-    throw std::runtime_error("invalid syntax");
+    throw ReaderError("invalid syntax");
   }
   else
   {
@@ -115,7 +116,7 @@ SExprReaderMappingImpl::SExprReaderMappingImpl(SExprReaderDocumentImpl const& do
   {
     std::ostringstream msg;
     msg << "SExprReaderMapping s-expression must be a array: " << sx;
-    throw std::runtime_error(msg.str());
+    throw ReaderError(msg.str());
   }
 
   // Expects data in this format:

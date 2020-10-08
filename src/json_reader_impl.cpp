@@ -22,6 +22,7 @@
 #include <stdexcept>
 
 #include "reader_collection.hpp"
+#include "reader_error.hpp"
 #include "reader_impl.hpp"
 #include "reader_mapping.hpp"
 #include "reader_object.hpp"
@@ -39,7 +40,7 @@ void
 JsonReaderDocumentImpl::error(Json::Value const& json, const char* message) const
 {
   if (m_pedantic) {
-    throw std::runtime_error(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message));
+    throw ReaderError(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message));
   } else {
     log_error("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message);
   }

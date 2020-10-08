@@ -27,6 +27,7 @@
 
 #include "json_reader_impl.hpp"
 #include "reader_collection.hpp"
+#include "reader_error.hpp"
 #include "reader_impl.hpp"
 #include "reader_mapping.hpp"
 #include "reader_object.hpp"
@@ -54,7 +55,7 @@ ReaderDocument::from_stream(std::istream& stream, bool pedantic, std::optional<s
     if (Json::parseFromStream(builder, stream, &root, &errs)) {
       return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), pedantic, filename));
     } else {
-      throw std::runtime_error(fmt::format("json parse error: {}", errs));
+      throw ReaderError(fmt::format("json parse error: {}", errs));
     }
   }
   else
@@ -69,7 +70,7 @@ ReaderDocument::from_file(const std::string& filename, bool pedantic)
 {
   std::ifstream fin(filename);
   if (!fin) {
-    throw std::runtime_error(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
+    throw ReaderError(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
   } else {
     return from_stream(fin, pedantic, filename);
   }

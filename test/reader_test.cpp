@@ -18,8 +18,9 @@
 
 #include <fstream>
 
-#include <prio/reader_document.hpp>
 #include <prio/reader_collection.hpp>
+#include <prio/reader_document.hpp>
+#include <prio/reader_error.hpp>
 #include <prio/reader_mapping.hpp>
 
 using namespace prio;
@@ -112,7 +113,7 @@ TEST_P(ReaderTest, read_bools_fail)
   std::vector<bool> original({ true, false, false, false});
   std::vector<bool> boolvalues2 = original;
 
-  ASSERT_THROW(body_pedantic.read("stringvalues", boolvalues2), std::runtime_error);
+  ASSERT_THROW(body_pedantic.read("stringvalues", boolvalues2), ReaderError);
   EXPECT_EQ(original, boolvalues2);
 
   ASSERT_FALSE(body.read("stringvalues", boolvalues2));
