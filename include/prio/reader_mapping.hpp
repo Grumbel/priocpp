@@ -53,8 +53,8 @@ public:
   bool read(const char* key, ReaderCollection&) const;
   bool read(const char* key, ReaderObject&) const;
 
-  template<class E, class T>
-  bool read(const char* key, E& value, T string2enum) const
+  template<typename Enum, typename String2Enum>
+  bool read(const char* key, Enum& value, String2Enum string2enum) const
   {
     std::string str;
     if (!read(key, str)) {
@@ -74,6 +74,12 @@ public:
   template<typename T>
   T get(char const* name, T fallback = {}) {
     read(name, fallback);
+    return fallback;
+  }
+
+  template<typename T, typename String2Enum>
+  T get(char const* name, String2Enum string2enum, T fallback = {}) {
+    read(name, fallback, string2enum);
     return fallback;
   }
 
