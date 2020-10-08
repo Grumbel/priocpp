@@ -31,6 +31,7 @@ TEST(JsonWriterImplTest, write)
   writer.write("intval", 123);
   writer.write("floatval", 123.5f);
   writer.write("stringval", "Hello World");
+  writer.write("escapedstringval", "\"Hello\\World\"");
 
   writer.write("truevals", std::vector<bool>({true, false, true}));
   writer.write("intvals", std::vector<int>({1, 2, 3}));
@@ -42,6 +43,7 @@ TEST(JsonWriterImplTest, write)
             "{\n"
             "\t\"testfile\" : \n"
             "\t{\n"
+            "\t\t\"escapedstringval\" : \"\\\"Hello\\\\World\\\"\",\n"
             "\t\t\"falseval\" : false,\n"
             "\t\t\"floatval\" : 123.5,\n"
             "\t\t\"floatvals\" : \n"

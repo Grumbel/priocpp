@@ -31,6 +31,7 @@ TEST(SExprWriterImplTest, write)
   writer.write("intval", 123);
   writer.write("floatval", 123.5f);
   writer.write("stringval", "Hello World");
+  writer.write("escapedstringval", "\"Hello\\World\"");
 
   writer.write("truevals", std::vector<bool>({true, false, true}));
   writer.write("intvals", std::vector<int>({1, 2, 3}));
@@ -45,6 +46,7 @@ TEST(SExprWriterImplTest, write)
             "  (intval 123)\n"
             "  (floatval 123.5)\n"
             "  (stringval \"Hello World\")\n"
+            "  (escapedstringval \"\\\"Hello\\\\World\\\"\")\n"
             "  (truevals #t #f #t)\n"
             "  (intvals 1 2 3)\n"
             "  (floatvals 1.5 2.5 3.5)\n"
