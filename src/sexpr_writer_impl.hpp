@@ -25,12 +25,6 @@ namespace prio {
 
 class SExprWriterImpl : public WriterImpl
 {
-private:
-  /** A reference to the output stream */
-  std::ostream* out;
-  size_t level;
-  std::string indent() const;
-
 public:
   SExprWriterImpl(std::ostream& out_);
   ~SExprWriterImpl() override;
@@ -49,11 +43,16 @@ public:
   void write_float(const char* name, float) override;
   void write_string(const char* name, const std::string&) override;
 
-  template<class E, class F>
-  void write_enum(const char* name, E value, F enum2string)
-  {
-    (*out) << "\n" << indent() << "(" << name << " \"" << enum2string(value) << "\")";
-  }
+  void write_bools(const char* name, std::vector<bool> const&) override;
+  void write_ints(const char* name, std::vector<int> const&) override;
+  void write_floats(const char* name, std::vector<float> const&) override;
+  void write_strings(const char* name, std::vector<std::string> const&) override;
+
+private:
+  /** A reference to the output stream */
+  std::ostream* out;
+  size_t level;
+  std::string indent() const;
 
 private:
   SExprWriterImpl(const SExprWriterImpl&);

@@ -136,6 +136,54 @@ JsonWriterImpl::write_string(const char* name, const std::string& value)
   m_stack.back().get()[name] = Json::Value(value);
 }
 
+void
+JsonWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
+{
+  assert(!m_stack.empty());
+  assert(m_stack.back().get().type() == Json::objectValue);
+
+  auto& arr = m_stack.back().get()[name] = Json::Value(Json::arrayValue);
+  for(int i = 0; i < static_cast<int>(values.size()); ++i) {
+    arr[i] = Json::Value(values[i]);
+  }
+}
+
+void
+JsonWriterImpl::write_ints(const char* name, std::vector<int> const& values)
+{
+  assert(!m_stack.empty());
+  assert(m_stack.back().get().type() == Json::objectValue);
+
+  auto& arr = m_stack.back().get()[name] = Json::Value(Json::arrayValue);
+  for(int i = 0; i < static_cast<int>(values.size()); ++i) {
+    arr[i] = Json::Value(values[i]);
+  }
+}
+
+void
+JsonWriterImpl::write_floats(const char* name, std::vector<float> const& values)
+{
+  assert(!m_stack.empty());
+  assert(m_stack.back().get().type() == Json::objectValue);
+
+  auto& arr = m_stack.back().get()[name] = Json::Value(Json::arrayValue);
+  for(int i = 0; i < static_cast<int>(values.size()); ++i) {
+    arr[i] = Json::Value(values[i]);
+  }
+}
+
+void
+JsonWriterImpl::write_strings(const char* name, std::vector<std::string> const& values)
+{
+  assert(!m_stack.empty());
+  assert(m_stack.back().get().type() == Json::objectValue);
+
+  auto& arr = m_stack.back().get()[name] = Json::Value(Json::arrayValue);
+  for(int i = 0; i < static_cast<int>(values.size()); ++i) {
+    arr[i] = Json::Value(values[i]);
+  }
+}
+
 namespace {
 
 void strip_trailing_whitespace(std::ostream& out, std::istream& in)

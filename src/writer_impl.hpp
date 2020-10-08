@@ -18,6 +18,7 @@
 #define HEADER_PRIO_FILE_WRITER_IMPL_HPP
 
 #include <string>
+#include <vector>
 
 namespace prio {
 
@@ -25,7 +26,6 @@ namespace prio {
     structure */
 class WriterImpl
 {
-private:
 public:
   virtual ~WriterImpl() {}
 
@@ -38,10 +38,15 @@ public:
   virtual void begin_mapping(const char* name) = 0;
   virtual void end_mapping() = 0;
 
-  virtual void write_bool   (const char* name, bool) = 0;
-  virtual void write_int    (const char* name, int) = 0;
-  virtual void write_float  (const char* name, float) = 0;
-  virtual void write_string (const char* name, const std::string&) = 0;
+  virtual void write_bool(const char* name, bool) = 0;
+  virtual void write_int(const char* name, int) = 0;
+  virtual void write_float(const char* name, float) = 0;
+  virtual void write_string(const char* name, const std::string&) = 0;
+
+  virtual void write_bools(const char* name, std::vector<bool> const&) = 0;
+  virtual void write_ints(const char* name, std::vector<int> const&) = 0;
+  virtual void write_floats(const char* name, std::vector<float> const&) = 0;
+  virtual void write_strings(const char* name, std::vector<std::string> const&) = 0;
 };
 
 } // namespace prio

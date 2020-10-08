@@ -20,6 +20,31 @@
 
 namespace prio {
 
+namespace {
+
+void write_escaped(std::ostream& os, std::string_view text)
+{
+  os << '"';
+  for(char const c : text) {
+    switch(c) {
+      case '"':
+        os << "\\\"";
+        break;
+
+      case '\\':
+        os << "\\\\";
+        break;
+
+      default:
+        os << c;
+        break;
+    }
+  }
+  os << '"';
+}
+
+} // namespace
+
 SExprWriterImpl::SExprWriterImpl(std::ostream& out_) :
   out(&out_),
   level(0)
@@ -104,26 +129,50 @@ SExprWriterImpl::write_float(const char* name, float value)
 void
 SExprWriterImpl::write_string(const char* name, const std::string& value)
 {
-  // Perform basic XML encoding (turns apostrophes into &apos;, etc.
-  std::string new_value = value;
-  std::string::size_type pos;
+  (*out) << "\n" << indent() << "(" << name << " ";
+  write_escaped(*out, value);
+  (*out) << ")";
+}
 
-  std::map<std::string, std::string> replacements;
-
-  replacements["\""] = "\\\"";
-  replacements["\\"] = "\\\\";
-
-  for (std::map<std::string, std::string>::iterator i = replacements.begin();
-       i != replacements.end(); i++)
-  {
-    for (pos = new_value.find(i->first); pos != std::string::npos; pos = new_value.find(i->first))
-    {
-      // Replace character with encoding characters
-      new_value.replace(pos, 1, i->second);
-    }
+void
+SExprWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
+{
+  (*out) << "\n" << indent() << "(" << name;
+  for (auto const& value : values) {
+    (*out) << ' ' << (value ? "#t" : "#f");
   }
+  (*out) << ")";
+}
 
-  (*out) << "\n" << indent() << "(" << name << " \"" << new_value << "\")";
+void
+SExprWriterImpl::write_ints(const char* name, std::vector<int> const& values)
+{
+  (*out) << "\n" << indent() << "(" << name;
+  for (auto const& value : values) {
+    (*out) << ' ' << value;
+  }
+  (*out) << ")";
+}
+
+void
+SExprWriterImpl::write_floats(const char* name, std::vector<float> const& values)
+{
+  (*out) << "\n" << indent() << "(" << name;
+  for (auto const& value : values) {
+    (*out) << ' ' << value;
+  }
+  (*out) << ")";
+}
+
+void
+SExprWriterImpl::write_strings(const char* name, std::vector<std::string> const& values)
+{
+  (*out) << "\n" << indent() << "(" << name;
+  for (auto const& value : values) {
+    (*out) << ' ';
+    write_escaped(*out, value);
+  }
+  (*out) << ")";
 }
 
 } // namespace prio

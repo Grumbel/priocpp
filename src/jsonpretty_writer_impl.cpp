@@ -186,6 +186,72 @@ JsonPrettyWriterImpl::write_string(const char* name, const std::string& value)
 }
 
 void
+JsonPrettyWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
+{
+  write_indent();
+  write_quoted_string(name);
+  m_out << ": [";
+  size_t index = 0;
+  for(auto const& value : values) {
+    m_out << (value ? "true" : "false");
+    if (index != values.size() - 1) {
+      m_out << ", ";
+    }
+    index += 1;
+  }
+  m_out << "]";
+  write_separator();
+}
+
+void
+JsonPrettyWriterImpl::write_ints(const char* name, std::vector<int> const& values)
+{
+  write_indent();
+  write_quoted_string(name);
+  m_out << ": [";
+  for(auto const& value : values) {
+    m_out << value;
+    if (&value != &values.back()) {
+      m_out << ", ";
+    }
+  }
+  m_out << "]";
+  write_separator();
+}
+
+void
+JsonPrettyWriterImpl::write_floats(const char* name, std::vector<float> const& values)
+{
+  write_indent();
+  write_quoted_string(name);
+  m_out << ": [";
+  for(auto const& value : values) {
+    m_out << value;
+    if (&value != &values.back()) {
+      m_out << ", ";
+    }
+  }
+  m_out << "]";
+  write_separator();
+}
+
+void
+JsonPrettyWriterImpl::write_strings(const char* name, std::vector<std::string> const& values)
+{
+  write_indent();
+  write_quoted_string(name);
+  m_out << ": [";
+  for(auto const& value : values) {
+    write_quoted_string(value);
+    if (&value != &values.back()) {
+      m_out << ", ";
+    }
+  }
+  m_out << "]";
+  write_separator();
+}
+
+void
 JsonPrettyWriterImpl::write_indent()
 {
   if (m_write_seperator.back())

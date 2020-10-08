@@ -114,6 +114,30 @@ Writer::write_string(const char* name, const std::string& value)
   m_impl->write_string(name, value);
 }
 
+void
+Writer::write_bools(const char* name, std::vector<bool> const& values)
+{
+  m_impl->write_bools(name, values);
+}
+
+void
+Writer::write_ints(const char* name, std::vector<int> const& values)
+{
+  m_impl->write_ints(name, values);
+}
+
+void
+Writer::write_floats(const char* name, std::vector<float> const& values)
+{
+  m_impl->write_floats(name, values);
+}
+
+void
+Writer::write_strings(const char* name, std::vector<std::string> const& values)
+{
+  m_impl->write_strings(name, values);
+}
+
 } // namespace prio
 
 /* EOF */

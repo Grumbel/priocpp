@@ -53,6 +53,11 @@ public:
   void write_float(const char* name, float) override;
   void write_string(const char* name, const std::string&) override;
 
+  void write_bools(const char* name, std::vector<bool> const&) override;
+  void write_ints(const char* name, std::vector<int> const&) override;
+  void write_floats(const char* name, std::vector<float> const&) override;
+  void write_strings(const char* name, std::vector<std::string> const&) override;
+
 private:
   inline void write_indent();
   inline void write_separator();

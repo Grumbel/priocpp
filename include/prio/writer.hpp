@@ -18,6 +18,7 @@
 #define HEADER_PRIO_FILE_WRITER_HPP
 
 #include <string>
+#include <vector>
 #include <memory>
 
 namespace prio {
@@ -55,6 +56,11 @@ public:
   void write_int(const char* name, int);
   void write_float(const char* name, float);
   void write_string(const char* name, const std::string&);
+
+  void write_bools(const char* name, std::vector<bool> const&);
+  void write_ints(const char* name, std::vector<int> const&);
+  void write_floats(const char* name, std::vector<float> const&);
+  void write_strings(const char* name, std::vector<std::string> const&);
 
   template<class E, class T>
   void write_enum(const char* name, E& value, T string2enum)
