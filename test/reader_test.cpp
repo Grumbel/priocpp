@@ -100,6 +100,14 @@ TEST_P(ReaderTest, read_bools)
   EXPECT_EQ(std::vector<bool>({true, false, true}), boolvalues);
 }
 
+TEST_P(ReaderTest, read_bools_fail)
+{
+  std::vector<bool> original({ true, false, false, false});
+  std::vector<bool> boolvalues2 = original;
+  ASSERT_ANY_THROW(body.read("stringvalues", boolvalues2));
+  EXPECT_EQ(original, boolvalues2);
+}
+
 TEST_P(ReaderTest, read_ints)
 {
   std::vector<int> intvalues;

@@ -164,13 +164,17 @@ SExprReaderMappingImpl::read(const char* key, std::string& value) const
   GET_VALUE_MACRO("string", is_string, as_string);
 }
 
+#undef GET_VALUE_MACRO
+
 #define GET_VALUES_MACRO(type, checker, getter)         \
   sexp::Value const* item = get_subsection_items(key);  \
   if (!item || !item->is_array()) { return false; }     \
                                                         \
-  values.resize(item->as_array().size() - 1);           \
   for (size_t i = 0; i < values.size(); ++i) {          \
     assert_##checker(m_doc, item->as_array()[i + 1]);   \
+  }                                                     \
+  values.resize(item->as_array().size() - 1);           \
+  for (size_t i = 0; i < values.size(); ++i) {          \
     values[i] = item->as_array()[i + 1].getter();       \
   }                                                     \
   return true;
@@ -198,6 +202,8 @@ SExprReaderMappingImpl::read(const char* key, std::vector<std::string>& values) 
 {
   GET_VALUES_MACRO("string", is_string, as_string);
 }
+
+#undef GET_VALUES_MACRO
 
 bool
 SExprReaderMappingImpl::read(const char* key, ReaderObject& value) const

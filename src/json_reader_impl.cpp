@@ -17,6 +17,7 @@
 #include "json_reader_impl.hpp"
 
 #include <logmich/log.hpp>
+#include <stdexcept>
 
 #include "reader_collection.hpp"
 #include "reader_impl.hpp"
@@ -119,117 +120,80 @@ JsonReaderMappingImpl::get_keys() const
   return result;
 }
 
+#define GET_VALUE_MACRO(type, checker, getter)  \
+  const Json::Value& element = m_json[key];     \
+  if (!element.checker()) { return false; }     \
+                                                \
+  value = element.getter();                     \
+  return true;
+
 bool
 JsonReaderMappingImpl::read(const char* key, bool& value) const
 {
-  const Json::Value& element = m_json[key];
-  if (element.isBool())
-  {
-    value = element.asBool();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("bool", isBool, asBool);
 }
 
 bool
 JsonReaderMappingImpl::read(const char* key, int& value) const
 {
-  const Json::Value& element = m_json[key];
-  if (element.isInt())
-  {
-    value = element.asInt();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("int", isInt, asInt);
 }
 
 bool
 JsonReaderMappingImpl::read(const char* key, float& value) const
 {
-  const Json::Value& element = m_json[key];
-  if (element.isDouble())
-  {
-    value = element.asFloat();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("double", isDouble, asFloat);
 }
 
 bool
 JsonReaderMappingImpl::read(const char* key, std::string& value) const
 {
-  const Json::Value& element = m_json[key];
-  if (element.isString())
-  {
-    value = element.asString();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  GET_VALUE_MACRO("string", isString, asString);
 }
+
+#undef GET_VALUE_MACRO
+
+#define GET_VALUES_MACRO(type_, checker_, getter_)                      \
+  const Json::Value& element = m_json[key];                             \
+  if (!element.isArray()) return false;                                 \
+                                                                        \
+  for(int i = 0; i < element.size(); ++i) {                             \
+    if (!element[i].checker_()) {                                       \
+      throw std::runtime_error(                                         \
+        fmt::format("expected {} got {}", type_, element[i].type()));   \
+    }                                                                   \
+  }                                                                     \
+  values.resize(element.size());                                        \
+  for(int i = 0; i < element.size(); ++i) {                             \
+    values[i] = element[i].getter_();                                   \
+  }                                                                     \
+  return true;
 
 bool
 JsonReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
 {
-  const Json::Value& element = m_json[key];
-  if (!element.isArray()) return false;
-
-  values.resize(element.size());
-  for(int i = 0; i < element.size(); ++i) {
-    values[i] = element[i].asBool();
-  }
-  return true;
+  GET_VALUES_MACRO("bool", isBool, asBool);
 }
 
 bool
 JsonReaderMappingImpl::read(const char* key, std::vector<int>& values) const
 {
-  const Json::Value& element = m_json[key];
-  if (!element.isArray()) return false;
-
-  values.resize(element.size());
-  for(int i = 0; i < element.size(); ++i) {
-    values[i] = element[i].asInt();
-  }
-  return true;
+  GET_VALUES_MACRO("int", isInt, asInt);
 }
 
 bool
 JsonReaderMappingImpl::read(const char* key, std::vector<float>& values) const
 {
-  const Json::Value& element = m_json[key];
-  if (!element.isArray()) return false;
-
-  values.resize(element.size());
-  for(int i = 0; i < element.size(); ++i) {
-    values[i] = element[i].asFloat();
-  }
-  return true;
+  GET_VALUES_MACRO("double", isDouble, asFloat);
 }
 
 bool
 JsonReaderMappingImpl::read(const char* key, std::vector<std::string>& values) const
 {
-  const Json::Value& element = m_json[key];
-  if (!element.isArray()) return false;
-
-  values.resize(element.size());
-  for(int i = 0; i < element.size(); ++i) {
-    values[i] = element[i].asString();
-  }
-  return true;
+  GET_VALUES_MACRO("string", isString, asString);
 }
+
+#undef GET_VALUES_MACRO
 
 bool
 JsonReaderMappingImpl::read(const char* key, ReaderMapping& value) const
