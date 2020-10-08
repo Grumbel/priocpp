@@ -21,6 +21,8 @@
 
 namespace prio {
 
+/** Create a ReaderMapping that wraps 'reader' and allows overriding
+    values stored in 'reader' with values stored in 'overrides' */
 ReaderMapping make_override_mapping(ReaderMapping const& reader, ReaderMapping const& overrides);
 
 } // namespace prio
