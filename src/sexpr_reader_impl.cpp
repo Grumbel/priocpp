@@ -30,8 +30,9 @@
 
 namespace prio {
 
-SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx, std::optional<std::string> filename) :
+SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx, bool pedantic, std::optional<std::string> filename) :
   m_sx(std::move(sx)),
+  m_pedantic(pedantic),
   m_filename(std::move(filename))
 {
 }
@@ -40,6 +41,16 @@ ReaderObject
 SExprReaderDocumentImpl::get_root() const
 {
   return ReaderObject(std::make_unique<SExprReaderObjectImpl>(*this, m_sx));
+}
+
+void
+SExprReaderDocumentImpl::error(sexp::Value const& sx, char const* message) const
+{
+  if (m_pedantic) {
+    throw std::runtime_error(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));
+  } else {
+    log_error("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message);
+  }
 }
 
 SExprReaderObjectImpl::SExprReaderObjectImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& sx) :
@@ -135,10 +146,13 @@ SExprReaderMappingImpl::get_keys() const
 
 #define GET_VALUE_MACRO(type, checker, getter)         \
   sexp::Value const* item = get_subsection_item(key);  \
-  if (!item || !item->checker()) { return false; }     \
-  assert_##checker(m_doc, *item);                      \
+  if (!item) { return false; }                         \
+  if (!item->checker()) {                              \
+    m_doc.error(*item, "expected " type);              \
+    return false;                                      \
+  }                                                    \
   value = item->getter();                              \
-  return true;                                         \
+  return true;
 
 bool
 SExprReaderMappingImpl::read(const char* key, bool& value) const
@@ -166,17 +180,25 @@ SExprReaderMappingImpl::read(const char* key, std::string& value) const
 
 #undef GET_VALUE_MACRO
 
-#define GET_VALUES_MACRO(type, checker, getter)         \
-  sexp::Value const* item = get_subsection_items(key);  \
-  if (!item || !item->is_array()) { return false; }     \
-                                                        \
-  for (size_t i = 0; i < values.size(); ++i) {          \
-    assert_##checker(m_doc, item->as_array()[i + 1]);   \
-  }                                                     \
-  values.resize(item->as_array().size() - 1);           \
-  for (size_t i = 0; i < values.size(); ++i) {          \
-    values[i] = item->as_array()[i + 1].getter();       \
-  }                                                     \
+#define GET_VALUES_MACRO(type, checker, getter)                 \
+  sexp::Value const* item = get_subsection_items(key);          \
+  if (!item) { return false; }                                  \
+  if (!item->is_array()) {                                      \
+    m_doc.error(*item, "expected array");                       \
+    return false;                                               \
+  }                                                             \
+                                                                \
+  for (size_t i = 0; i < values.size(); ++i) {                  \
+    if (!item->as_array()[i + 1].checker()) {                   \
+      m_doc.error(item->as_array()[i + 1], "expected " type);   \
+      return false;                                             \
+    }                                                           \
+  }                                                             \
+                                                                \
+  values.resize(item->as_array().size() - 1);                   \
+  for (size_t i = 0; i < values.size(); ++i) {                  \
+    values[i] = item->as_array()[i + 1].getter();               \
+  }                                                             \
   return true;
 
 bool

@@ -26,45 +26,50 @@ namespace prio {
 class JsonReaderDocumentImpl final : public ReaderDocumentImpl
 {
 public:
-  JsonReaderDocumentImpl(Json::Value value, std::optional<std::string> filename);
+  JsonReaderDocumentImpl(Json::Value value, bool pedantic, std::optional<std::string> filename);
 
   virtual ReaderObject get_root() const;
   std::optional<std::string> get_filename() const { return m_filename; }
 
+  void error(Json::Value const& json, const char* message) const;
+
 private:
   Json::Value m_value;
+  bool m_pedantic;
   std::optional<std::string> m_filename;
 };
 
 class JsonReaderObjectImpl final : public ReaderObjectImpl
 {
 public:
-  JsonReaderObjectImpl(Json::Value const& value);
+  JsonReaderObjectImpl(JsonReaderDocumentImpl const& doc, Json::Value const& value);
   ~JsonReaderObjectImpl() override;
 
   std::string get_name() const override;
   ReaderMapping get_mapping() const override;
 
 private:
+  JsonReaderDocumentImpl const& m_doc;
   Json::Value const& m_json;
 };
 
 class JsonReaderCollectionImpl final : public ReaderCollectionImpl
 {
 public:
-  JsonReaderCollectionImpl(Json::Value const& value);
+  JsonReaderCollectionImpl(JsonReaderDocumentImpl const& doc, Json::Value const& value);
   ~JsonReaderCollectionImpl() override;
 
   std::vector<ReaderObject> get_objects() const override;
 
 private:
+  JsonReaderDocumentImpl const& m_doc;
   Json::Value const& m_json;
 };
 
 class JsonReaderMappingImpl final : public ReaderMappingImpl
 {
 public:
-  JsonReaderMappingImpl(Json::Value const& value);
+  JsonReaderMappingImpl(JsonReaderDocumentImpl const& doc, Json::Value const& value);
   ~JsonReaderMappingImpl() override;
 
   std::vector<std::string> get_keys() const override;
@@ -84,6 +89,7 @@ public:
   bool read(const char* key, ReaderObject&) const override;
 
 private:
+  JsonReaderDocumentImpl const& m_doc;
   Json::Value const& m_json;
 };
 

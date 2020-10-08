@@ -26,13 +26,16 @@ namespace prio {
 class SExprReaderDocumentImpl final : public ReaderDocumentImpl
 {
 public:
-  SExprReaderDocumentImpl(sexp::Value sx, std::optional<std::string> filename);
+  SExprReaderDocumentImpl(sexp::Value sx, bool pedantic, std::optional<std::string> filename);
 
   ReaderObject get_root() const override;
   std::optional<std::string> get_filename() const override { return m_filename; }
 
+  void error(sexp::Value const& sx, const char* message) const;
+
 private:
   sexp::Value m_sx;
+  bool m_pedantic;
   std::optional<std::string> m_filename;
 };
 

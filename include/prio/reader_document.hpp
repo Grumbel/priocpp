@@ -39,9 +39,9 @@ class ReaderDocumentImpl;
 class ReaderDocument final
 {
 public:
-  static ReaderDocument from_stream(std::istream& stream, std::optional<std::string> const& filename = {});
-  static ReaderDocument from_file(const std::string& filename);
-  static ReaderDocument from_string(std::string_view text);
+  static ReaderDocument from_stream(std::istream& stream, bool pedantic, std::optional<std::string> const& filename = {});
+  static ReaderDocument from_file(const std::string& filename, bool pedantic);
+  static ReaderDocument from_string(std::string_view text, bool pedantic, std::optional<std::string> const& filename = {});
 
 #if 0
   /** Reads multiple trees from a file, for use with files that don't

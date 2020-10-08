@@ -35,14 +35,14 @@
 namespace prio {
 
 ReaderDocument
-ReaderDocument::from_string(std::string_view text)
+ReaderDocument::from_string(std::string_view text, bool pedantic, std::optional<std::string> const& filename)
 {
   std::istringstream in{std::string(text)};
-  return ReaderDocument::from_stream(in);
+  return ReaderDocument::from_stream(in, pedantic, filename);
 }
 
 ReaderDocument
-ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> const& filename)
+ReaderDocument::from_stream(std::istream& stream, bool pedantic, std::optional<std::string> const& filename)
 {
   int c = stream.get();
   stream.unget();
@@ -52,7 +52,7 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
     std::string errs;
     Json::Value root;
     if (Json::parseFromStream(builder, stream, &root, &errs)) {
-      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), filename));
+      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), pedantic, filename));
     } else {
       throw std::runtime_error(fmt::format("json parse error: {}", errs));
     }
@@ -60,18 +60,18 @@ ReaderDocument::from_stream(std::istream& stream, std::optional<std::string> con
   else
   { // sexp
     auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
-    return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), filename));
+    return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), pedantic, filename));
   }
 }
 
 ReaderDocument
-ReaderDocument::from_file(const std::string& filename)
+ReaderDocument::from_file(const std::string& filename, bool pedantic)
 {
   std::ifstream fin(filename);
   if (!fin) {
     throw std::runtime_error(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
   } else {
-    return from_stream(fin, filename);
+    return from_stream(fin, pedantic, filename);
   }
 }
 

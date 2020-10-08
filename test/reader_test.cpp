@@ -29,7 +29,9 @@ class ReaderTest : public ::testing::TestWithParam<std::string>
 public:
   ReaderTest() :
     doc(),
-    body()
+    body(),
+    doc_pedantic(),
+    body_pedantic()
   {}
 
   ~ReaderTest()
@@ -37,14 +39,19 @@ public:
 
   void SetUp() override
   {
-    std::ifstream stream(GetParam());
-    doc = ReaderDocument::from_stream(stream);
+    doc = ReaderDocument::from_file(GetParam(), false);
     body = doc.get_root().get_mapping();
+
+    doc_pedantic = ReaderDocument::from_file(GetParam(), true);
+    body_pedantic = doc_pedantic.get_root().get_mapping();
   }
 
 public:
   ReaderDocument doc;
   ReaderMapping body;
+
+  ReaderDocument doc_pedantic;
+  ReaderMapping body_pedantic;
 };
 
 TEST_P(ReaderTest, construction)
@@ -104,7 +111,11 @@ TEST_P(ReaderTest, read_bools_fail)
 {
   std::vector<bool> original({ true, false, false, false});
   std::vector<bool> boolvalues2 = original;
-  ASSERT_ANY_THROW(body.read("stringvalues", boolvalues2));
+
+  ASSERT_THROW(body_pedantic.read("stringvalues", boolvalues2), std::runtime_error);
+  EXPECT_EQ(original, boolvalues2);
+
+  ASSERT_FALSE(body.read("stringvalues", boolvalues2));
   EXPECT_EQ(original, boolvalues2);
 }
 
