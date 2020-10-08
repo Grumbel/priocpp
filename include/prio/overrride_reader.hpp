@@ -17,7 +17,7 @@
 #ifndef HEADER_PRIO_OVERRIDE_FILE_READER_HPP
 #define HEADER_PRIO_OVERRIDE_FILE_READER_HPP
 
-#include "reader_impl.hpp"
+#include "reader_mapping.hpp"
 
 namespace prio {
 
