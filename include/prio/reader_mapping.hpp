@@ -72,7 +72,7 @@ public:
   }
 
   template<typename T>
-  T get(char const* name, T fallback) {
+  T get(char const* name, T fallback = {}) {
     read(name, fallback);
     return fallback;
   }
