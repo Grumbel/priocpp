@@ -91,51 +91,51 @@ Writer::end_mapping()
 }
 
 void
-Writer::write_bool(const char* name, bool value)
+Writer::write(const char* name, bool value)
 {
-  m_impl->write_bool(name, value);
+  m_impl->write(name, value);
 }
 
 void
-Writer::write_int(const char* name, int value)
+Writer::write(const char* name, int value)
 {
-  m_impl->write_int(name, value);
+  m_impl->write(name, value);
 }
 
 void
-Writer::write_float(const char* name, float value)
+Writer::write(const char* name, float value)
 {
-  m_impl->write_float(name, value);
+  m_impl->write(name, value);
 }
 
 void
-Writer::write_string(const char* name, const std::string& value)
+Writer::write(const char* name, const std::string& value)
 {
-  m_impl->write_string(name, value);
+  m_impl->write(name, value);
 }
 
 void
-Writer::write_bools(const char* name, std::vector<bool> const& values)
+Writer::write(const char* name, std::vector<bool> const& values)
 {
-  m_impl->write_bools(name, values);
+  m_impl->write(name, values);
 }
 
 void
-Writer::write_ints(const char* name, std::vector<int> const& values)
+Writer::write(const char* name, std::vector<int> const& values)
 {
-  m_impl->write_ints(name, values);
+  m_impl->write(name, values);
 }
 
 void
-Writer::write_floats(const char* name, std::vector<float> const& values)
+Writer::write(const char* name, std::vector<float> const& values)
 {
-  m_impl->write_floats(name, values);
+  m_impl->write(name, values);
 }
 
 void
-Writer::write_strings(const char* name, std::vector<std::string> const& values)
+Writer::write(const char* name, std::vector<std::string> const& values)
 {
-  m_impl->write_strings(name, values);
+  m_impl->write(name, values);
 }
 
 } // namespace prio

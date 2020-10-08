@@ -38,15 +38,15 @@ public:
   void begin_mapping(const char* name) override;
   void end_mapping() override;
 
-  void write_bool(const char* name, bool) override;
-  void write_int(const char* name, int) override;
-  void write_float(const char* name, float) override;
-  void write_string(const char* name, const std::string&) override;
+  void write(const char* name, bool) override;
+  void write(const char* name, int) override;
+  void write(const char* name, float) override;
+  void write(const char* name, const std::string&) override;
 
-  void write_bools(const char* name, std::vector<bool> const&) override;
-  void write_ints(const char* name, std::vector<int> const&) override;
-  void write_floats(const char* name, std::vector<float> const&) override;
-  void write_strings(const char* name, std::vector<std::string> const&) override;
+  void write(const char* name, std::vector<bool> const&) override;
+  void write(const char* name, std::vector<int> const&) override;
+  void write(const char* name, std::vector<float> const&) override;
+  void write(const char* name, std::vector<std::string> const&) override;
 
 private:
   /** A reference to the output stream */

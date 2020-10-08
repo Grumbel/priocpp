@@ -141,7 +141,7 @@ JsonPrettyWriterImpl::end_mapping()
 }
 
 void
-JsonPrettyWriterImpl::write_bool(const char* name, bool value)
+JsonPrettyWriterImpl::write(const char* name, bool value)
 {
   assert(m_context.back() == Context::Mapping);
 
@@ -152,7 +152,7 @@ JsonPrettyWriterImpl::write_bool(const char* name, bool value)
 }
 
 void
-JsonPrettyWriterImpl::write_int(const char* name, int value)
+JsonPrettyWriterImpl::write(const char* name, int value)
 {
   assert(m_context.back() == Context::Mapping);
 
@@ -163,7 +163,7 @@ JsonPrettyWriterImpl::write_int(const char* name, int value)
 }
 
 void
-JsonPrettyWriterImpl::write_float(const char* name, float value)
+JsonPrettyWriterImpl::write(const char* name, float value)
 {
   assert(m_context.back() == Context::Mapping);
 
@@ -174,7 +174,7 @@ JsonPrettyWriterImpl::write_float(const char* name, float value)
 }
 
 void
-JsonPrettyWriterImpl::write_string(const char* name, const std::string& value)
+JsonPrettyWriterImpl::write(const char* name, const std::string& value)
 {
   assert(m_context.back() == Context::Mapping);
 
@@ -186,7 +186,7 @@ JsonPrettyWriterImpl::write_string(const char* name, const std::string& value)
 }
 
 void
-JsonPrettyWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
+JsonPrettyWriterImpl::write(const char* name, std::vector<bool> const& values)
 {
   write_indent();
   write_quoted_string(name);
@@ -204,7 +204,7 @@ JsonPrettyWriterImpl::write_bools(const char* name, std::vector<bool> const& val
 }
 
 void
-JsonPrettyWriterImpl::write_ints(const char* name, std::vector<int> const& values)
+JsonPrettyWriterImpl::write(const char* name, std::vector<int> const& values)
 {
   write_indent();
   write_quoted_string(name);
@@ -220,7 +220,7 @@ JsonPrettyWriterImpl::write_ints(const char* name, std::vector<int> const& value
 }
 
 void
-JsonPrettyWriterImpl::write_floats(const char* name, std::vector<float> const& values)
+JsonPrettyWriterImpl::write(const char* name, std::vector<float> const& values)
 {
   write_indent();
   write_quoted_string(name);
@@ -236,7 +236,7 @@ JsonPrettyWriterImpl::write_floats(const char* name, std::vector<float> const& v
 }
 
 void
-JsonPrettyWriterImpl::write_strings(const char* name, std::vector<std::string> const& values)
+JsonPrettyWriterImpl::write(const char* name, std::vector<std::string> const& values)
 {
   write_indent();
   write_quoted_string(name);

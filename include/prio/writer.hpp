@@ -52,15 +52,15 @@ public:
   void end_mapping();
 
   /** write a name/value pair inside a mapping */
-  void write_bool(const char* name, bool);
-  void write_int(const char* name, int);
-  void write_float(const char* name, float);
-  void write_string(const char* name, const std::string&);
+  void write(const char* name, bool);
+  void write(const char* name, int);
+  void write(const char* name, float);
+  void write(const char* name, const std::string&);
 
-  void write_bools(const char* name, std::vector<bool> const&);
-  void write_ints(const char* name, std::vector<int> const&);
-  void write_floats(const char* name, std::vector<float> const&);
-  void write_strings(const char* name, std::vector<std::string> const&);
+  void write(const char* name, std::vector<bool> const&);
+  void write(const char* name, std::vector<int> const&);
+  void write(const char* name, std::vector<float> const&);
+  void write(const char* name, std::vector<std::string> const&);
 
   template<class E, class T>
   void write_enum(const char* name, E& value, T string2enum)

@@ -109,25 +109,25 @@ SExprWriterImpl::end_mapping()
 }
 
 void
-SExprWriterImpl::write_bool(const char* name, bool value)
+SExprWriterImpl::write(const char* name, bool value)
 {
   (*out) << "\n" << indent() << "(" << name << " " << (value ? "#t" : "#f") << ")";
 }
 
 void
-SExprWriterImpl::write_int(const char* name, int value)
+SExprWriterImpl::write(const char* name, int value)
 {
   (*out) << "\n" << indent() << "(" << name << " " << value << ")";
 }
 
 void
-SExprWriterImpl::write_float(const char* name, float value)
+SExprWriterImpl::write(const char* name, float value)
 {
   (*out) << "\n" << indent() << "(" << name << " " << value << ")";
 }
 
 void
-SExprWriterImpl::write_string(const char* name, const std::string& value)
+SExprWriterImpl::write(const char* name, const std::string& value)
 {
   (*out) << "\n" << indent() << "(" << name << " ";
   write_escaped(*out, value);
@@ -135,7 +135,7 @@ SExprWriterImpl::write_string(const char* name, const std::string& value)
 }
 
 void
-SExprWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
+SExprWriterImpl::write(const char* name, std::vector<bool> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
   for (auto const& value : values) {
@@ -145,7 +145,7 @@ SExprWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
 }
 
 void
-SExprWriterImpl::write_ints(const char* name, std::vector<int> const& values)
+SExprWriterImpl::write(const char* name, std::vector<int> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
   for (auto const& value : values) {
@@ -155,7 +155,7 @@ SExprWriterImpl::write_ints(const char* name, std::vector<int> const& values)
 }
 
 void
-SExprWriterImpl::write_floats(const char* name, std::vector<float> const& values)
+SExprWriterImpl::write(const char* name, std::vector<float> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
   for (auto const& value : values) {
@@ -165,7 +165,7 @@ SExprWriterImpl::write_floats(const char* name, std::vector<float> const& values
 }
 
 void
-SExprWriterImpl::write_strings(const char* name, std::vector<std::string> const& values)
+SExprWriterImpl::write(const char* name, std::vector<std::string> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
   for (auto const& value : values) {

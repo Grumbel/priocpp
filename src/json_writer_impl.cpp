@@ -101,7 +101,7 @@ JsonWriterImpl::end_mapping()
 }
 
 void
-JsonWriterImpl::write_bool(const char* name, bool value)
+JsonWriterImpl::write(const char* name, bool value)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
@@ -110,7 +110,7 @@ JsonWriterImpl::write_bool(const char* name, bool value)
 }
 
 void
-JsonWriterImpl::write_int(const char* name, int value)
+JsonWriterImpl::write(const char* name, int value)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
@@ -119,7 +119,7 @@ JsonWriterImpl::write_int(const char* name, int value)
 }
 
 void
-JsonWriterImpl::write_float(const char* name, float value)
+JsonWriterImpl::write(const char* name, float value)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
@@ -128,7 +128,7 @@ JsonWriterImpl::write_float(const char* name, float value)
 }
 
 void
-JsonWriterImpl::write_string(const char* name, const std::string& value)
+JsonWriterImpl::write(const char* name, const std::string& value)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
@@ -137,7 +137,7 @@ JsonWriterImpl::write_string(const char* name, const std::string& value)
 }
 
 void
-JsonWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
+JsonWriterImpl::write(const char* name, std::vector<bool> const& values)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
@@ -149,7 +149,7 @@ JsonWriterImpl::write_bools(const char* name, std::vector<bool> const& values)
 }
 
 void
-JsonWriterImpl::write_ints(const char* name, std::vector<int> const& values)
+JsonWriterImpl::write(const char* name, std::vector<int> const& values)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
@@ -161,7 +161,7 @@ JsonWriterImpl::write_ints(const char* name, std::vector<int> const& values)
 }
 
 void
-JsonWriterImpl::write_floats(const char* name, std::vector<float> const& values)
+JsonWriterImpl::write(const char* name, std::vector<float> const& values)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
@@ -173,7 +173,7 @@ JsonWriterImpl::write_floats(const char* name, std::vector<float> const& values)
 }
 
 void
-JsonWriterImpl::write_strings(const char* name, std::vector<std::string> const& values)
+JsonWriterImpl::write(const char* name, std::vector<std::string> const& values)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);

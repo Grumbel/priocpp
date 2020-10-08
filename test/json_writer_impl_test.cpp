@@ -26,16 +26,16 @@ TEST(JsonWriterImplTest, write)
 
   JsonWriterImpl writer(os);
   writer.begin_object("testfile");
-  writer.write_bool("trueval", true);
-  writer.write_bool("falseval", false);
-  writer.write_int("intval", 123);
-  writer.write_float("floatval", 123.5);
-  writer.write_string("stringval", "Hello World");
+  writer.write("trueval", true);
+  writer.write("falseval", false);
+  writer.write("intval", 123);
+  writer.write("floatval", 123.5f);
+  writer.write("stringval", "Hello World");
 
-  writer.write_bools("truevals", std::vector<bool>({true, false, true}));
-  writer.write_ints("intvals", std::vector<int>({1, 2, 3}));
-  writer.write_floats("floatvals", std::vector<float>({1.5, 2.5, 3.5}));
-  writer.write_strings("stringvals", std::vector<std::string>({"\"Hello", "World\""}));
+  writer.write("truevals", std::vector<bool>({true, false, true}));
+  writer.write("intvals", std::vector<int>({1, 2, 3}));
+  writer.write("floatvals", std::vector<float>({1.5f, 2.5f, 3.5f}));
+  writer.write("stringvals", std::vector<std::string>({"\"Hello", "World\""}));
   writer.end_object();
 
   ASSERT_EQ(os.str(),
