@@ -54,16 +54,16 @@ public:
   bool read(const char* key, ReaderObject&) const;
 
   template<class E, class T>
-  bool read_enum (const char* key, E& value, T enum2string) const
+  bool read(const char* key, E& value, T string2enum) const
   {
     std::string str;
-    if(read(key, str))
-    {
-      value = enum2string(str);
+    if (!read(key, str)) {
+      return false;
+    } else {
+      // FIXME: add pedantic handling here
+      value = string2enum(str);
       return true;
     }
-
-    return false;
   }
 
   template<typename T>
