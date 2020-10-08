@@ -26,7 +26,6 @@
 #include "reader_impl.hpp"
 #include "reader_mapping.hpp"
 #include "reader_object.hpp"
-#include "sexpr_reader_error.hpp"
 
 namespace prio {
 
