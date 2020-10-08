@@ -188,9 +188,9 @@ SExprReaderMappingImpl::read(const char* key, std::string& value) const
     return false;                                               \
   }                                                             \
                                                                 \
-  for (size_t i = 0; i < values.size(); ++i) {                  \
-    if (!item->as_array()[i + 1].checker()) {                   \
-      m_doc.error(item->as_array()[i + 1], "expected " type);   \
+  for (size_t i = 1; i < item->as_array().size(); ++i) {        \
+    if (!item->as_array()[i].checker()) {                       \
+      m_doc.error(item->as_array()[i], "expected " type);       \
       return false;                                             \
     }                                                           \
   }                                                             \

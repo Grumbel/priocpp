@@ -120,6 +120,41 @@ TEST_P(ReaderTest, read_bools_fail)
   EXPECT_EQ(original, boolvalues2);
 }
 
+TEST_P(ReaderTest, read_wrong)
+{
+  bool bool_value;
+  int int_value;
+  float float_value;
+  std::string string_value;
+
+  std::vector<bool> bool_values;
+  std::vector<int> int_values;
+  std::vector<float> float_values;
+  std::vector<std::string> string_values;
+
+  ReaderMapping mapping;
+  ReaderObject object;
+  ReaderCollection collection;
+
+  for(auto const& key : body.get_keys()) {
+    body.read(key.c_str(), bool_value);
+    body.read(key.c_str(), int_value);
+    body.read(key.c_str(), float_value);
+    body.read(key.c_str(), string_value);
+
+    body.read(key.c_str(), bool_values);
+    body.read(key.c_str(), int_values);
+    body.read(key.c_str(), float_values);
+    body.read(key.c_str(), string_values);
+
+    body.read(key.c_str(), mapping);
+    body.read(key.c_str(), object);
+    body.read(key.c_str(), collection);
+  }
+
+  SUCCEED();
+}
+
 TEST_P(ReaderTest, read_ints)
 {
   std::vector<int> intvalues;
