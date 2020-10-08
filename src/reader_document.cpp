@@ -60,8 +60,12 @@ ReaderDocument::from_stream(std::istream& stream, bool pedantic, std::optional<s
   }
   else
   { // sexp
-    auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
-    return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), pedantic, filename));
+    try {
+      auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
+      return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), pedantic, filename));
+    } catch(std::exception const& err) {
+      std::throw_with_nested(ReaderError(fmt::format("{}: ReaderDocument::from_stream() failed", filename ?  *filename : "<unknown>")));
+    }
   }
 }
 
