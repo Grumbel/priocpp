@@ -53,10 +53,6 @@ public:
   bool read(const char* key, ReaderCollection&) const;
   bool read(const char* key, ReaderObject&) const;
 
-  ReaderMapping read_mapping(const char* key) const;
-  ReaderCollection read_collection(const char* key) const;
-  ReaderObject read_object(const char* key) const;
-
   template<class E, class T>
   bool read_enum (const char* key, E& value, T enum2string) const
   {

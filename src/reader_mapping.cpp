@@ -138,48 +138,6 @@ ReaderMapping::read(const char* key, ReaderCollection& collection) const
     return false;
 }
 
-ReaderMapping
-ReaderMapping::read_mapping(const char* key) const
-{
-  if (!m_impl)
-  {
-    return {};
-  }
-  {
-    ReaderMapping result;
-    read(key, result);
-    return result;
-  }
-}
-
-ReaderCollection
-ReaderMapping::read_collection(const char* key) const
-{
-  if (!m_impl)
-  {
-    return {};
-  }
-  {
-    ReaderCollection result;
-    read(key, result);
-    return result;
-  }
-}
-
-ReaderObject
-ReaderMapping::read_object(const char* key) const
-{
-  if (!m_impl)
-  {
-    return {};
-  }
-  {
-    ReaderObject result;
-    read(key, result);
-    return result;
-  }
-}
-
 std::vector<std::string>
 ReaderMapping::get_keys() const
 {
