@@ -51,7 +51,8 @@ public:
   void write(const char* name, bool) override;
   void write(const char* name, int) override;
   void write(const char* name, float) override;
-  void write(const char* name, const std::string&) override;
+  void write(const char* name, char const* text) override;
+  void write(const char* name, std::string_view) override;
 
   void write(const char* name, std::vector<bool> const&) override;
   void write(const char* name, std::vector<int> const&) override;

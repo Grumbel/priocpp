@@ -109,7 +109,13 @@ Writer::write(const char* name, float value)
 }
 
 void
-Writer::write(const char* name, const std::string& value)
+Writer::write(const char* name, char const* text)
+{
+  m_impl->write(name, text);
+}
+
+void
+Writer::write(const char* name, std::string_view value)
 {
   m_impl->write(name, value);
 }

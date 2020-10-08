@@ -174,7 +174,13 @@ JsonPrettyWriterImpl::write(const char* name, float value)
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, const std::string& value)
+JsonPrettyWriterImpl::write(const char* name, char const* text)
+{
+  write(name, std::string_view(text));
+}
+
+void
+JsonPrettyWriterImpl::write(const char* name, std::string_view value)
 {
   assert(m_context.back() == Context::Mapping);
 
@@ -277,16 +283,16 @@ JsonPrettyWriterImpl::write_separator()
 }
 
 void
-JsonPrettyWriterImpl::write_quoted_string(const char* str)
+JsonPrettyWriterImpl::write_quoted_string(const char* text)
 {
-  // FIXME: obviously evil
-  m_out << '"' << str << '"';
+  write_quoted_string(std::string_view(text));
 }
 
 void
-JsonPrettyWriterImpl::write_quoted_string(const std::string& str)
+JsonPrettyWriterImpl::write_quoted_string(std::string_view text)
 {
-  write_quoted_string(str.c_str());
+  // FIXME: obviously evil
+  m_out << '"' << text << '"';
 }
 
 } // namespace prio

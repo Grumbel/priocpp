@@ -128,12 +128,18 @@ JsonWriterImpl::write(const char* name, float value)
 }
 
 void
-JsonWriterImpl::write(const char* name, const std::string& value)
+JsonWriterImpl::write(const char* name, char const* text)
+{
+  write(name, std::string_view(text));
+}
+
+void
+JsonWriterImpl::write(const char* name, std::string_view value)
 {
   assert(!m_stack.empty());
   assert(m_stack.back().get().type() == Json::objectValue);
 
-  m_stack.back().get()[name] = Json::Value(value);
+  m_stack.back().get()[name] = Json::Value(value.begin(), value.end());
 }
 
 void

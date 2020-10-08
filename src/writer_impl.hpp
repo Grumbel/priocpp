@@ -41,7 +41,8 @@ public:
   virtual void write(const char* name, bool) = 0;
   virtual void write(const char* name, int) = 0;
   virtual void write(const char* name, float) = 0;
-  virtual void write(const char* name, const std::string&) = 0;
+  virtual void write(const char* name, char const* text) = 0;
+  virtual void write(const char* name, std::string_view) = 0;
 
   virtual void write(const char* name, std::vector<bool> const&) = 0;
   virtual void write(const char* name, std::vector<int> const&) = 0;

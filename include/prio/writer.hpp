@@ -55,7 +55,8 @@ public:
   void write(const char* name, bool);
   void write(const char* name, int);
   void write(const char* name, float);
-  void write(const char* name, const std::string&);
+  void write(const char* name, char const* text);
+  void write(const char* name, std::string_view);
 
   void write(const char* name, std::vector<bool> const&);
   void write(const char* name, std::vector<int> const&);
