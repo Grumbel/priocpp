@@ -291,8 +291,23 @@ JsonPrettyWriterImpl::write_quoted_string(const char* text)
 void
 JsonPrettyWriterImpl::write_quoted_string(std::string_view text)
 {
-  // FIXME: obviously evil
-  m_out << '"' << text << '"';
+  m_out << '"';
+  for(char const c : text) {
+    switch(c) {
+      case '"':
+        m_out << "\\\"";
+        break;
+
+      case '\\':
+        m_out << "\\\\";
+        break;
+
+      default:
+        m_out << c;
+        break;
+    }
+  }
+  m_out << '"';
 }
 
 } // namespace prio
