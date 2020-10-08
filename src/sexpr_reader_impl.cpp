@@ -146,7 +146,7 @@ SExprReaderMappingImpl::get_keys() const
 
     if (!keyvalue.as_array()[0].is_symbol()) {
       std::ostringstream oss;
-      oss << keyvalue << ": malformed mapping, expected string";
+      oss << keyvalue << ": malformed mapping, expected symbol";
       throw ReaderError(oss.str());
     }
 
