@@ -198,7 +198,7 @@ JsonPrettyWriterImpl::write(const char* name, std::vector<bool> const& values)
   write_quoted_string(name);
   m_out << ": [";
   size_t index = 0;
-  for(auto const& value : values) {
+  for(auto const&& value : values) {
     m_out << (value ? "true" : "false");
     if (index != values.size() - 1) {
       m_out << ", ";

@@ -28,8 +28,8 @@ class JsonReaderDocumentImpl final : public ReaderDocumentImpl
 public:
   JsonReaderDocumentImpl(Json::Value value, bool pedantic, std::optional<std::string> filename);
 
-  virtual ReaderObject get_root() const;
-  std::optional<std::string> get_filename() const { return m_filename; }
+  virtual ReaderObject get_root() const override;
+  std::optional<std::string> get_filename() const override { return m_filename; }
 
   void error(Json::Value const& json, const char* message) const;
 

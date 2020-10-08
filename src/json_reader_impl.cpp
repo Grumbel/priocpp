@@ -136,7 +136,7 @@ JsonReaderMappingImpl::get_keys() const
     return false;                               \
   }                                             \
   value = element.getter();                     \
-  return true;
+  return true
 
 bool
 JsonReaderMappingImpl::read(const char* key, bool& value) const
@@ -172,7 +172,7 @@ JsonReaderMappingImpl::read(const char* key, std::string& value) const
     return false;                                                       \
   }                                                                     \
                                                                         \
-  for(int i = 0; i < element.size(); ++i) {                             \
+  for(Json::Value::ArrayIndex i = 0; i < element.size(); ++i) {         \
     if (!element[i].checker_()) {                                       \
       m_doc.error(element[i], "expected " type_);                       \
       return false;                                                     \
@@ -180,10 +180,10 @@ JsonReaderMappingImpl::read(const char* key, std::string& value) const
   }                                                                     \
                                                                         \
   values.resize(element.size());                                        \
-  for(int i = 0; i < element.size(); ++i) {                             \
+  for(Json::Value::ArrayIndex i = 0; i < element.size(); ++i) {         \
     values[i] = element[i].getter_();                                   \
   }                                                                     \
-  return true;
+  return true
 
 bool
 JsonReaderMappingImpl::read(const char* key, std::vector<bool>& values) const

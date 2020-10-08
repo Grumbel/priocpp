@@ -144,7 +144,7 @@ void
 SExprWriterImpl::write(const char* name, std::vector<bool> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
-  for (auto const& value : values) {
+  for (bool const value : values) {
     (*out) << ' ' << (value ? "#t" : "#f");
   }
   (*out) << ")";
@@ -154,7 +154,7 @@ void
 SExprWriterImpl::write(const char* name, std::vector<int> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
-  for (auto const& value : values) {
+  for (int const value : values) {
     (*out) << ' ' << value;
   }
   (*out) << ")";
@@ -164,7 +164,7 @@ void
 SExprWriterImpl::write(const char* name, std::vector<float> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
-  for (auto const& value : values) {
+  for (float const value : values) {
     (*out) << ' ' << value;
   }
   (*out) << ")";
@@ -174,7 +174,7 @@ void
 SExprWriterImpl::write(const char* name, std::vector<std::string> const& values)
 {
   (*out) << "\n" << indent() << "(" << name;
-  for (auto const& value : values) {
+  for (std::string const& value : values) {
     (*out) << ' ';
     write_escaped(*out, value);
   }

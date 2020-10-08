@@ -152,7 +152,7 @@ SExprReaderMappingImpl::get_keys() const
     return false;                                      \
   }                                                    \
   value = item->getter();                              \
-  return true;
+  return true
 
 bool
 SExprReaderMappingImpl::read(const char* key, bool& value) const
@@ -199,7 +199,7 @@ SExprReaderMappingImpl::read(const char* key, std::string& value) const
   for (size_t i = 0; i < values.size(); ++i) {                  \
     values[i] = item->as_array()[i + 1].getter();               \
   }                                                             \
-  return true;
+  return true
 
 bool
 SExprReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
