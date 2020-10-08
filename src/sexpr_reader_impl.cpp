@@ -288,19 +288,16 @@ sexp::Value const*
 SExprReaderMappingImpl::get_subsection_item(const char* key) const
 {
   sexp::Value const* sub = get_subsection(key);
-  if (sub && sub->as_array().size() >= 2)
-  {
-    if (sub->as_array().size() > 2)
-    {
-      log_error("invalid items in section: {}", key);
-    }
-
-    return &sub->as_array()[1];
-  }
-  else
-  {
+  if (!sub) {
     return nullptr;
   }
+
+  if (sub->as_array().size() > 2) {
+    m_doc.error(*sub, "invalid items in section");
+    return nullptr;
+  }
+
+  return &sub->as_array()[1];
 }
 
 sexp::Value const*
