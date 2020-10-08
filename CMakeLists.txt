@@ -19,6 +19,9 @@ project(prio)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/)
 
+option(BUILD_TESTS "Build test cases" OFF)
+option(BUILD_EXTRA "Build extra stuff" OFF)
+
 include(GNUInstallDirs)
 include(MaximumWarnings)
 include(ClangTidy)
@@ -78,6 +81,22 @@ if(BUILD_TESTS)
   add_test(NAME test_prio
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     COMMAND test_prio)
+endif()
+
+if(BUILD_EXTRA)
+  file(GLOB PRIO_EXTRA_SOURCES_CXX RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    extra/*.cpp)
+  foreach(EXTRA_SOURCE ${PRIO_EXTRA_SOURCES_CXX})
+    string(REGEX REPLACE ".*/\([^/]*\).cpp" "\\1" EXTRA_EXE ${EXTRA_SOURCE})
+    add_executable(${EXTRA_EXE} ${EXTRA_SOURCE})
+    set_target_properties(${EXTRA_EXE} PROPERTIES
+      CXX_STANDARD 20
+      CXX_STANDARD_REQUIRED ON
+      CXX_EXTENSIONS OFF)
+    set_target_properties(${EXTRA_EXE} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "extra/")
+    target_compile_options(${EXTRA_EXE} PRIVATE ${WARNINGS_CXX_FLAGS})
+    target_link_libraries(${EXTRA_EXE} prio)
+  endforeach(EXTRA_SOURCE)
 endif()
 
 install(TARGETS prio
