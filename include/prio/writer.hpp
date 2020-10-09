@@ -55,11 +55,12 @@ public:
   void end_keyvalue();
 
   /** write a name/value pair inside a mapping */
-  void write(std::string_view key, bool);
-  void write(std::string_view key, int);
-  void write(std::string_view key, float);
-  void write(std::string_view key, char const* text);
-  void write(std::string_view key, std::string_view);
+  void write(std::string_view key, bool value);
+  void write(std::string_view key, int value);
+  void write(std::string_view key, float value);
+  void write(std::string_view key, char const* value);
+  void write(std::string_view key, std::string_view value);
+  void write(std::string_view key, std::string const& value);
 
   void write(std::string_view key, std::vector<bool> const&);
   void write(std::string_view key, std::vector<int> const&);
@@ -67,9 +68,19 @@ public:
   void write(std::string_view key, std::vector<std::string> const&);
 
   template<class E, class T>
-  void write_enum(std::string_view key, E& value, T string2enum)
-  {
+  void write_enum(std::string_view key, E& value, T string2enum) {
     write_string(key, string2enum(value));
+  }
+
+  template<typename T>
+  void write(std::string_view key, T const& value) {
+    write_custom(*this, key, value);
+  }
+
+  template<typename Enum, typename Enum2String>
+  void write(std::string_view key, Enum const& value, Enum2String enum2string)
+  {
+    write(key, enum2string(value));
   }
 
 private:

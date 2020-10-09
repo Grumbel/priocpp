@@ -133,6 +133,12 @@ Writer::write(std::string_view key, std::string_view value)
 }
 
 void
+Writer::write(std::string_view key, std::string const& value)
+{
+  m_impl->write(key, std::string_view(value));
+}
+
+void
 Writer::write(std::string_view key, std::vector<bool> const& values)
 {
   m_impl->write(key, values);
