@@ -29,11 +29,8 @@ class JsonWriterImpl final : public WriterImpl
 {
 private:
   std::ostream& m_out;
-  Json::Value m_root;
 
-  // jsoncpp does copy-by-value, even for arrays and objects, so we
-  // have to use std::reference_wrapper<> instead of just Json::Value
-  std::vector<std::reference_wrapper<Json::Value> > m_stack;
+  std::vector<Json::Value> m_stack;
 
 public:
   JsonWriterImpl(std::ostream& out);

@@ -26,11 +26,8 @@ namespace prio {
 
 JsonWriterImpl::JsonWriterImpl(std::ostream& out) :
   m_out(out),
-  m_root(Json::objectValue),
   m_stack()
 {
-  // the root element is always an anonymous mapping
-  m_stack.push_back(m_root);
 }
 
 JsonWriterImpl::~JsonWriterImpl()
@@ -42,62 +39,83 @@ void
 JsonWriterImpl::begin_collection(std::string_view key)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  m_stack.push_back((m_stack.back().get()[std::string(key)] = Json::Value(Json::arrayValue)));
+  m_stack.emplace_back(std::string(key));
+  m_stack.emplace_back(Json::arrayValue);
 }
 
 void
 JsonWriterImpl::end_collection()
 {
   assert(!m_stack.empty());
+
+  Json::Value value = std::move(m_stack.back());
   m_stack.pop_back();
+
+  Json::Value key = std::move(m_stack.back());
+  m_stack.pop_back();
+
+  m_stack.back()[key.asString()] = std::move(value);
 }
 
 void
 JsonWriterImpl::begin_object(std::string_view type)
 {
-  // FIXME: hack
-  begin_mapping(type);
+  assert(m_stack.empty() || // root
+         m_stack.back().type() == Json::stringValue || // keyvalue
+         m_stack.back().type() == Json::arrayValue); // collection
+
+  m_stack.emplace_back(std::string(type));
+  m_stack.emplace_back(Json::objectValue);
 }
 
 void
 JsonWriterImpl::end_object()
 {
-  // FIXME: hack
-  end_mapping();
+  assert(m_stack.size() >= 2);
+
+  Json::Value mapping = std::move(m_stack.back());
+  m_stack.pop_back();
+
+  Json::Value type = std::move(m_stack.back());
+  m_stack.pop_back();
+
+  Json::Value object(Json::objectValue);
+  object[type.asString()] = std::move(mapping);
+
+  if (m_stack.empty()) {
+    m_stack.emplace_back(std::move(object));
+    flush();
+  } else if (m_stack.back().type() == Json::stringValue) {
+    m_stack.emplace_back(std::move(object));
+  } else if (m_stack.back().type() == Json::arrayValue) {
+    m_stack.back().append(std::move(object));
+  }
 }
 
 void
 JsonWriterImpl::begin_mapping(std::string_view key)
 {
   assert(!m_stack.empty());
+  assert(m_stack.back().type() == Json::objectValue);
 
-  if (m_stack.back().get().type() == Json::objectValue)
-  {
-    m_stack.push_back((m_stack.back().get()[std::string(key)] = Json::Value(Json::objectValue)));
-  }
-  else if (m_stack.back().get().type() == Json::arrayValue)
-  {
-    m_stack.back().get().append(Json::Value(Json::objectValue));
-    m_stack.push_back(m_stack.back().get()[m_stack.back().get().size()-1][std::string(key)] = Json::Value(Json::objectValue));
-  }
-  else
-  {
-    assert(false && "never reached");
-  }
+  m_stack.emplace_back(std::string(key));
+  m_stack.emplace_back(Json::objectValue);
 }
 
 void
 JsonWriterImpl::end_mapping()
 {
-  assert(!m_stack.empty());
+  assert(m_stack.size() >= 2);
+
+  Json::Value value = std::move(m_stack.back());
   m_stack.pop_back();
 
-  if (m_stack.size() == 1)
-  {
-    flush();
-  }
+  Json::Value key = std::move(m_stack.back());
+  m_stack.pop_back();
+
+  m_stack.back()[key.asString()] = std::move(value);
 }
 
 void
@@ -114,27 +132,27 @@ void
 JsonWriterImpl::write(std::string_view key, bool value)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  m_stack.back().get()[std::string(key)] = Json::Value(value);
+  m_stack.back()[std::string(key)] = Json::Value(value);
 }
 
 void
 JsonWriterImpl::write(std::string_view key, int value)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  m_stack.back().get()[std::string(key)] = Json::Value(value);
+  m_stack.back()[std::string(key)] = Json::Value(value);
 }
 
 void
 JsonWriterImpl::write(std::string_view key, float value)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  m_stack.back().get()[std::string(key)] = Json::Value(value);
+  m_stack.back()[std::string(key)] = Json::Value(value);
 }
 
 void
@@ -147,18 +165,18 @@ void
 JsonWriterImpl::write(std::string_view key, std::string_view value)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  m_stack.back().get()[std::string(key)] = Json::Value(value.begin(), value.end());
+  m_stack.back()[std::string(key)] = Json::Value(value.begin(), value.end());
 }
 
 void
 JsonWriterImpl::write(std::string_view key, std::vector<bool> const& values)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  auto& arr = m_stack.back().get()[std::string(key)] = Json::Value(Json::arrayValue);
+  auto& arr = m_stack.back()[std::string(key)] = Json::Value(Json::arrayValue);
   for(int i = 0; i < static_cast<int>(values.size()); ++i) {
     arr[i] = Json::Value(values[i]);
   }
@@ -168,9 +186,9 @@ void
 JsonWriterImpl::write(std::string_view key, std::vector<int> const& values)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  auto& arr = m_stack.back().get()[std::string(key)] = Json::Value(Json::arrayValue);
+  auto& arr = m_stack.back()[std::string(key)] = Json::Value(Json::arrayValue);
   for(int i = 0; i < static_cast<int>(values.size()); ++i) {
     arr[i] = Json::Value(values[i]);
   }
@@ -180,9 +198,9 @@ void
 JsonWriterImpl::write(std::string_view key, std::vector<float> const& values)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  auto& arr = m_stack.back().get()[std::string(key)] = Json::Value(Json::arrayValue);
+  auto& arr = m_stack.back()[std::string(key)] = Json::Value(Json::arrayValue);
   for(int i = 0; i < static_cast<int>(values.size()); ++i) {
     arr[i] = Json::Value(values[i]);
   }
@@ -192,9 +210,9 @@ void
 JsonWriterImpl::write(std::string_view key, std::vector<std::string> const& values)
 {
   assert(!m_stack.empty());
-  assert(m_stack.back().get().type() == Json::objectValue);
+  assert(m_stack.back().type() == Json::objectValue);
 
-  auto& arr = m_stack.back().get()[std::string(key)] = Json::Value(Json::arrayValue);
+  auto& arr = m_stack.back()[std::string(key)] = Json::Value(Json::arrayValue);
   for(int i = 0; i < static_cast<int>(values.size()); ++i) {
     arr[i] = Json::Value(values[i]);
   }
