@@ -29,7 +29,7 @@ class ReaderCollection final
 {
 public:
   ReaderCollection();
-  ReaderCollection(ReaderCollection&&) = default;
+  ReaderCollection(ReaderCollection&&);
   ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl);
   ~ReaderCollection();
 

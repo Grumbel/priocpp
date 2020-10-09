@@ -51,7 +51,7 @@ public:
 
 public:
   ReaderDocument();
-  ReaderDocument(ReaderDocument&&) = default;
+  ReaderDocument(ReaderDocument&&);
   ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl);
   ~ReaderDocument();
 

@@ -27,6 +27,8 @@ ReaderMapping::ReaderMapping(std::unique_ptr<ReaderMappingImpl> impl) :
 {
 }
 
+ReaderMapping::ReaderMapping(ReaderMapping&&) = default;
+
 ReaderMapping::ReaderMapping() :
   m_impl()
 {

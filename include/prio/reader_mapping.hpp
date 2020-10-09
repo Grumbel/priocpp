@@ -31,7 +31,7 @@ class ReaderMapping final
 {
 public:
   ReaderMapping();
-  ReaderMapping(ReaderMapping&&) = default;
+  ReaderMapping(ReaderMapping&&);
   ReaderMapping(std::unique_ptr<ReaderMappingImpl> impl);
   ~ReaderMapping();
 

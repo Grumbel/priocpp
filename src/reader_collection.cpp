@@ -26,6 +26,8 @@ ReaderCollection::ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl) :
 {
 }
 
+ReaderCollection::ReaderCollection(ReaderCollection&&) = default;
+
 ReaderCollection::ReaderCollection() :
   m_impl()
 {
