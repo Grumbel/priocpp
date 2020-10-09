@@ -28,11 +28,11 @@ class ReaderObject final
 {
 public:
   ReaderObject();
-  ReaderObject(ReaderObject&&) = default;
+  ReaderObject(ReaderObject&&) noexcept;
   ReaderObject(std::unique_ptr<ReaderObjectImpl> impl);
   ~ReaderObject();
 
-  ReaderObject& operator=(ReaderObject&&);
+  ReaderObject& operator=(ReaderObject&&) noexcept;
 
   std::string get_name() const;
   ReaderMapping get_mapping() const;

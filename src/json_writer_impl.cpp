@@ -90,7 +90,7 @@ JsonWriterImpl::end_object()
   } else if (m_stack.top().type() == Json::stringValue) {
     m_stack.emplace(std::move(object));
   } else if (m_stack.top().type() == Json::arrayValue) {
-    m_stack.top().append(std::move(object));
+    m_stack.top().append(std::move(object)); // NOLINT
   }
 }
 

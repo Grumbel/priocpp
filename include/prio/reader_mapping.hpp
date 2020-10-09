@@ -31,11 +31,11 @@ class ReaderMapping final
 {
 public:
   ReaderMapping();
-  ReaderMapping(ReaderMapping&&);
+  ReaderMapping(ReaderMapping&&) noexcept;
   ReaderMapping(std::unique_ptr<ReaderMappingImpl> impl);
   ~ReaderMapping();
 
-  ReaderMapping& operator=(ReaderMapping&&);
+  ReaderMapping& operator=(ReaderMapping&&) noexcept;
 
   std::vector<std::string> get_keys() const;
 

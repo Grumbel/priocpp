@@ -27,7 +27,7 @@ ReaderMapping::ReaderMapping(std::unique_ptr<ReaderMappingImpl> impl) :
 {
 }
 
-ReaderMapping::ReaderMapping(ReaderMapping&&) = default;
+ReaderMapping::ReaderMapping(ReaderMapping&&) noexcept = default;
 
 ReaderMapping::ReaderMapping() :
   m_impl()
@@ -39,7 +39,7 @@ ReaderMapping::~ReaderMapping()
 }
 
 ReaderMapping&
-ReaderMapping::operator=(ReaderMapping&&) = default;
+ReaderMapping::operator=(ReaderMapping&&) noexcept = default;
 
 bool
 ReaderMapping::read(std::string_view key, bool& value) const

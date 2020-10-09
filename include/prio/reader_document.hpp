@@ -49,11 +49,11 @@ public:
 
 public:
   ReaderDocument();
-  ReaderDocument(ReaderDocument&&);
+  ReaderDocument(ReaderDocument&&) noexcept;
   ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl);
   ~ReaderDocument();
 
-  ReaderDocument& operator=(ReaderDocument&&);
+  ReaderDocument& operator=(ReaderDocument&&) noexcept;
 
   std::string get_name() const;
   ReaderMapping get_mapping() const;

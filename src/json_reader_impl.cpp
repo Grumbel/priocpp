@@ -33,7 +33,7 @@ namespace prio {
 JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, bool pedantic, std::optional<std::string> filename) :
   m_value(std::move(value)),
   m_pedantic(pedantic),
-  m_filename(filename)
+  m_filename(std::move(filename))
 {
 }
 

@@ -26,7 +26,7 @@ ReaderCollection::ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl) :
 {
 }
 
-ReaderCollection::ReaderCollection(ReaderCollection&&) = default;
+ReaderCollection::ReaderCollection(ReaderCollection&&) noexcept = default;
 
 ReaderCollection::ReaderCollection() :
   m_impl()
@@ -38,7 +38,7 @@ ReaderCollection::~ReaderCollection()
 }
 
 ReaderCollection&
-ReaderCollection::operator=(ReaderCollection&&) = default;
+ReaderCollection::operator=(ReaderCollection&&) noexcept = default;
 
 std::vector<ReaderObject>
 ReaderCollection::get_objects() const

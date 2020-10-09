@@ -26,6 +26,8 @@ ReaderObject::ReaderObject(std::unique_ptr<ReaderObjectImpl> impl) :
 {
 }
 
+ReaderObject::ReaderObject(ReaderObject&&) noexcept = default;
+
 ReaderObject::ReaderObject() :
   m_impl()
 {
@@ -36,7 +38,7 @@ ReaderObject::~ReaderObject()
 }
 
 ReaderObject&
-ReaderObject::operator=(ReaderObject&&) = default;
+ReaderObject::operator=(ReaderObject&&) noexcept = default;
 
 std::string
 ReaderObject::get_name() const

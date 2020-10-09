@@ -72,14 +72,11 @@ SExprReaderObjectImpl::~SExprReaderObjectImpl()
 std::string
 SExprReaderObjectImpl::get_name() const
 {
-  if (m_sx.as_array().size() < 1)
-  {
+  if (m_sx.as_array().empty()) {
     throw ReaderError("invalid syntax");
   }
-  else
-  {
-    return m_sx.as_array()[0].as_string();
-  }
+
+  return m_sx.as_array()[0].as_string();
 }
 
 ReaderMapping
@@ -140,7 +137,7 @@ SExprReaderMappingImpl::get_keys() const
   assert(m_sx.is_array());
   for (size_t i = 1; i < m_sx.as_array().size(); ++i) {
     sexp::Value const& keyvalue = m_sx.as_array()[i];
-    if (!keyvalue.is_array() || keyvalue.as_array().size() < 1) {
+    if (!keyvalue.is_array() || keyvalue.as_array().empty()) {
       std::ostringstream oss;
       oss << keyvalue << ": malformed mapping, expected array";
       throw ReaderError(oss.str());
@@ -284,7 +281,7 @@ SExprReaderMappingImpl::read(std::string_view key, ReaderMapping& value) const
   std::set<std::string> keys;
   for (size_t i = 1; i < cur->as_array().size(); ++i) {
     sexp::Value const& keyvalue = cur->as_array()[i];
-    if (!keyvalue.is_array() || keyvalue.as_array().size() < 1) {
+    if (!keyvalue.is_array() || keyvalue.as_array().empty()) {
       m_doc.error(keyvalue, "malformed key/value pair");
       return false;
     }
@@ -326,7 +323,7 @@ sexp::Value const*
 SExprReaderMappingImpl::get_subsection_items(std::string_view key) const
 {
   sexp::Value const* sub = get_subsection(key);
-  if (sub && sub->as_array().size() >= 1) {
+  if (sub && !sub->as_array().empty()) {
     return sub;
   } else {
     return nullptr;

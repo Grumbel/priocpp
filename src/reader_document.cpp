@@ -112,14 +112,14 @@ ReaderDocument::ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl) :
 {
 }
 
-ReaderDocument::ReaderDocument(ReaderDocument&&) = default;
+ReaderDocument::ReaderDocument(ReaderDocument&&) noexcept = default;
 
 ReaderDocument::~ReaderDocument()
 {
 }
 
 ReaderDocument&
-ReaderDocument::operator=(ReaderDocument&&) = default;
+ReaderDocument::operator=(ReaderDocument&&) noexcept = default;
 
 ReaderObject
 ReaderDocument::get_root() const

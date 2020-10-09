@@ -29,11 +29,11 @@ class ReaderCollection final
 {
 public:
   ReaderCollection();
-  ReaderCollection(ReaderCollection&&);
+  ReaderCollection(ReaderCollection&&) noexcept;
   ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl);
   ~ReaderCollection();
 
-  ReaderCollection& operator=(ReaderCollection&&);
+  ReaderCollection& operator=(ReaderCollection&&) noexcept;
 
   std::vector<ReaderObject> get_objects() const;
 
