@@ -45,7 +45,7 @@ SExprReaderDocumentImpl::get_root() const
 }
 
 void
-SExprReaderDocumentImpl::error(sexp::Value const& sx, char const* message) const
+SExprReaderDocumentImpl::error(sexp::Value const& sx, std::string_view message) const
 {
   if (m_pedantic) {
     throw ReaderError(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));

@@ -31,7 +31,7 @@ public:
   ReaderObject get_root() const override;
   std::optional<std::string> get_filename() const override { return m_filename; }
 
-  void error(sexp::Value const& sx, const char* message) const;
+  void error(sexp::Value const& sx, std::string_view message) const;
 
 private:
   sexp::Value m_sx;

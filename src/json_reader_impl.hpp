@@ -31,7 +31,7 @@ public:
   virtual ReaderObject get_root() const override;
   std::optional<std::string> get_filename() const override { return m_filename; }
 
-  void error(Json::Value const& json, const char* message) const;
+  void error(Json::Value const& json, std::string_view message) const;
 
 private:
   Json::Value m_value;

@@ -37,7 +37,7 @@ JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, bool pedantic,
 }
 
 void
-JsonReaderDocumentImpl::error(Json::Value const& json, const char* message) const
+JsonReaderDocumentImpl::error(Json::Value const& json, std::string_view message) const
 {
   if (m_pedantic) {
     throw ReaderError(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message));
