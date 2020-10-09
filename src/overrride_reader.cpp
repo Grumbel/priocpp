@@ -49,80 +49,80 @@ public:
     return std::vector<std::string>(result.begin(), result.end());
   }
 
-  bool read(const char* name, bool& v) const override
+  bool read(std::string_view key, bool& v) const override
   {
-    if (m_overrides.read(name, v))
+    if (m_overrides.read(key, v))
     {
       return true;
     }
     else
     {
-      return m_reader.read(name, v);
+      return m_reader.read(key, v);
     }
   }
 
-  bool read(const char* name, int& v) const override
+  bool read(std::string_view key, int& v) const override
   {
-    if (m_overrides.read(name, v))
+    if (m_overrides.read(key, v))
     {
       return true;
     }
     else
     {
-      return m_reader.read(name, v);
+      return m_reader.read(key, v);
     }
   }
 
-  bool read(const char* name, float& v) const override
+  bool read(std::string_view key, float& v) const override
   {
-    if (m_overrides.read(name, v))
+    if (m_overrides.read(key, v))
     {
       return true;
     }
     else
     {
-      return m_reader.read(name, v);
+      return m_reader.read(key, v);
     }
   }
 
-  bool read(const char* name, std::string& str) const override
+  bool read(std::string_view key, std::string& str) const override
   {
-    if (m_overrides.read(name, str))
+    if (m_overrides.read(key, str))
     {
       return true;
     }
     else
     {
-      return m_reader.read(name, str);
+      return m_reader.read(key, str);
     }
   }
 
-  bool read(const char* name, std::vector<bool>& v) const override
+  bool read(std::string_view key, std::vector<bool>& v) const override
   {
-    return m_overrides.read(name, v) || m_reader.read(name, v);
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
-  bool read(const char* name, std::vector<int>& v) const override
+  bool read(std::string_view key, std::vector<int>& v) const override
   {
-    return m_overrides.read(name, v) || m_reader.read(name, v);
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
-  bool read(const char* name, std::vector<float>& v) const override
+  bool read(std::string_view key, std::vector<float>& v) const override
   {
-    return m_overrides.read(name, v) || m_reader.read(name, v);
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
-  bool read(const char* name, std::vector<std::string>& v) const override
+  bool read(std::string_view key, std::vector<std::string>& v) const override
   {
-    return m_overrides.read(name, v) || m_reader.read(name, v);
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
-  bool read(const char* name, ReaderMapping& result) const override
+  bool read(std::string_view key, ReaderMapping& result) const override
   {
     ReaderMapping overwrite_result;
-    if (m_overrides.read(name, overwrite_result))
+    if (m_overrides.read(key, overwrite_result))
     {
-      if (m_reader.read(name, result))
+      if (m_reader.read(key, result))
       {
         result = make_override_mapping(result, overwrite_result);
         return true;
@@ -135,11 +135,11 @@ public:
     }
     else
     {
-      return m_reader.read(name, result);
+      return m_reader.read(key, result);
     }
   }
 
-  bool read(const char* key, ReaderCollection& result) const override
+  bool read(std::string_view key, ReaderCollection& result) const override
   {
     if (m_overrides.read(key, result))
     {
@@ -151,7 +151,7 @@ public:
     }
   }
 
-  bool read(const char* key, ReaderObject& result) const override
+  bool read(std::string_view key, ReaderObject& result) const override
   {
     if (m_overrides.read(key, result))
     {

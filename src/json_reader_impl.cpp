@@ -128,36 +128,36 @@ JsonReaderMappingImpl::get_keys() const
   return result;
 }
 
-#define GET_VALUE_MACRO(type, checker, getter)  \
-  const Json::Value& element = m_json[key];     \
-  if (element.isNull()) { return false; }       \
-  if (!element.checker()) {                     \
-    m_doc.error(element, "expected " type);     \
-    return false;                               \
-  }                                             \
-  value = element.getter();                     \
+#define GET_VALUE_MACRO(type, checker, getter)                  \
+  const Json::Value& element = m_json[std::string(key)];        \
+  if (element.isNull()) { return false; }                       \
+  if (!element.checker()) {                                     \
+    m_doc.error(element, "expected " type);                     \
+    return false;                                               \
+  }                                                             \
+  value = element.getter();                                     \
   return true
 
 bool
-JsonReaderMappingImpl::read(const char* key, bool& value) const
+JsonReaderMappingImpl::read(std::string_view key, bool& value) const
 {
   GET_VALUE_MACRO("bool", isBool, asBool);
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, int& value) const
+JsonReaderMappingImpl::read(std::string_view key, int& value) const
 {
   GET_VALUE_MACRO("int", isInt, asInt);
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, float& value) const
+JsonReaderMappingImpl::read(std::string_view key, float& value) const
 {
   GET_VALUE_MACRO("double", isDouble, asFloat);
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, std::string& value) const
+JsonReaderMappingImpl::read(std::string_view key, std::string& value) const
 {
   GET_VALUE_MACRO("string", isString, asString);
 }
@@ -165,7 +165,7 @@ JsonReaderMappingImpl::read(const char* key, std::string& value) const
 #undef GET_VALUE_MACRO
 
 #define GET_VALUES_MACRO(type_, checker_, getter_)                      \
-  const Json::Value& element = m_json[key];                             \
+  const Json::Value& element = m_json[std::string(key)];                \
   if (element.isNull()) { return false; }                               \
   if (!element.isArray()) {                                             \
     m_doc.error(element, "expected array");                             \
@@ -186,25 +186,25 @@ JsonReaderMappingImpl::read(const char* key, std::string& value) const
   return true
 
 bool
-JsonReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
+JsonReaderMappingImpl::read(std::string_view key, std::vector<bool>& values) const
 {
   GET_VALUES_MACRO("bool", isBool, asBool);
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, std::vector<int>& values) const
+JsonReaderMappingImpl::read(std::string_view key, std::vector<int>& values) const
 {
   GET_VALUES_MACRO("int", isInt, asInt);
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, std::vector<float>& values) const
+JsonReaderMappingImpl::read(std::string_view key, std::vector<float>& values) const
 {
   GET_VALUES_MACRO("double", isDouble, asFloat);
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, std::vector<std::string>& values) const
+JsonReaderMappingImpl::read(std::string_view key, std::vector<std::string>& values) const
 {
   GET_VALUES_MACRO("string", isString, asString);
 }
@@ -212,9 +212,9 @@ JsonReaderMappingImpl::read(const char* key, std::vector<std::string>& values) c
 #undef GET_VALUES_MACRO
 
 bool
-JsonReaderMappingImpl::read(const char* key, ReaderMapping& value) const
+JsonReaderMappingImpl::read(std::string_view key, ReaderMapping& value) const
 {
-  const Json::Value& element = m_json[key];
+  const Json::Value& element = m_json[std::string(key)];
   if (element.isObject())
   {
     value = ReaderMapping(std::make_unique<JsonReaderMappingImpl>(m_doc, element));
@@ -227,9 +227,9 @@ JsonReaderMappingImpl::read(const char* key, ReaderMapping& value) const
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, ReaderCollection& value) const
+JsonReaderMappingImpl::read(std::string_view key, ReaderCollection& value) const
 {
-  const Json::Value& element = m_json[key];
+  const Json::Value& element = m_json[std::string(key)];
   if (element.isArray())
   {
     value = ReaderCollection(std::make_unique<JsonReaderCollectionImpl>(m_doc, element));
@@ -242,9 +242,9 @@ JsonReaderMappingImpl::read(const char* key, ReaderCollection& value) const
 }
 
 bool
-JsonReaderMappingImpl::read(const char* key, ReaderObject& value) const
+JsonReaderMappingImpl::read(std::string_view key, ReaderObject& value) const
 {
-  const Json::Value& element = m_json[key];
+  const Json::Value& element = m_json[std::string(key)];
   if (element.isObject())
   {
     value = ReaderObject(std::make_unique<JsonReaderObjectImpl>(m_doc, element));

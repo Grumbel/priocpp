@@ -19,6 +19,7 @@
 
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace prio {
@@ -60,19 +61,19 @@ public:
 
   virtual std::vector<std::string> get_keys() const = 0;
 
-  virtual bool read(const char* key, bool&) const = 0;
-  virtual bool read(const char* key, int&) const = 0;
-  virtual bool read(const char* key, float&) const = 0;
-  virtual bool read(const char* key, std::string&) const = 0;
+  virtual bool read(std::string_view key, bool&) const = 0;
+  virtual bool read(std::string_view key, int&) const = 0;
+  virtual bool read(std::string_view key, float&) const = 0;
+  virtual bool read(std::string_view key, std::string&) const = 0;
 
-  virtual bool read(const char* key, std::vector<bool>& v) const = 0;
-  virtual bool read(const char* key, std::vector<int>& v) const = 0;
-  virtual bool read(const char* key, std::vector<float>& v) const = 0;
-  virtual bool read(const char* key, std::vector<std::string>& v) const = 0;
+  virtual bool read(std::string_view key, std::vector<bool>& v) const = 0;
+  virtual bool read(std::string_view key, std::vector<int>& v) const = 0;
+  virtual bool read(std::string_view key, std::vector<float>& v) const = 0;
+  virtual bool read(std::string_view key, std::vector<std::string>& v) const = 0;
 
-  virtual bool read(const char* key, ReaderMapping&) const = 0;
-  virtual bool read(const char* key, ReaderCollection&) const = 0;
-  virtual bool read(const char* key, ReaderObject&) const = 0;
+  virtual bool read(std::string_view key, ReaderMapping&) const = 0;
+  virtual bool read(std::string_view key, ReaderCollection&) const = 0;
+  virtual bool read(std::string_view key, ReaderObject&) const = 0;
 };
 
 } // namespace prio

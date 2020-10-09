@@ -219,7 +219,7 @@ struct CustomType {
   int value = 0;
 };
 
-bool read_custom(ReaderMapping const& mapping, char const* key, CustomType& value)
+bool read_custom(ReaderMapping const& mapping, std::string_view key, CustomType& value)
 {
   return mapping.read(key, value.value);
 }

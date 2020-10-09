@@ -74,19 +74,19 @@ public:
 
   std::vector<std::string> get_keys() const override;
 
-  bool read(const char* key, bool&) const override;
-  bool read(const char* key, int&) const override;
-  bool read(const char* key, float&) const override;
-  bool read(const char* key, std::string&) const override;
+  bool read(std::string_view key, bool&) const override;
+  bool read(std::string_view key, int&) const override;
+  bool read(std::string_view key, float&) const override;
+  bool read(std::string_view key, std::string&) const override;
 
-  bool read(const char* key, std::vector<bool>& v) const override;
-  bool read(const char* key, std::vector<int>& v) const override;
-  bool read(const char* key, std::vector<float>& v) const override;
-  bool read(const char* key, std::vector<std::string>& v) const override;
+  bool read(std::string_view key, std::vector<bool>& v) const override;
+  bool read(std::string_view key, std::vector<int>& v) const override;
+  bool read(std::string_view key, std::vector<float>& v) const override;
+  bool read(std::string_view key, std::vector<std::string>& v) const override;
 
-  bool read(const char* key, ReaderMapping&) const override;
-  bool read(const char* key, ReaderCollection&) const override;
-  bool read(const char* key, ReaderObject&) const override;
+  bool read(std::string_view key, ReaderMapping&) const override;
+  bool read(std::string_view key, ReaderCollection&) const override;
+  bool read(std::string_view key, ReaderObject&) const override;
 
 private:
   JsonReaderDocumentImpl const& m_doc;

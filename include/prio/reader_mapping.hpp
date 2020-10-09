@@ -39,22 +39,22 @@ public:
 
   std::vector<std::string> get_keys() const;
 
-  bool read(const char* key, bool& value) const;
-  bool read(const char* key, int& value) const;
-  bool read(const char* key, float& value) const;
-  bool read(const char* key, std::string& value) const;
+  bool read(std::string_view key, bool& value) const;
+  bool read(std::string_view key, int& value) const;
+  bool read(std::string_view key, float& value) const;
+  bool read(std::string_view key, std::string& value) const;
 
-  bool read(const char* key, std::vector<bool>& value) const;
-  bool read(const char* key, std::vector<int>& value) const;
-  bool read(const char* key, std::vector<float>& value) const;
-  bool read(const char* key, std::vector<std::string>& value) const;
+  bool read(std::string_view key, std::vector<bool>& value) const;
+  bool read(std::string_view key, std::vector<int>& value) const;
+  bool read(std::string_view key, std::vector<float>& value) const;
+  bool read(std::string_view key, std::vector<std::string>& value) const;
 
-  bool read(const char* key, ReaderMapping&) const;
-  bool read(const char* key, ReaderCollection&) const;
-  bool read(const char* key, ReaderObject&) const;
+  bool read(std::string_view key, ReaderMapping&) const;
+  bool read(std::string_view key, ReaderCollection&) const;
+  bool read(std::string_view key, ReaderObject&) const;
 
   template<typename Enum, typename String2Enum>
-  bool read(const char* key, Enum& value, String2Enum string2enum) const
+  bool read(std::string_view key, Enum& value, String2Enum string2enum) const
   {
     std::string str;
     if (!read(key, str)) {
@@ -67,19 +67,19 @@ public:
   }
 
   template<typename T>
-  bool read(char const* name, T& value) const {
-    return read_custom(*this, name, value);
+  bool read(std::string_view key, T& value) const {
+    return read_custom(*this, key, value);
   }
 
   template<typename T>
-  T get(char const* name, T fallback = {}) {
-    read(name, fallback);
+  T get(std::string_view key, T fallback = {}) {
+    read(key, fallback);
     return fallback;
   }
 
   template<typename T, typename String2Enum>
-  T get(char const* name, String2Enum string2enum, T fallback = {}) {
-    read(name, fallback, string2enum);
+  T get(std::string_view key, String2Enum string2enum, T fallback = {}) {
+    read(key, fallback, string2enum);
     return fallback;
   }
 

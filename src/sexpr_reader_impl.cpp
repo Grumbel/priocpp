@@ -167,25 +167,25 @@ SExprReaderMappingImpl::get_keys() const
   return true
 
 bool
-SExprReaderMappingImpl::read(const char* key, bool& value) const
+SExprReaderMappingImpl::read(std::string_view key, bool& value) const
 {
   GET_VALUE_MACRO("bool", is_boolean, as_bool);
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, int& value) const
+SExprReaderMappingImpl::read(std::string_view key, int& value) const
 {
   GET_VALUE_MACRO("int", is_integer, as_int);
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, float& value) const
+SExprReaderMappingImpl::read(std::string_view key, float& value) const
 {
   GET_VALUE_MACRO("float", is_real, as_float);
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, std::string& value) const
+SExprReaderMappingImpl::read(std::string_view key, std::string& value) const
 {
   GET_VALUE_MACRO("string", is_string, as_string);
 }
@@ -214,25 +214,25 @@ SExprReaderMappingImpl::read(const char* key, std::string& value) const
   return true
 
 bool
-SExprReaderMappingImpl::read(const char* key, std::vector<bool>& values) const
+SExprReaderMappingImpl::read(std::string_view key, std::vector<bool>& values) const
 {
   GET_VALUES_MACRO("bool", is_boolean, as_bool);
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, std::vector<int>& values) const
+SExprReaderMappingImpl::read(std::string_view key, std::vector<int>& values) const
 {
   GET_VALUES_MACRO("int", is_integer, as_int);
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, std::vector<float>& values) const
+SExprReaderMappingImpl::read(std::string_view key, std::vector<float>& values) const
 {
   GET_VALUES_MACRO("float", is_real, as_float);
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, std::vector<std::string>& values) const
+SExprReaderMappingImpl::read(std::string_view key, std::vector<std::string>& values) const
 {
   GET_VALUES_MACRO("string", is_string, as_string);
 }
@@ -240,7 +240,7 @@ SExprReaderMappingImpl::read(const char* key, std::vector<std::string>& values) 
 #undef GET_VALUES_MACRO
 
 bool
-SExprReaderMappingImpl::read(const char* key, ReaderObject& value) const
+SExprReaderMappingImpl::read(std::string_view key, ReaderObject& value) const
 {
   sexp::Value const* cur = get_subsection_item(key);
   if (cur)
@@ -255,7 +255,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderObject& value) const
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, ReaderCollection& value) const
+SExprReaderMappingImpl::read(std::string_view key, ReaderCollection& value) const
 {
   sexp::Value const* cur = get_subsection(key);
   if (cur)
@@ -270,7 +270,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderCollection& value) const
 }
 
 bool
-SExprReaderMappingImpl::read(const char* key, ReaderMapping& value) const
+SExprReaderMappingImpl::read(std::string_view key, ReaderMapping& value) const
 {
   sexp::Value const* cur = get_subsection(key);
   if (cur)
@@ -285,7 +285,7 @@ SExprReaderMappingImpl::read(const char* key, ReaderMapping& value) const
 }
 
 sexp::Value const*
-SExprReaderMappingImpl::get_subsection_item(const char* key) const
+SExprReaderMappingImpl::get_subsection_item(std::string_view key) const
 {
   sexp::Value const* sub = get_subsection(key);
   if (!sub) {
@@ -301,7 +301,7 @@ SExprReaderMappingImpl::get_subsection_item(const char* key) const
 }
 
 sexp::Value const*
-SExprReaderMappingImpl::get_subsection_items(const char* key) const
+SExprReaderMappingImpl::get_subsection_items(std::string_view key) const
 {
   sexp::Value const* sub = get_subsection(key);
   if (sub && sub->as_array().size() >= 1) {
@@ -312,7 +312,7 @@ SExprReaderMappingImpl::get_subsection_items(const char* key) const
 }
 
 sexp::Value const*
-SExprReaderMappingImpl::get_subsection(const char* key) const
+SExprReaderMappingImpl::get_subsection(std::string_view key) const
 {
   sexp::Value const* result = nullptr;
 
