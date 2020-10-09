@@ -91,6 +91,18 @@ Writer::end_mapping()
 }
 
 void
+Writer::begin_keyvalue(const char* key)
+{
+  m_impl->begin_keyvalue(key);
+}
+
+void
+Writer::end_keyvalue()
+{
+  m_impl->end_keyvalue();
+}
+
+void
 Writer::write(const char* name, bool value)
 {
   m_impl->write(name, value);

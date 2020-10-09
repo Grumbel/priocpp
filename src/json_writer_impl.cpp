@@ -101,6 +101,16 @@ JsonWriterImpl::end_mapping()
 }
 
 void
+JsonWriterImpl::begin_keyvalue(const char* key)
+{
+}
+
+void
+JsonWriterImpl::end_keyvalue()
+{
+}
+
+void
 JsonWriterImpl::write(const char* name, bool value)
 {
   assert(!m_stack.empty());

@@ -48,6 +48,9 @@ public:
   void begin_mapping(const char* name) override;
   void end_mapping() override;
 
+  void begin_keyvalue(const char* key) override;
+  void end_keyvalue() override;
+
   void write(const char* name, bool) override;
   void write(const char* name, int) override;
   void write(const char* name, float) override;

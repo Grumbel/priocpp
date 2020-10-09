@@ -62,6 +62,46 @@ SExprWriterImpl::indent() const
 }
 
 void
+SExprWriterImpl::begin_mapping(const char* name)
+{
+  if (level != 0)
+    (*out) << std::endl;
+
+  (*out) << indent() << "(" << name;
+  ++level;
+}
+
+void
+SExprWriterImpl::end_mapping()
+{
+  --level;
+  (*out) << ")";
+
+  // insert trailing newline and EOF marker at end of file
+  if (level == 0)
+  {
+    (*out) << "\n\n;; EOF ;;\n";
+  }
+}
+
+void
+SExprWriterImpl::begin_keyvalue(const char* key)
+{
+  if (level != 0)
+    (*out) << std::endl;
+
+  (*out) << indent() << "(" << key;
+  ++level;
+}
+
+void
+SExprWriterImpl::end_keyvalue()
+{
+  --level;
+  (*out) << ")";
+}
+
+void
 SExprWriterImpl::begin_collection(const char* name)
 {
   begin_mapping(name);
@@ -83,29 +123,6 @@ void
 SExprWriterImpl::end_object()
 {
   end_mapping();
-}
-
-void
-SExprWriterImpl::begin_mapping(const char* name)
-{
-  if (level != 0)
-    (*out) << std::endl;
-
-  (*out) << indent() << "(" << name;
-  ++level;
-}
-
-void
-SExprWriterImpl::end_mapping()
-{
-  --level;
-  (*out) << ")";
-
-  // insert trailing newline and EOF marker at end of file
-  if (level == 0)
-  {
-    (*out) << "\n\n;; EOF ;;\n";
-  }
 }
 
 void

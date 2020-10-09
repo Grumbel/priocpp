@@ -141,6 +141,16 @@ JsonPrettyWriterImpl::end_mapping()
 }
 
 void
+JsonPrettyWriterImpl::begin_keyvalue(const char* key)
+{
+}
+
+void
+JsonPrettyWriterImpl::end_keyvalue()
+{
+}
+
+void
 JsonPrettyWriterImpl::write(const char* name, bool value)
 {
   assert(m_context.back() == Context::Mapping);

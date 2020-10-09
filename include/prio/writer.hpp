@@ -51,6 +51,9 @@ public:
   void begin_mapping(const char* name);
   void end_mapping();
 
+  void begin_keyvalue(const char* key);
+  void end_keyvalue();
+
   /** write a name/value pair inside a mapping */
   void write(const char* name, bool);
   void write(const char* name, int);

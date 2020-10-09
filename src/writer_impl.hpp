@@ -38,6 +38,9 @@ public:
   virtual void begin_mapping(const char* name) = 0;
   virtual void end_mapping() = 0;
 
+  virtual void begin_keyvalue(const char* key) = 0;
+  virtual void end_keyvalue() = 0;
+
   virtual void write(const char* name, bool) = 0;
   virtual void write(const char* name, int) = 0;
   virtual void write(const char* name, float) = 0;
