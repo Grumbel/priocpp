@@ -20,6 +20,7 @@
 #include <sstream>
 
 #include <logmich/log.hpp>
+#include <fmt/ostream.h>
 #include <sexp/util.hpp>
 #include <sexp/io.hpp>
 

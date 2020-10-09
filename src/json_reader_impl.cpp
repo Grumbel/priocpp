@@ -16,10 +16,11 @@
 
 #include "json_reader_impl.hpp"
 
-#include <logmich/log.hpp>
-#include <json/writer.h>
-
 #include <stdexcept>
+
+#include <fmt/ostream.h>
+#include <json/writer.h>
+#include <logmich/log.hpp>
 
 #include "reader_collection.hpp"
 #include "reader_error.hpp"
