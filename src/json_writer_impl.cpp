@@ -121,11 +121,25 @@ JsonWriterImpl::end_mapping()
 void
 JsonWriterImpl::begin_keyvalue(std::string_view key)
 {
+  assert(!m_stack.empty());
+  assert(m_stack.back().type() == Json::objectValue);
+
+  m_stack.emplace_back(std::string(key));
 }
 
 void
 JsonWriterImpl::end_keyvalue()
 {
+  assert(m_stack.size() >= 2);
+  assert(m_stack.back().type() == Json::stringValue);
+
+  Json::Value value = m_stack.back();
+  m_stack.pop_back();
+
+  Json::Value key = m_stack.back();
+  m_stack.pop_back();
+
+  m_stack.back()[key.asString()] = value;
 }
 
 void
