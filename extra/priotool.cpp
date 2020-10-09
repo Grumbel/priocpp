@@ -23,20 +23,6 @@ using namespace prio;
 
 namespace {
 
-void write(Writer& writer, ReaderMapping const& body);
-
-void write(Writer& writer, ReaderObject const& root)
-{
-  write(writer, root.get_mapping());
-}
-
-void write(Writer& writer, ReaderCollection const& collection)
-{
-  for (auto const& obj : collection.get_objects()) {
-    write(writer, obj);
-  }
-}
-
 void write(Writer& writer, ReaderMapping const& body)
 {
   for(auto const& key : body.get_keys()) {
@@ -78,14 +64,22 @@ void write(Writer& writer, ReaderMapping const& body)
       writer.begin_mapping(key.c_str());
       write(writer, mapping);
       writer.end_mapping();
-    } else if (body.read(key.c_str(), object)) {
-      writer.begin_object(key.c_str());
-      write(writer, object);
-      writer.end_object();
     } else if (body.read(key.c_str(), collection)) {
       writer.begin_collection(key.c_str());
-      write(writer, collection);
+      for (auto const& obj : collection.get_objects()) {
+        writer.begin_object(obj.get_name().c_str());
+        write(writer, obj.get_mapping());
+        writer.end_object();
+      }
       writer.end_collection();
+    } else if (body.read(key.c_str(), object)) {
+      writer.begin_keyvalue(key.c_str());
+      writer.begin_object(object.get_name().c_str());
+      write(writer, object.get_mapping());
+      writer.end_object();
+      writer.end_keyvalue();
+    } else {
+      std::cerr << "unknown thing at key: " << key << std::endl;
     }
   }
 }
@@ -165,7 +159,7 @@ int main(int argc, char** argv)
 
         Writer writer = make_writer(opts.format);
         writer.begin_object(root.get_name().c_str());
-        write(writer, root);
+        write(writer, root.get_mapping());
         writer.end_object();
       } catch (std::exception& err) {
         std::cerr << filename << ": " << err.what() << std::endl;
