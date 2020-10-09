@@ -72,13 +72,13 @@ public:
   }
 
   template<typename T>
-  T get(std::string_view key, T fallback = {}) {
+  T get(std::string_view key, T fallback = {}) const {
     read(key, fallback);
     return fallback;
   }
 
   template<typename T, typename String2Enum>
-  T get(std::string_view key, String2Enum string2enum, T fallback = {}) {
+  T get(std::string_view key, String2Enum string2enum, T fallback = {}) const {
     read(key, fallback, string2enum);
     return fallback;
   }
