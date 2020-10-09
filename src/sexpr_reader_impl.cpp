@@ -16,6 +16,7 @@
 
 #include "sexpr_reader_impl.hpp"
 
+#include <set>
 #include <sstream>
 
 #include <logmich/log.hpp>
@@ -273,15 +274,35 @@ bool
 SExprReaderMappingImpl::read(std::string_view key, ReaderMapping& value) const
 {
   sexp::Value const* cur = get_subsection(key);
-  if (cur)
-  {
-    value = ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_doc, *cur));
-    return true;
-  }
-  else
-  {
+  if (!cur) {
     return false;
   }
+
+  assert(cur->is_array());
+
+  std::set<std::string> keys;
+  for (size_t i = 1; i < cur->as_array().size(); ++i) {
+    sexp::Value const& keyvalue = cur->as_array()[i];
+    if (!keyvalue.is_array() || keyvalue.as_array().size() < 1) {
+      m_doc.error(keyvalue, "malformed key/value pair");
+      return false;
+    }
+
+    if (!keyvalue.as_array()[0].is_symbol()) {
+      m_doc.error(keyvalue.as_array()[0], "expected symbol for key");
+      return false;
+    }
+
+    if (keys.find(keyvalue.as_array()[0].as_string()) != keys.end()) {
+      m_doc.error(*cur, "duplicate key in mapping");
+      return false;
+    }
+
+    keys.insert(keyvalue.as_array()[0].as_string());
+  }
+
+  value = ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_doc, *cur));
+  return true;
 }
 
 sexp::Value const*
