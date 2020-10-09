@@ -108,7 +108,7 @@ Options parse_args(int argc, char** argv)
   Options opts;
 
   for (int i = 1; i < argc; ++i) {
-    if (argv[i][0] == '-') {
+    if (argv[i][0] == '-' && strlen(argv[i]) > 1) {
       if (strcmp(argv[i], "--help") == 0) {
         print_usage(argv[0]);
       } else if (strcmp(argv[i], "--json") == 0) {
@@ -154,7 +154,10 @@ int main(int argc, char** argv)
 
     for (auto const& filename : opts.files) {
       try {
-        ReaderDocument doc = ReaderDocument::from_file(filename, false);
+        ReaderDocument doc = (filename == "-") ?
+          ReaderDocument::from_stream(std::cin, false) :
+          ReaderDocument::from_file(filename, false);
+
         ReaderObject const& root = doc.get_root();
 
         Writer writer = make_writer(opts.format);
