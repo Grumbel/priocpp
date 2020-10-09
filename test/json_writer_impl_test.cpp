@@ -17,32 +17,29 @@
 #include <gtest/gtest.h>
 
 #include "json_writer_impl.hpp"
+#include "writer_impl_test.hpp"
 
 using namespace prio;
 
 TEST(JsonWriterImplTest, write)
 {
   std::ostringstream os;
-
   JsonWriterImpl writer(os);
-  writer.begin_object("testfile");
-  writer.write("trueval", true);
-  writer.write("falseval", false);
-  writer.write("intval", 123);
-  writer.write("floatval", 123.5f);
-  writer.write("stringval", "Hello World");
-  writer.write("escapedstringval", "\"Hello\\World\"");
-
-  writer.write("truevals", std::vector<bool>({true, false, true}));
-  writer.write("intvals", std::vector<int>({1, 2, 3}));
-  writer.write("floatvals", std::vector<float>({1.5f, 2.5f, 3.5f}));
-  writer.write("stringvals", std::vector<std::string>({"\"Hello", "World\""}));
-  writer.end_object();
+  write_testfile(writer);
 
   ASSERT_EQ(os.str(),
             "{\n"
             "\t\"testfile\" : \n"
             "\t{\n"
+            "\t\t\"background\" : \n"
+            "\t\t{\n"
+            "\t\t\t\"color\" : \n"
+            "\t\t\t{\n"
+            "\t\t\t\t\"blue\" : 0.0,\n"
+            "\t\t\t\t\"green\" : 0.0,\n"
+            "\t\t\t\t\"red\" : 0.0\n"
+            "\t\t\t}\n"
+            "\t\t},\n"
             "\t\t\"escapedstringval\" : \"\\\"Hello\\\\World\\\"\",\n"
             "\t\t\"falseval\" : false,\n"
             "\t\t\"floatval\" : 123.5,\n"

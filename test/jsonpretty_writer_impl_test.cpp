@@ -17,27 +17,15 @@
 #include <gtest/gtest.h>
 
 #include "jsonpretty_writer_impl.hpp"
+#include "writer_impl_test.hpp"
 
 using namespace prio;
 
 TEST(JsonPrettyWriterImplTest, write)
 {
   std::ostringstream os;
-
   JsonPrettyWriterImpl writer(os);
-  writer.begin_object("testfile");
-  writer.write("trueval", true);
-  writer.write("falseval", false);
-  writer.write("intval", 123);
-  writer.write("floatval", 123.5f);
-  writer.write("stringval", "Hello World");
-  writer.write("escapedstringval", "\"Hello\\World\"");
-
-  writer.write("truevals", std::vector<bool>({true, false, true}));
-  writer.write("intvals", std::vector<int>({1, 2, 3}));
-  writer.write("floatvals", std::vector<float>({1.5f, 2.5f, 3.5f}));
-  writer.write("stringvals", std::vector<std::string>({"\"Hello", "World\""}));
-  writer.end_object();
+  write_testfile(writer);
 
   ASSERT_EQ(os.str(),
             "{\n"
@@ -51,7 +39,16 @@ TEST(JsonPrettyWriterImplTest, write)
             "    \"truevals\": [true, false, true],\n"
             "    \"intvals\": [1, 2, 3],\n"
             "    \"floatvals\": [1.5, 2.5, 3.5],\n"
-            "    \"stringvals\": [\"\\\"Hello\", \"World\\\"\"]\n"
+            "    \"stringvals\": [\"\\\"Hello\", \"World\\\"\"],\n"
+            "    \"background\": {\n"
+            "      {\n"
+            "        \"color\": {\n"
+            "          \"red\": 0,\n"
+            "          \"green\": 0,\n"
+            "          \"blue\": 0\n"
+            "        }\n"
+            "      }\n"
+            "    }\n"
             "  }\n"
             "}\n");
 }
