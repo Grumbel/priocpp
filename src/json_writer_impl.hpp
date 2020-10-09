@@ -18,8 +18,9 @@
 #define HEADER_PRIO_JSON_FILE_WRITER_HPP
 
 #include <functional>
-#include <json/json.h>
 #include <iosfwd>
+#include <json/json.h>
+#include <stack>
 
 #include "writer_impl.hpp"
 
@@ -30,7 +31,7 @@ class JsonWriterImpl final : public WriterImpl
 private:
   std::ostream& m_out;
 
-  std::vector<Json::Value> m_stack;
+  std::stack<Json::Value> m_stack;
 
 public:
   JsonWriterImpl(std::ostream& out);
