@@ -37,12 +37,12 @@ void write_testfile(prio::WriterImpl& writer)
 
   writer.begin_collection("collection");
   writer.begin_object("object1");
-  writer.write("x", 123.0f);
-  writer.write("y", 456.0f);
+  writer.write("x", 123.5f);
+  writer.write("y", 456.5f);
   writer.end_object();
   writer.begin_object("object1");
-  writer.write("x", 78.0f);
-  writer.write("y", 90.0f);
+  writer.write("x", 78.5f);
+  writer.write("y", 90.5f);
   writer.end_object();
   writer.end_collection();
 
@@ -54,9 +54,9 @@ void write_testfile(prio::WriterImpl& writer)
 
   writer.begin_keyvalue("background");
   writer.begin_object("color");
-  writer.write("red", 0.0f);
-  writer.write("green", 0.0f);
-  writer.write("blue", 0.0f);
+  writer.write("red", 0.125f);
+  writer.write("green", 0.25f);
+  writer.write("blue", 0.5f);
   writer.end_object();
   writer.end_keyvalue();
 
