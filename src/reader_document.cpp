@@ -80,10 +80,10 @@ ReaderDocument::from_file(const std::string& filename, bool pedantic)
   }
 }
 
-#if 0
-std::vector<ReaderObject>
-Reader::parse_many(const std::string& pathname)
+std::vector<ReaderDocument>
+ReaderDocument::parse_many(const std::string& pathname)
 {
+#if 0
   std::shared_ptr<lisp::Lisp> sexpr = lisp::Parser::parse(pathname.get_sys_path());
   if (sexpr)
   {
@@ -96,11 +96,11 @@ Reader::parse_many(const std::string& pathname)
     return sections;
   }
   else
+#endif
   {
-    return std::vector<Reader>();
+    return std::vector<ReaderDocument>();
   }
 }
-#endif
 
 ReaderDocument:: ReaderDocument() :
   m_impl()

@@ -43,11 +43,9 @@ public:
   static ReaderDocument from_file(const std::string& filename, bool pedantic);
   static ReaderDocument from_string(std::string_view text, bool pedantic, std::optional<std::string> const& filename = {});
 
-#if 0
   /** Reads multiple trees from a file, for use with files that don't
       contain a root element */
-  static std::vector<ReaderObject> parse_many(const std::string& pathname);
-#endif
+  static std::vector<ReaderDocument> parse_many(const std::string& pathname);
 
 public:
   ReaderDocument();
