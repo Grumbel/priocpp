@@ -26,7 +26,7 @@ JsonPrettyWriterImpl::JsonPrettyWriterImpl(std::ostream& out) :
   m_out(out),
   m_depth(0),
   m_write_seperator( { false } ),
-  m_context( { Context::Collection } )
+  m_context()
 {
 }
 
@@ -68,10 +68,11 @@ JsonPrettyWriterImpl::end_collection()
 void
 JsonPrettyWriterImpl::begin_object(std::string_view type)
 {
-  assert(m_context.back() == Context::Collection);
+  assert(m_context.empty() ||
+         m_context.back() == Context::Collection ||
+         m_context.back() == Context::KeyValue);
 
-  if (m_depth != 0)
-  {
+  if (m_depth != 0) {
     write_indent();
   }
 

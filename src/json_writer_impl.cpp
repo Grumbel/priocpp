@@ -131,10 +131,11 @@ void
 JsonWriterImpl::end_keyvalue()
 {
   assert(m_stack.size() >= 2);
-  assert(m_stack.top().type() == Json::stringValue);
 
   Json::Value value = m_stack.top();
   m_stack.pop();
+
+  assert(m_stack.top().type() == Json::stringValue);
 
   Json::Value key = m_stack.top();
   m_stack.pop();
