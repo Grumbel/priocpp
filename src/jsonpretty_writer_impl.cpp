@@ -143,11 +143,32 @@ JsonPrettyWriterImpl::end_mapping()
 void
 JsonPrettyWriterImpl::begin_keyvalue(std::string_view key)
 {
+  assert(m_context.back() == Context::Mapping);
+
+  write_indent();
+  write_quoted_string(key);
+  m_out << ": {";
+
+  m_context.push_back(Context::KeyValue);
+  m_write_seperator.push_back(false);
+  m_depth += 1;
 }
 
 void
 JsonPrettyWriterImpl::end_keyvalue()
 {
+  assert(m_context.back() == Context::KeyValue);
+
+  m_write_seperator.back() = false;
+  m_depth -= 1;
+
+  write_indent();
+  m_out << "}";
+
+  m_context.pop_back();
+  m_write_seperator.pop_back();
+
+  write_separator();
 }
 
 void

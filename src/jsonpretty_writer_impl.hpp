@@ -28,7 +28,7 @@ namespace prio {
 class JsonPrettyWriterImpl final : public WriterImpl
 {
 private:
-  enum class Context { Mapping, Collection };
+  enum class Context { Mapping, Collection, KeyValue };
 
   std::ostream& m_out;
   int m_depth;
