@@ -35,6 +35,23 @@ void write_testfile(prio::WriterImpl& writer)
   writer.write("floatvals", std::vector<float>({1.5f, 2.5f, 3.5f}));
   writer.write("stringvals", std::vector<std::string>({"\"Hello", "World\""}));
 
+  writer.begin_collection("collection");
+  writer.begin_object("object1");
+  writer.write("x", 123.0f);
+  writer.write("y", 456.0f);
+  writer.end_object();
+  writer.begin_object("object1");
+  writer.write("x", 78.0f);
+  writer.write("y", 90.0f);
+  writer.end_object();
+  writer.end_collection();
+
+  writer.begin_mapping("mapping");
+  writer.write("one", 1);
+  writer.write("two", 2);
+  writer.write("three", 3);
+  writer.end_mapping();
+
   writer.begin_keyvalue("background");
   writer.begin_object("color");
   writer.write("red", 0.0f);
