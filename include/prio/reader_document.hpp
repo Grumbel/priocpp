@@ -57,6 +57,9 @@ public:
 
   ReaderDocument& operator=(ReaderDocument&&);
 
+  std::string get_name() const;
+  ReaderMapping get_mapping() const;
+
   /** Returns the root object */
   ReaderObject get_root() const;
 

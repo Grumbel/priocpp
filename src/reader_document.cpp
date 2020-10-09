@@ -128,6 +128,18 @@ ReaderDocument::get_root() const
 }
 
 std::string
+ReaderDocument::get_name() const
+{
+  return m_impl->get_root().get_name();
+}
+
+ReaderMapping
+ReaderDocument::get_mapping() const
+{
+  return m_impl->get_root().get_mapping();
+}
+
+std::string
 ReaderDocument::get_filename() const
 {
   if (!m_impl->get_filename()) {
