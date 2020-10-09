@@ -55,9 +55,9 @@ Writer::~Writer()
 }
 
 void
-Writer::begin_collection(const char* name)
+Writer::begin_collection(std::string_view key)
 {
-  m_impl->begin_collection(name);
+  m_impl->begin_collection(key);
 }
 
 void
@@ -67,7 +67,7 @@ Writer::end_collection()
 }
 
 void
-Writer::begin_object(const char* type)
+Writer::begin_object(std::string_view type)
 {
   m_impl->begin_object(type);
 }
@@ -79,9 +79,9 @@ Writer::end_object()
 }
 
 void
-Writer::begin_mapping(const char* name)
+Writer::begin_mapping(std::string_view key)
 {
-  m_impl->begin_mapping(name);
+  m_impl->begin_mapping(key);
 }
 
 void
@@ -91,7 +91,7 @@ Writer::end_mapping()
 }
 
 void
-Writer::begin_keyvalue(const char* key)
+Writer::begin_keyvalue(std::string_view key)
 {
   m_impl->begin_keyvalue(key);
 }
@@ -103,57 +103,57 @@ Writer::end_keyvalue()
 }
 
 void
-Writer::write(const char* name, bool value)
+Writer::write(std::string_view key, bool value)
 {
-  m_impl->write(name, value);
+  m_impl->write(key, value);
 }
 
 void
-Writer::write(const char* name, int value)
+Writer::write(std::string_view key, int value)
 {
-  m_impl->write(name, value);
+  m_impl->write(key, value);
 }
 
 void
-Writer::write(const char* name, float value)
+Writer::write(std::string_view key, float value)
 {
-  m_impl->write(name, value);
+  m_impl->write(key, value);
 }
 
 void
-Writer::write(const char* name, char const* text)
+Writer::write(std::string_view key, char const* text)
 {
-  m_impl->write(name, text);
+  m_impl->write(key, text);
 }
 
 void
-Writer::write(const char* name, std::string_view value)
+Writer::write(std::string_view key, std::string_view value)
 {
-  m_impl->write(name, value);
+  m_impl->write(key, value);
 }
 
 void
-Writer::write(const char* name, std::vector<bool> const& values)
+Writer::write(std::string_view key, std::vector<bool> const& values)
 {
-  m_impl->write(name, values);
+  m_impl->write(key, values);
 }
 
 void
-Writer::write(const char* name, std::vector<int> const& values)
+Writer::write(std::string_view key, std::vector<int> const& values)
 {
-  m_impl->write(name, values);
+  m_impl->write(key, values);
 }
 
 void
-Writer::write(const char* name, std::vector<float> const& values)
+Writer::write(std::string_view key, std::vector<float> const& values)
 {
-  m_impl->write(name, values);
+  m_impl->write(key, values);
 }
 
 void
-Writer::write(const char* name, std::vector<std::string> const& values)
+Writer::write(std::string_view key, std::vector<std::string> const& values)
 {
-  m_impl->write(name, values);
+  m_impl->write(key, values);
 }
 
 } // namespace prio

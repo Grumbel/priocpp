@@ -62,12 +62,12 @@ SExprWriterImpl::indent() const
 }
 
 void
-SExprWriterImpl::begin_mapping(const char* name)
+SExprWriterImpl::begin_mapping(std::string_view key)
 {
   if (level != 0)
     (*out) << std::endl;
 
-  (*out) << indent() << "(" << name;
+  (*out) << indent() << "(" << key;
   ++level;
 }
 
@@ -85,7 +85,7 @@ SExprWriterImpl::end_mapping()
 }
 
 void
-SExprWriterImpl::begin_keyvalue(const char* key)
+SExprWriterImpl::begin_keyvalue(std::string_view key)
 {
   if (level != 0)
     (*out) << std::endl;
@@ -102,9 +102,9 @@ SExprWriterImpl::end_keyvalue()
 }
 
 void
-SExprWriterImpl::begin_collection(const char* name)
+SExprWriterImpl::begin_collection(std::string_view key)
 {
-  begin_mapping(name);
+  begin_mapping(key);
 }
 
 void
@@ -114,7 +114,7 @@ SExprWriterImpl::end_collection()
 }
 
 void
-SExprWriterImpl::begin_object(const char* type)
+SExprWriterImpl::begin_object(std::string_view type)
 {
   begin_mapping(type);
 }
@@ -126,41 +126,41 @@ SExprWriterImpl::end_object()
 }
 
 void
-SExprWriterImpl::write(const char* name, bool value)
+SExprWriterImpl::write(std::string_view key, bool value)
 {
-  (*out) << "\n" << indent() << "(" << name << " " << (value ? "#t" : "#f") << ")";
+  (*out) << "\n" << indent() << "(" << key << " " << (value ? "#t" : "#f") << ")";
 }
 
 void
-SExprWriterImpl::write(const char* name, int value)
+SExprWriterImpl::write(std::string_view key, int value)
 {
-  (*out) << "\n" << indent() << "(" << name << " " << value << ")";
+  (*out) << "\n" << indent() << "(" << key << " " << value << ")";
 }
 
 void
-SExprWriterImpl::write(const char* name, float value)
+SExprWriterImpl::write(std::string_view key, float value)
 {
-  (*out) << "\n" << indent() << "(" << name << " " << value << ")";
+  (*out) << "\n" << indent() << "(" << key << " " << value << ")";
 }
 
 void
-SExprWriterImpl::write(const char* name, char const* text)
+SExprWriterImpl::write(std::string_view key, char const* text)
 {
-  write(name, std::string_view(text));
+  write(key, std::string_view(text));
 }
 
 void
-SExprWriterImpl::write(const char* name, std::string_view value)
+SExprWriterImpl::write(std::string_view key, std::string_view value)
 {
-  (*out) << "\n" << indent() << "(" << name << " ";
+  (*out) << "\n" << indent() << "(" << key << " ";
   write_escaped(*out, value);
   (*out) << ")";
 }
 
 void
-SExprWriterImpl::write(const char* name, std::vector<bool> const& values)
+SExprWriterImpl::write(std::string_view key, std::vector<bool> const& values)
 {
-  (*out) << "\n" << indent() << "(" << name;
+  (*out) << "\n" << indent() << "(" << key;
   for (bool const value : values) {
     (*out) << ' ' << (value ? "#t" : "#f");
   }
@@ -168,9 +168,9 @@ SExprWriterImpl::write(const char* name, std::vector<bool> const& values)
 }
 
 void
-SExprWriterImpl::write(const char* name, std::vector<int> const& values)
+SExprWriterImpl::write(std::string_view key, std::vector<int> const& values)
 {
-  (*out) << "\n" << indent() << "(" << name;
+  (*out) << "\n" << indent() << "(" << key;
   for (int const value : values) {
     (*out) << ' ' << value;
   }
@@ -178,9 +178,9 @@ SExprWriterImpl::write(const char* name, std::vector<int> const& values)
 }
 
 void
-SExprWriterImpl::write(const char* name, std::vector<float> const& values)
+SExprWriterImpl::write(std::string_view key, std::vector<float> const& values)
 {
-  (*out) << "\n" << indent() << "(" << name;
+  (*out) << "\n" << indent() << "(" << key;
   for (float const value : values) {
     (*out) << ' ' << value;
   }
@@ -188,9 +188,9 @@ SExprWriterImpl::write(const char* name, std::vector<float> const& values)
 }
 
 void
-SExprWriterImpl::write(const char* name, std::vector<std::string> const& values)
+SExprWriterImpl::write(std::string_view key, std::vector<std::string> const& values)
 {
-  (*out) << "\n" << indent() << "(" << name;
+  (*out) << "\n" << indent() << "(" << key;
   for (std::string const& value : values) {
     (*out) << ' ';
     write_escaped(*out, value);

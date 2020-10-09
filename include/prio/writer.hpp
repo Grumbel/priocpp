@@ -39,37 +39,37 @@ public:
   ~Writer();
 
   /** collections contain an ordered sequence of objects */
-  void begin_collection(const char* name);
+  void begin_collection(std::string_view key);
   void end_collection();
 
   /** write an object into a collection, objects start a mapping for
       object properties */
-  void begin_object(const char* type);
+  void begin_object(std::string_view type);
   void end_object();
 
   /** mappings contain name/value pairs */
-  void begin_mapping(const char* name);
+  void begin_mapping(std::string_view key);
   void end_mapping();
 
-  void begin_keyvalue(const char* key);
+  void begin_keyvalue(std::string_view key);
   void end_keyvalue();
 
   /** write a name/value pair inside a mapping */
-  void write(const char* name, bool);
-  void write(const char* name, int);
-  void write(const char* name, float);
-  void write(const char* name, char const* text);
-  void write(const char* name, std::string_view);
+  void write(std::string_view key, bool);
+  void write(std::string_view key, int);
+  void write(std::string_view key, float);
+  void write(std::string_view key, char const* text);
+  void write(std::string_view key, std::string_view);
 
-  void write(const char* name, std::vector<bool> const&);
-  void write(const char* name, std::vector<int> const&);
-  void write(const char* name, std::vector<float> const&);
-  void write(const char* name, std::vector<std::string> const&);
+  void write(std::string_view key, std::vector<bool> const&);
+  void write(std::string_view key, std::vector<int> const&);
+  void write(std::string_view key, std::vector<float> const&);
+  void write(std::string_view key, std::vector<std::string> const&);
 
   template<class E, class T>
-  void write_enum(const char* name, E& value, T string2enum)
+  void write_enum(std::string_view key, E& value, T string2enum)
   {
-    write_string(name, string2enum(value));
+    write_string(key, string2enum(value));
   }
 
 private:

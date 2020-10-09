@@ -39,28 +39,28 @@ public:
   JsonWriterImpl(std::ostream& out);
   ~JsonWriterImpl() override;
 
-  void begin_collection(const char* name) override;
+  void begin_collection(std::string_view key) override;
   void end_collection() override;
 
-  void begin_object(const char* type) override;
+  void begin_object(std::string_view type) override;
   void end_object() override;
 
-  void begin_mapping(const char* name) override;
+  void begin_mapping(std::string_view key) override;
   void end_mapping() override;
 
-  void begin_keyvalue(const char* key) override;
+  void begin_keyvalue(std::string_view key) override;
   void end_keyvalue() override;
 
-  void write(const char* name, bool) override;
-  void write(const char* name, int) override;
-  void write(const char* name, float) override;
-  void write(const char* name, char const* text) override;
-  void write(const char* name, std::string_view) override;
+  void write(std::string_view key, bool) override;
+  void write(std::string_view key, int) override;
+  void write(std::string_view key, float) override;
+  void write(std::string_view key, char const* text) override;
+  void write(std::string_view key, std::string_view) override;
 
-  void write(const char* name, std::vector<bool> const&) override;
-  void write(const char* name, std::vector<int> const&) override;
-  void write(const char* name, std::vector<float> const&) override;
-  void write(const char* name, std::vector<std::string> const&) override;
+  void write(std::string_view key, std::vector<bool> const&) override;
+  void write(std::string_view key, std::vector<int> const&) override;
+  void write(std::string_view key, std::vector<float> const&) override;
+  void write(std::string_view key, std::vector<std::string> const&) override;
 
 private:
   void flush();

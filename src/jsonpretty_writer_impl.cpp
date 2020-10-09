@@ -35,12 +35,12 @@ JsonPrettyWriterImpl::~JsonPrettyWriterImpl()
 }
 
 void
-JsonPrettyWriterImpl::begin_collection(const char* name)
+JsonPrettyWriterImpl::begin_collection(std::string_view key)
 {
   assert(m_context.back() == Context::Mapping);
 
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": [";
 
   m_context.push_back(Context::Collection);
@@ -66,7 +66,7 @@ JsonPrettyWriterImpl::end_collection()
 }
 
 void
-JsonPrettyWriterImpl::begin_object(const char* type)
+JsonPrettyWriterImpl::begin_object(std::string_view type)
 {
   assert(m_context.back() == Context::Collection);
 
@@ -110,12 +110,12 @@ JsonPrettyWriterImpl::end_object()
 }
 
 void
-JsonPrettyWriterImpl::begin_mapping(const char* name)
+JsonPrettyWriterImpl::begin_mapping(std::string_view key)
 {
   assert(m_context.back() == Context::Mapping);
 
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": {";
 
   m_context.push_back(Context::Mapping);
@@ -141,7 +141,7 @@ JsonPrettyWriterImpl::end_mapping()
 }
 
 void
-JsonPrettyWriterImpl::begin_keyvalue(const char* key)
+JsonPrettyWriterImpl::begin_keyvalue(std::string_view key)
 {
 }
 
@@ -151,61 +151,61 @@ JsonPrettyWriterImpl::end_keyvalue()
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, bool value)
+JsonPrettyWriterImpl::write(std::string_view key, bool value)
 {
   assert(m_context.back() == Context::Mapping);
 
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": " << (value ? "true" : "false");
   write_separator();
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, int value)
+JsonPrettyWriterImpl::write(std::string_view key, int value)
 {
   assert(m_context.back() == Context::Mapping);
 
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": " << value;
   write_separator();
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, float value)
+JsonPrettyWriterImpl::write(std::string_view key, float value)
 {
   assert(m_context.back() == Context::Mapping);
 
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": " << value;
   write_separator();
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, char const* text)
+JsonPrettyWriterImpl::write(std::string_view key, char const* text)
 {
-  write(name, std::string_view(text));
+  write(key, std::string_view(text));
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, std::string_view value)
+JsonPrettyWriterImpl::write(std::string_view key, std::string_view value)
 {
   assert(m_context.back() == Context::Mapping);
 
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": ";
   write_quoted_string(value);
   write_separator();
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, std::vector<bool> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::vector<bool> const& values)
 {
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": [";
   size_t index = 0;
   for(auto const&& value : values) {
@@ -220,10 +220,10 @@ JsonPrettyWriterImpl::write(const char* name, std::vector<bool> const& values)
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, std::vector<int> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::vector<int> const& values)
 {
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": [";
   for(auto const& value : values) {
     m_out << value;
@@ -236,10 +236,10 @@ JsonPrettyWriterImpl::write(const char* name, std::vector<int> const& values)
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, std::vector<float> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::vector<float> const& values)
 {
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": [";
   for(auto const& value : values) {
     m_out << value;
@@ -252,10 +252,10 @@ JsonPrettyWriterImpl::write(const char* name, std::vector<float> const& values)
 }
 
 void
-JsonPrettyWriterImpl::write(const char* name, std::vector<std::string> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::vector<std::string> const& values)
 {
   write_indent();
-  write_quoted_string(name);
+  write_quoted_string(key);
   m_out << ": [";
   for(auto const& value : values) {
     write_quoted_string(value);
@@ -290,12 +290,6 @@ void
 JsonPrettyWriterImpl::write_separator()
 {
   m_write_seperator.back() = true;
-}
-
-void
-JsonPrettyWriterImpl::write_quoted_string(const char* text)
-{
-  write_quoted_string(std::string_view(text));
 }
 
 void
