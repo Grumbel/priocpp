@@ -40,41 +40,41 @@ void write(Writer& writer, ReaderMapping const& body)
     ReaderObject object;
     ReaderCollection collection;
 
-    if (body.read(key.c_str(), bool_value)) {
-      writer.write(key.c_str(), bool_value);
-    } else  if (body.read(key.c_str(), int_value)) {
-      writer.write(key.c_str(), int_value);
-    } else if (body.read(key.c_str(), float_value)) {
-      writer.write(key.c_str(), float_value);
-    } else if (body.read(key.c_str(), string_value)) {
-      writer.write(key.c_str(), string_value);
+    if (body.read(key, bool_value)) {
+      writer.write(key, bool_value);
+    } else  if (body.read(key, int_value)) {
+      writer.write(key, int_value);
+    } else if (body.read(key, float_value)) {
+      writer.write(key, float_value);
+    } else if (body.read(key, string_value)) {
+      writer.write(key, string_value);
     }
 
-    else if (body.read(key.c_str(), bool_values)) {
-      writer.write(key.c_str(), bool_values);
-    } else  if (body.read(key.c_str(), int_values)) {
-      writer.write(key.c_str(), int_values);
-    } else if (body.read(key.c_str(), float_values)) {
-      writer.write(key.c_str(), float_values);
-    } else if (body.read(key.c_str(), string_values)) {
-      writer.write(key.c_str(), string_values);
+    else if (body.read(key, bool_values)) {
+      writer.write(key, bool_values);
+    } else  if (body.read(key, int_values)) {
+      writer.write(key, int_values);
+    } else if (body.read(key, float_values)) {
+      writer.write(key, float_values);
+    } else if (body.read(key, string_values)) {
+      writer.write(key, string_values);
     }
 
-    else if (body.read(key.c_str(), mapping)) {
-      writer.begin_mapping(key.c_str());
+    else if (body.read(key, mapping)) {
+      writer.begin_mapping(key);
       write(writer, mapping);
       writer.end_mapping();
-    } else if (body.read(key.c_str(), collection)) {
-      writer.begin_collection(key.c_str());
+    } else if (body.read(key, collection)) {
+      writer.begin_collection(key);
       for (auto const& obj : collection.get_objects()) {
-        writer.begin_object(obj.get_name().c_str());
+        writer.begin_object(obj.get_name());
         write(writer, obj.get_mapping());
         writer.end_object();
       }
       writer.end_collection();
-    } else if (body.read(key.c_str(), object)) {
-      writer.begin_keyvalue(key.c_str());
-      writer.begin_object(object.get_name().c_str());
+    } else if (body.read(key, object)) {
+      writer.begin_keyvalue(key);
+      writer.begin_object(object.get_name());
       write(writer, object.get_mapping());
       writer.end_object();
       writer.end_keyvalue();
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
         ReaderObject const& root = doc.get_root();
 
         Writer writer = make_writer(opts.format);
-        writer.begin_object(root.get_name().c_str());
+        writer.begin_object(root.get_name());
         write(writer, root.get_mapping());
         writer.end_object();
       } catch (std::exception& err) {
