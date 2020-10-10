@@ -87,11 +87,26 @@ TEST_P(ReaderTest, read_int)
   EXPECT_EQ(5, intvalue);
 }
 
+TEST_P(ReaderTest, read_int_from_float)
+{
+  int intvalue;
+  ASSERT_FALSE(body.read("floatvalue", intvalue));
+  ASSERT_THROW(body_pedantic.read("floatvalue", intvalue), ReaderError);
+}
+
 TEST_P(ReaderTest, read_float)
 {
   float floatvalue;
   ASSERT_TRUE(body.read("floatvalue", floatvalue));
   EXPECT_EQ(5.5f, floatvalue);
+}
+
+TEST_P(ReaderTest, read_float_from_int)
+{
+  float floatvalue;
+  ASSERT_TRUE(body.read("intvalue", floatvalue));
+  EXPECT_EQ(5.0f, floatvalue);
+  ASSERT_NO_THROW(body_pedantic.read("intvalue", floatvalue));
 }
 
 TEST_P(ReaderTest, read_string)
