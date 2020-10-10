@@ -14,19 +14,18 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PRIO_FWD_HPP
-#define HEADER_PRIO_FWD_HPP
+#ifndef HEADER_PRIO_FORMAT_HPP
+#define HEADER_PRIO_FORMAT_HPP
 
 namespace prio {
 
-class ReaderCollection;
-class ReaderDocument;
-class ReaderError;
-class ReaderMapping;
-class ReaderObject;
-class Writer;
-
-enum class Format;
+enum class Format
+{
+  AUTO,
+  SEXPR,
+  JSON,
+  FASTJSON
+};
 
 } // namespace prio
 

@@ -84,11 +84,9 @@ void write(Writer& writer, ReaderMapping const& body)
   }
 }
 
-enum class OutputFormat { JSON, FASTJSON, SEXP };
-
 struct Options
 {
-  OutputFormat format = OutputFormat::JSON;
+  Format format = Format::AUTO;
   std::vector<std::string> files = {};
 };
 
@@ -112,11 +110,11 @@ Options parse_args(int argc, char** argv)
       if (strcmp(argv[i], "--help") == 0) {
         print_usage(argv[0]);
       } else if (strcmp(argv[i], "--json") == 0) {
-        opts.format = OutputFormat::JSON;
+        opts.format = Format::JSON;
       } else if (strcmp(argv[i], "--fastjson") == 0) {
-        opts.format = OutputFormat::FASTJSON;
+        opts.format = Format::FASTJSON;
       } else if (strcmp(argv[i], "--sexp") == 0) {
-        opts.format = OutputFormat::SEXP;
+        opts.format = Format::SEXPR;
       } else {
         throw std::runtime_error(fmt::format("invalid argument {}", argv[i]));
       }
@@ -126,23 +124,6 @@ Options parse_args(int argc, char** argv)
   }
 
   return opts;
-}
-
-Writer make_writer(OutputFormat format)
-{
-  switch (format) {
-    case OutputFormat::JSON:
-      return Writer::json(std::cout);
-
-    case OutputFormat::FASTJSON:
-      return Writer::fastjson(std::cout);
-
-    case OutputFormat::SEXP:
-      return Writer::sexpr(std::cout);
-
-    default:
-      throw std::runtime_error("invalid output format");
-  }
 }
 
 } // namespace
@@ -160,7 +141,7 @@ int main(int argc, char** argv)
 
         ReaderObject const& root = doc.get_root();
 
-        Writer writer = make_writer(opts.format);
+        Writer writer = Writer::from_stream(std::cout, opts.format);
         writer.begin_object(root.get_name());
         write(writer, root.get_mapping());
         writer.end_object();

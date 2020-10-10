@@ -17,10 +17,13 @@
 #ifndef HEADER_PRIO_FILE_WRITER_HPP
 #define HEADER_PRIO_FILE_WRITER_HPP
 
+#include <filesystem>
 #include <memory>
 #include <span>
 #include <string>
 #include <vector>
+
+#include "format.hpp"
 
 namespace prio {
 
@@ -29,15 +32,16 @@ class WriterImpl;
 class Writer final
 {
 public:
-  static Writer json(std::ostream& out);
-  static Writer fastjson(std::ostream& out);
-  static Writer sexpr(std::ostream& out);
+  static Writer from_file(std::filesystem::path const& filename, Format format = Format::AUTO);
+  static Writer from_stream(std::ostream& out, Format format = Format::AUTO);
 
 public:
   Writer(std::ostream& out);
   Writer(std::unique_ptr<WriterImpl> impl);
   Writer(Writer&& other) noexcept = default;
   ~Writer();
+
+  void write_comment(std::string_view text);
 
   /** collections contain an ordered sequence of objects */
   void begin_collection(std::string_view key);

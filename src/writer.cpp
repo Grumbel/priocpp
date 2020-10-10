@@ -17,6 +17,12 @@
 #include "writer.hpp"
 
 #include <assert.h>
+#include <errno.h>
+#include <string.h>
+
+#include <fstream>
+#include <sstream>
+#include <stdexcept>
 
 #include "sexpr_writer_impl.hpp"
 #include "json_writer_impl.hpp"
@@ -25,21 +31,35 @@
 namespace prio {
 
 Writer
-Writer::fastjson(std::ostream& out)
+Writer::from_file(std::filesystem::path const& filename, Format format)
 {
-  return Writer(std::make_unique<JsonWriterImpl>(out));
+  std::ofstream fout(filename);
+  if (!fout) {
+    std::ostringstream oss;
+    oss << filename << ": failed to open for writing: " << strerror(errno);
+    throw std::runtime_error(oss.str());
+  }
+
+  return from_stream(fout, format);
 }
 
 Writer
-Writer::json(std::ostream& out)
+Writer::from_stream(std::ostream& out, Format format)
 {
-  return Writer(std::make_unique<JsonPrettyWriterImpl>(out));
-}
+  switch (format) {
+    case Format::FASTJSON:
+      return Writer(std::make_unique<JsonWriterImpl>(out));
 
-Writer
-Writer::sexpr(std::ostream& out)
-{
-  return Writer(std::make_unique<SExprWriterImpl>(out));
+    case Format::JSON:
+      return Writer(std::make_unique<JsonPrettyWriterImpl>(out));
+
+    case Format::AUTO:
+    case Format::SEXPR:
+      return Writer(std::make_unique<SExprWriterImpl>(out));
+
+    default:
+      throw std::invalid_argument("invalid format");
+  }
 }
 
 Writer::Writer(std::ostream& out) :
@@ -53,6 +73,11 @@ Writer::Writer(std::unique_ptr<WriterImpl> impl) :
 }
 
 Writer::~Writer()
+{
+}
+
+void
+Writer::write_comment(std::string_view text)
 {
 }
 
