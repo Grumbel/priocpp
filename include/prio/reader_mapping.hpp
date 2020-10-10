@@ -53,7 +53,8 @@ public:
   bool read(std::string_view key, ReaderCollection&) const;
   bool read(std::string_view key, ReaderObject&) const;
 
-  template<typename Enum, typename String2Enum>
+  template<typename Enum, typename String2Enum,
+           typename std::enable_if_t<std::is_enum<Enum>::value, int> = 0>
   bool read(std::string_view key, Enum& value, String2Enum string2enum) const
   {
     std::string str;
@@ -77,8 +78,9 @@ public:
     return fallback;
   }
 
-  template<typename T, typename String2Enum>
-  T get(std::string_view key, String2Enum string2enum, T fallback = {}) const {
+  template<typename Enum, typename String2Enum,
+           typename std::enable_if_t<std::is_enum<Enum>::value, int> = 0>
+  Enum get(std::string_view key, String2Enum string2enum, Enum fallback = {}) const {
     read(key, fallback, string2enum);
     return fallback;
   }

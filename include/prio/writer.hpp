@@ -67,17 +67,13 @@ public:
   void write(std::string_view key, std::vector<float> const&);
   void write(std::string_view key, std::vector<std::string> const&);
 
-  template<class E, class T>
-  void write_enum(std::string_view key, E& value, T string2enum) {
-    write_string(key, string2enum(value));
-  }
-
   template<typename T>
   void write(std::string_view key, T const& value) {
     write_custom(*this, key, value);
   }
 
-  template<typename Enum, typename Enum2String>
+  template<typename Enum, typename Enum2String,
+           std::enable_if_t<std::is_enum<Enum>::value> = 0>
   void write(std::string_view key, Enum const& value, Enum2String enum2string)
   {
     write(key, enum2string(value));
