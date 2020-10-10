@@ -59,6 +59,7 @@ SExprReaderObjectImpl::SExprReaderObjectImpl(SExprReaderDocumentImpl const& doc,
   m_doc(doc),
   m_sx(sx)
 {
+  assert(m_sx.is_array());
   // Expects data in the format:
   // (objectname
   //   (property1 45)
@@ -90,6 +91,7 @@ SExprReaderCollectionImpl::SExprReaderCollectionImpl(SExprReaderDocumentImpl con
   m_doc(doc),
   m_sx(sx)
 {
+  assert(m_sx.is_array());
 }
 
 SExprReaderCollectionImpl::~SExprReaderCollectionImpl()
@@ -111,13 +113,7 @@ SExprReaderMappingImpl::SExprReaderMappingImpl(SExprReaderDocumentImpl const& do
   m_doc(doc),
   m_sx(sx)
 {
-  if (!m_sx.is_array())
-  {
-    std::ostringstream msg;
-    msg << "SExprReaderMapping s-expression must be a array: " << sx;
-    throw ReaderError(msg.str());
-  }
-
+  assert(m_sx.is_array());
   // Expects data in this format:
   // (objectname
   //   (property1 45)
@@ -242,30 +238,34 @@ bool
 SExprReaderMappingImpl::read(std::string_view key, ReaderObject& value) const
 {
   sexp::Value const* cur = get_subsection_item(key);
-  if (cur)
-  {
-    value = ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_doc, *cur));
-    return true;
-  }
-  else
-  {
+  if (!cur) {
     return false;
   }
+
+  if (!cur->is_array()) {
+    m_doc.error(*cur, "must be array");
+    return false;
+  }
+
+  value = ReaderObject(std::make_unique<SExprReaderObjectImpl>(m_doc, *cur));
+  return true;
 }
 
 bool
 SExprReaderMappingImpl::read(std::string_view key, ReaderCollection& value) const
 {
   sexp::Value const* cur = get_subsection(key);
-  if (cur)
-  {
-    value = ReaderCollection(std::make_unique<SExprReaderCollectionImpl>(m_doc, *cur));
-    return true;
-  }
-  else
-  {
+  if (!cur) {
     return false;
   }
+
+  if (!cur->is_array()) {
+    m_doc.error(*cur, "must be array");
+    return false;
+  }
+
+  value = ReaderCollection(std::make_unique<SExprReaderCollectionImpl>(m_doc, *cur));
+  return true;
 }
 
 bool
