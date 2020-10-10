@@ -40,7 +40,15 @@ Writer::from_file(std::filesystem::path const& filename, Format format)
     throw std::runtime_error(oss.str());
   }
 
-  return from_stream(fout, format);
+  return from_stream(std::make_unique<std::ofstream>(std::move(fout)), format);
+}
+
+Writer
+Writer::from_stream(std::unique_ptr<std::ostream> out, Format format)
+{
+  Writer writer = from_stream(*out, format);
+  writer.m_owned = std::move(out);
+  return writer;
 }
 
 Writer
@@ -63,12 +71,14 @@ Writer::from_stream(std::ostream& out, Format format)
 }
 
 Writer::Writer(std::ostream& out) :
-  m_impl(std::make_unique<SExprWriterImpl>(out))
+  m_impl(std::make_unique<SExprWriterImpl>(out)),
+  m_owned()
 {
 }
 
 Writer::Writer(std::unique_ptr<WriterImpl> impl) :
-  m_impl(std::move(impl))
+  m_impl(std::move(impl)),
+  m_owned()
 {
 }
 

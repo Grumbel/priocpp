@@ -34,6 +34,7 @@ class Writer final
 public:
   static Writer from_file(std::filesystem::path const& filename, Format format = Format::AUTO);
   static Writer from_stream(std::ostream& out, Format format = Format::AUTO);
+  static Writer from_stream(std::unique_ptr<std::ostream> out, Format format = Format::AUTO);
 
 public:
   Writer(std::ostream& out);
@@ -91,6 +92,7 @@ public:
 
 private:
   std::unique_ptr<WriterImpl> m_impl;
+  std::unique_ptr<std::ostream> m_owned;
 };
 
 } // namespace prio
