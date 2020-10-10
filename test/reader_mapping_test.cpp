@@ -230,12 +230,17 @@ struct CustomType {
   int value = 0;
 };
 
+} // namespace
+
+namespace prio {
+
+template<>
 bool read_custom(ReaderMapping const& mapping, std::string_view key, CustomType& value)
 {
   return mapping.read(key, value.value);
 }
 
-} // namespace
+} // namespace prio
 
 TEST_P(ReaderMappingTest, read_custom)
 {

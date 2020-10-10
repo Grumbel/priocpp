@@ -27,7 +27,15 @@
 
 namespace prio {
 
+class Writer;
 class WriterImpl;
+
+template<typename T>
+void write_custom(Writer& writer, std::string_view key, T const& value)
+{
+  static_assert(!std::is_same<T, T>::value,
+                "no write_custom() specialisation found for the given type");
+}
 
 class Writer final
 {
@@ -80,7 +88,7 @@ public:
 
   template<typename T>
   void write(std::string_view key, T const& value) {
-    write_custom(*this, key, value);
+    write_custom<T>(*this, key, value);
   }
 
   template<typename Enum, typename Enum2String,

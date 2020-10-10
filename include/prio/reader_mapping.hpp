@@ -27,6 +27,14 @@ class ReaderMapping;
 class ReaderMappingImpl;
 class ReaderObject;
 
+template<typename T>
+bool read_custom(ReaderMapping const& map, std::string_view key, T& value)
+{
+  static_assert(!std::is_same<T, T>::value,
+                "no read_custom() specialisation found for the given type");
+  return false;
+}
+
 class ReaderMapping final
 {
 public:
@@ -69,7 +77,7 @@ public:
 
   template<typename T>
   bool read(std::string_view key, T& value) const {
-    return read_custom(*this, key, value);
+    return read_custom<T>(*this, key, value);
   }
 
   template<typename T>

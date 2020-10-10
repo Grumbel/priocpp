@@ -65,4 +65,29 @@ TEST(WriterTest, from_file)
             ";; EOF ;;\n");
 }
 
+namespace {
+
+struct CustomType {};
+
+} // namespace
+
+namespace prio {
+
+template<>
+void write_custom(Writer& writer, std::string_view key, CustomType const& value)
+{
+  writer.write(key, "foobar");
+}
+
+} // namespace prio
+
+TEST(WriterTest, write_custom)
+{
+  std::ostringstream out;
+  Writer writer = Writer::from_stream(out);
+  writer.begin_object("test");
+  writer.write("custom", CustomType{});
+  writer.end_object();
+}
+
 /* EOF */
