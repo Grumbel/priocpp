@@ -50,52 +50,54 @@ public:
   Writer(Writer&& other) noexcept = default;
   ~Writer();
 
-  void write_comment(std::string_view text);
+  Writer& write_comment(std::string_view text);
 
   /** collections contain an ordered sequence of objects */
-  void begin_collection(std::string_view key);
+  Writer& begin_collection(std::string_view key);
   void end_collection();
 
   /** write an object into a collection, objects start a mapping for
       object properties */
-  void begin_object(std::string_view type);
+  Writer& begin_object(std::string_view type);
   void end_object();
 
   /** mappings contain name/value pairs */
-  void begin_mapping(std::string_view key);
+  Writer& begin_mapping(std::string_view key);
   void end_mapping();
 
-  void begin_keyvalue(std::string_view key);
+  Writer& begin_keyvalue(std::string_view key);
   void end_keyvalue();
 
   /** write a name/value pair inside a mapping */
-  void write(std::string_view key, bool value);
-  void write(std::string_view key, int value);
-  void write(std::string_view key, float value);
-  void write(std::string_view key, char const* value);
-  void write(std::string_view key, std::string_view value);
-  void write(std::string_view key, std::string const& value);
+  Writer& write(std::string_view key, bool value);
+  Writer& write(std::string_view key, int value);
+  Writer& write(std::string_view key, float value);
+  Writer& write(std::string_view key, char const* value);
+  Writer& write(std::string_view key, std::string_view value);
+  Writer& write(std::string_view key, std::string const& value);
 
-  void write(std::string_view key, std::span<bool const> values);
-  void write(std::string_view key, std::span<int const> values);
-  void write(std::string_view key, std::span<float const> values);
-  void write(std::string_view key, std::span<std::string const> values);
+  Writer& write(std::string_view key, std::span<bool const> values);
+  Writer& write(std::string_view key, std::span<int const> values);
+  Writer& write(std::string_view key, std::span<float const> values);
+  Writer& write(std::string_view key, std::span<std::string const> values);
 
-  void write(std::string_view key, std::vector<bool> const& values);
-  void write(std::string_view key, std::vector<int> const& values);
-  void write(std::string_view key, std::vector<float> const& values);
-  void write(std::string_view key, std::vector<std::string> const& values);
+  Writer& write(std::string_view key, std::vector<bool> const& values);
+  Writer& write(std::string_view key, std::vector<int> const& values);
+  Writer& write(std::string_view key, std::vector<float> const& values);
+  Writer& write(std::string_view key, std::vector<std::string> const& values);
 
   template<typename T>
-  void write(std::string_view key, T const& value) {
+  Writer& write(std::string_view key, T const& value) {
     write_custom<T>(*this, key, value);
+    return *this;
   }
 
   template<typename Enum, typename Enum2String,
            std::enable_if_t<std::is_enum<Enum>::value> = 0>
-  void write(std::string_view key, Enum const& value, Enum2String enum2string)
+  Writer& write(std::string_view key, Enum const& value, Enum2String enum2string)
   {
     write(key, enum2string(value));
+    return *this;
   }
 
 private:

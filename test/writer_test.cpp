@@ -27,10 +27,10 @@ TEST(WriterTest, from_stream)
 {
   std::ostringstream out;
   Writer writer = Writer::from_stream(out);
-  writer.begin_object("testfile");
-  writer.write("foo", 10);
-  writer.write("bar", 5);
-  writer.end_object();
+  writer.begin_object("testfile")
+    .write("foo", 10)
+    .write("bar", 5)
+    .end_object();
 
   ASSERT_EQ(out.str(),
             "(testfile\n"
@@ -47,10 +47,10 @@ TEST(WriterTest, from_file)
 
   {
     Writer writer = Writer::from_file(outfile);
-    writer.begin_object("testfile");
-    writer.write("foo", 10);
-    writer.write("bar", 5);
-    writer.end_object();
+    writer.begin_object("testfile")
+      .write("foo", 10)
+      .write("bar", 5)
+      .end_object();
   }
 
   std::ifstream fin(outfile);

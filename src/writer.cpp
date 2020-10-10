@@ -86,185 +86,182 @@ Writer::~Writer()
 {
 }
 
-void
+Writer&
 Writer::write_comment(std::string_view text)
 {
+  return *this;
 }
 
-void
+Writer&
 Writer::begin_collection(std::string_view key)
 {
   assert(m_impl);
-
   m_impl->begin_collection(key);
+  return *this;
 }
 
 void
 Writer::end_collection()
 {
   assert(m_impl);
-
   m_impl->end_collection();
 }
 
-void
+Writer&
 Writer::begin_object(std::string_view type)
 {
   assert(m_impl);
-
   m_impl->begin_object(type);
+  return *this;
 }
 
 void
 Writer::end_object()
 {
   assert(m_impl);
-
   m_impl->end_object();
 }
 
-void
+Writer&
 Writer::begin_mapping(std::string_view key)
 {
   assert(m_impl);
-
   m_impl->begin_mapping(key);
+  return *this;
 }
 
 void
 Writer::end_mapping()
 {
   assert(m_impl);
-
   m_impl->end_mapping();
 }
 
-void
+Writer&
 Writer::begin_keyvalue(std::string_view key)
 {
   assert(m_impl);
-
   m_impl->begin_keyvalue(key);
+  return *this;
 }
 
 void
 Writer::end_keyvalue()
 {
   assert(m_impl);
-
   m_impl->end_keyvalue();
 }
 
-void
+Writer&
 Writer::write(std::string_view key, bool value)
 {
   assert(m_impl);
-
   m_impl->write(key, value);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, int value)
 {
   assert(m_impl);
-
   m_impl->write(key, value);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, float value)
 {
   assert(m_impl);
-
   m_impl->write(key, value);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, char const* text)
 {
   assert(m_impl);
-
   m_impl->write(key, text);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::string_view value)
 {
   assert(m_impl);
-
   m_impl->write(key, value);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::string const& value)
 {
   assert(m_impl);
-
   m_impl->write(key, std::string_view(value));
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::span<bool const> values)
 {
   assert(m_impl);
-
   m_impl->write(key, values);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::span<int const> values)
 {
   assert(m_impl);
-
   m_impl->write(key, values);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::span<float const> values)
 {
   assert(m_impl);
-
   m_impl->write(key, values);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::span<std::string const> values)
 {
   assert(m_impl);
-
   m_impl->write(key, values);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::vector<bool> const& values)
 {
   assert(m_impl);
-
   m_impl->write(key, values);
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::vector<int> const& values)
 {
   assert(m_impl);
-
   m_impl->write(key, std::span(values));
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::vector<float> const& values)
 {
   assert(m_impl);
-
   m_impl->write(key, std::span(values));
+  return *this;
 }
 
-void
+Writer&
 Writer::write(std::string_view key, std::vector<std::string> const& values)
 {
   assert(m_impl);
-
   m_impl->write(key, values);
+  return *this;
 }
 
 } // namespace prio
