@@ -311,6 +311,11 @@ SExprReaderMappingImpl::get_subsection_item(std::string_view key) const
     return nullptr;
   }
 
+  if (sub->as_array().size() == 1) {
+    // unset values are ok
+    return nullptr;
+  }
+
   if (sub->as_array().size() > 2) {
     m_doc.error(*sub, "invalid items in section");
     return nullptr;
