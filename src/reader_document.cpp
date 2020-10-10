@@ -124,24 +124,32 @@ ReaderDocument::operator=(ReaderDocument&&) noexcept = default;
 ReaderObject
 ReaderDocument::get_root() const
 {
+  if (!m_impl) { return {}; }
+
   return m_impl->get_root();
 }
 
 std::string
 ReaderDocument::get_name() const
 {
+  if (!m_impl) { return {}; }
+
   return m_impl->get_root().get_name();
 }
 
 ReaderMapping
 ReaderDocument::get_mapping() const
 {
+  if (!m_impl) { return {}; }
+
   return m_impl->get_root().get_mapping();
 }
 
 std::string
 ReaderDocument::get_filename() const
 {
+  if (!m_impl) { return {}; }
+
   if (!m_impl->get_filename()) {
     return "<unknown>";
   } else {
@@ -152,6 +160,8 @@ ReaderDocument::get_filename() const
 std::string
 ReaderDocument::get_directory() const
 {
+  if (!m_impl) { return {}; }
+
   if (!m_impl->get_filename()) {
     return std::filesystem::path("/");
   } else {

@@ -44,109 +44,97 @@ ReaderMapping::operator=(ReaderMapping&&) noexcept = default;
 bool
 ReaderMapping::read(std::string_view key, bool& value) const
 {
-  if (m_impl)
-    return m_impl->read(key, value);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, value);
 }
 
 bool
 ReaderMapping::read(std::string_view key, int& value) const
 {
-  if (m_impl)
-    return m_impl->read(key, value);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, value);
 }
 
 bool
 ReaderMapping::read (std::string_view key, float& value) const
 {
-  if (m_impl)
-    return m_impl->read(key, value);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, value);
 }
 
 bool
 ReaderMapping::read(std::string_view key, std::string& value) const
 {
-  if (m_impl)
-    return m_impl->read(key, value);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, value);
 }
 
 bool
 ReaderMapping::read  (std::string_view key, std::vector<bool>& values) const
 {
-  if (m_impl)
-    return m_impl->read(key, values);
-  else
-    return false;
+ if (!m_impl) { return false; }
+
+ return m_impl->read(key, values);
 }
 
 bool
 ReaderMapping::read(std::string_view key, std::vector<int>& values) const
 {
-  if (m_impl)
-    return m_impl->read(key, values);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, values);
 }
 
 bool
 ReaderMapping::read(std::string_view key, std::vector<float>& values) const
 {
-  if (m_impl)
-    return m_impl->read(key, values);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, values);
 }
 
 bool
 ReaderMapping::read(std::string_view key, std::vector<std::string>& values) const
 {
-  if (m_impl)
-    return m_impl->read(key, values);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, values);
 }
 
 bool
 ReaderMapping::read(std::string_view key, ReaderObject& object) const
 {
-  if (m_impl)
-    return m_impl->read(key, object);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, object);
 }
 
 bool
 ReaderMapping::read(std::string_view key, ReaderMapping& mapping) const
 {
-  if (m_impl)
-    return m_impl->read(key, mapping);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, mapping);
 }
 
 bool
 ReaderMapping::read(std::string_view key, ReaderCollection& collection) const
 {
-  if (m_impl)
-    return m_impl->read(key, collection);
-  else
-    return false;
+  if (!m_impl) { return false; }
+
+  return m_impl->read(key, collection);
 }
 
 std::vector<std::string>
 ReaderMapping::get_keys() const
 {
-  if (m_impl)
-    return m_impl->get_keys();
-  else
-    return {};
+  if (!m_impl) { return {}; }
+
+  return m_impl->get_keys();
 }
 
 } // namespace prio

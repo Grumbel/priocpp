@@ -43,19 +43,17 @@ ReaderObject::operator=(ReaderObject&&) noexcept = default;
 std::string
 ReaderObject::get_name() const
 {
-  if (m_impl)
-    return m_impl->get_name();
-  else
-    return {};
+  if (!m_impl) { return {}; }
+
+  return m_impl->get_name();
 }
 
 ReaderMapping
 ReaderObject::get_mapping() const
 {
-  if (m_impl)
-    return m_impl->get_mapping();
-  else
-    return {};
+  if (!m_impl) { return {}; }
+
+  return m_impl->get_mapping();
 }
 
 } // namespace prio

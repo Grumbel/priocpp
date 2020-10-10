@@ -43,10 +43,9 @@ ReaderCollection::operator=(ReaderCollection&&) noexcept = default;
 std::vector<ReaderObject>
 ReaderCollection::get_objects() const
 {
-  if (m_impl)
-    return m_impl->get_objects();
-  else
-    return {};
+  if (!m_impl) { return {}; }
+
+  return m_impl->get_objects();
 }
 
 } // namespace prio
