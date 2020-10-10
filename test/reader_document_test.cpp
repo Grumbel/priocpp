@@ -29,13 +29,22 @@ TEST_P(ReaderDocumentTest, from_file)
   EXPECT_NO_THROW(ReaderDocument::from_file("test/data/data" + GetParam(), ErrorHandler::IGNORE));
 }
 
-TEST_P(ReaderDocumentTest, from_file_fail)
+TEST_P(ReaderDocumentTest, from_file__fail)
 {
   EXPECT_THROW(ReaderDocument::from_file("does-not-exist"), ReaderError);
   EXPECT_THROW(ReaderDocument::from_file("does-not-exist", ErrorHandler::IGNORE), ReaderError);
 
   EXPECT_THROW(ReaderDocument::from_file("test/data/data-corrupt" + GetParam()), ReaderError);
   EXPECT_THROW(ReaderDocument::from_file("test/data/data-corrupt" + GetParam(), ErrorHandler::IGNORE), ReaderError);
+}
+
+TEST(ReaderDocumentTest, from_file__format)
+{
+  EXPECT_THROW(ReaderDocument::from_file(Format::JSON, "test/data/data.sexp"), ReaderError);
+  EXPECT_THROW(ReaderDocument::from_file(Format::SEXPR, "test/data/data.json"), ReaderError);
+
+  EXPECT_NO_THROW(ReaderDocument::from_file(Format::SEXPR, "test/data/data.sexp"));
+  EXPECT_NO_THROW(ReaderDocument::from_file(Format::JSON, "test/data/data.json"));
 }
 
 TEST_P(ReaderDocumentTest, get_filename)

@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "error_handler.hpp"
+#include "format.hpp"
 #include "reader_object.hpp"
 
 namespace prio {
@@ -40,12 +41,24 @@ class ReaderDocumentImpl;
 class ReaderDocument final
 {
 public:
-  static ReaderDocument from_stream(std::istream& stream,
+  static ReaderDocument from_file(Format format,
+                                  const std::string& filename,
+                                  ErrorHandler error_handler = ErrorHandler::THROW);
+  static ReaderDocument from_string(Format format,
+                                    std::string_view text,
                                     ErrorHandler error_handler = ErrorHandler::THROW,
                                     std::optional<std::string> const& filename = {});
+  static ReaderDocument from_stream(Format format,
+                                    std::istream& stream,
+                                    ErrorHandler error_handler = ErrorHandler::THROW,
+                                    std::optional<std::string> const& filename = {});
+
   static ReaderDocument from_file(const std::string& filename,
                                   ErrorHandler error_handler = ErrorHandler::THROW);
   static ReaderDocument from_string(std::string_view text,
+                                    ErrorHandler error_handler = ErrorHandler::THROW,
+                                    std::optional<std::string> const& filename = {});
+  static ReaderDocument from_stream(std::istream& stream,
                                     ErrorHandler error_handler = ErrorHandler::THROW,
                                     std::optional<std::string> const& filename = {});
 

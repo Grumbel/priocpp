@@ -36,50 +36,86 @@
 namespace prio {
 
 ReaderDocument
-ReaderDocument::from_string(std::string_view text, ErrorHandler error_handler,
+ReaderDocument::from_string(Format format,
+                            std::string_view text, ErrorHandler error_handler,
                             std::optional<std::string> const& filename)
 {
   std::istringstream in{std::string(text)};
-  return ReaderDocument::from_stream(in, error_handler, filename);
+  return ReaderDocument::from_stream(format, in, error_handler, filename);
+}
+
+ReaderDocument
+ReaderDocument::from_file(Format format,
+                          const std::string& filename, ErrorHandler error_handler)
+{
+  std::ifstream fin(filename);
+  if (!fin) {
+    throw ReaderError(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
+  } else {
+    return from_stream(format, fin, error_handler, filename);
+  }
+}
+
+ReaderDocument
+ReaderDocument::from_stream(Format format,
+                            std::istream& stream, ErrorHandler error_handler,
+                            std::optional<std::string> const& filename)
+{
+  switch (format)
+  {
+    case Format::AUTO: {
+      int c = stream.get();
+      stream.unget();
+      if (c == '{') {
+        return from_stream(Format::JSON, stream, error_handler, filename);
+      } else {
+        return from_stream(Format::SEXPR, stream, error_handler, filename);
+      }
+    }
+
+    case Format::FASTJSON:
+    case Format::JSON: {
+      Json::CharReaderBuilder builder;
+      std::string errs;
+      Json::Value root;
+      if (!Json::parseFromStream(builder, stream, &root, &errs)) {
+        throw ReaderError(fmt::format("json parse error: {}", errs));
+      }
+      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), error_handler, filename));
+    }
+
+    case Format::SEXPR: {
+      try {
+        auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
+        return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), error_handler, filename));
+      } catch(std::exception const& err) {
+        std::throw_with_nested(ReaderError(fmt::format("{}: ReaderDocument::from_stream() failed", filename ?  *filename : "<unknown>")));
+      }
+    }
+
+    default:
+      throw std::invalid_argument("unknown format");
+  }
+}
+
+ReaderDocument
+ReaderDocument::from_string(std::string_view text, ErrorHandler error_handler,
+                            std::optional<std::string> const& filename)
+{
+  return from_string(Format::AUTO, text, error_handler, filename);
 }
 
 ReaderDocument
 ReaderDocument::from_stream(std::istream& stream, ErrorHandler error_handler,
                             std::optional<std::string> const& filename)
 {
-  int c = stream.get();
-  stream.unget();
-  if (c == '{')
-  { // json
-    Json::CharReaderBuilder builder;
-    std::string errs;
-    Json::Value root;
-    if (Json::parseFromStream(builder, stream, &root, &errs)) {
-      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), error_handler, filename));
-    } else {
-      throw ReaderError(fmt::format("json parse error: {}", errs));
-    }
-  }
-  else
-  { // sexp
-    try {
-      auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
-      return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), error_handler, filename));
-    } catch(std::exception const& err) {
-      std::throw_with_nested(ReaderError(fmt::format("{}: ReaderDocument::from_stream() failed", filename ?  *filename : "<unknown>")));
-    }
-  }
+  return from_stream(Format::AUTO, stream, error_handler, filename);
 }
 
 ReaderDocument
 ReaderDocument::from_file(const std::string& filename, ErrorHandler error_handler)
 {
-  std::ifstream fin(filename);
-  if (!fin) {
-    throw ReaderError(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
-  } else {
-    return from_stream(fin, error_handler, filename);
-  }
+  return from_file(Format::AUTO, filename, error_handler);
 }
 
 std::vector<ReaderDocument>
