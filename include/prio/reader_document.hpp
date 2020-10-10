@@ -67,6 +67,8 @@ public:
   /** Returns the directory of the document */
   std::string get_directory() const;
 
+  explicit operator bool() const { return static_cast<bool>(m_impl); }
+
 private:
   std::unique_ptr<ReaderDocumentImpl> m_impl;
 };

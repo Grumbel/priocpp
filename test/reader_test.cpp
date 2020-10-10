@@ -284,6 +284,18 @@ TEST_P(ReaderTest, get)
   EXPECT_EQ(body.get("floatvalue", 0.0f), 5.5f);
   EXPECT_EQ(body.get("stringvalue", std::string()), "Hello World");
   EXPECT_EQ(body.get("customvalue", CustomType{}).value, 5);
+
+  EXPECT_TRUE(body.get<ReaderCollection>("collection"));
+  EXPECT_TRUE(body.get<ReaderMapping>("submap"));
+  EXPECT_TRUE(body.get<ReaderObject>("object"));
+
+  EXPECT_FALSE(body.get<ReaderCollection>("collection-doesnotexist"));
+  EXPECT_FALSE(body.get<ReaderMapping>("submap-doesnotexist"));
+  EXPECT_FALSE(body.get<ReaderObject>("object-doesnotexist"));
+
+  if (ReaderObject object = body.get<ReaderObject>("object-doesnotexist")) {}
+  if (ReaderMapping mapping = body.get<ReaderMapping>("submap-doesnotexist")) {}
+  if (ReaderCollection collection = body.get<ReaderCollection>("collection-doesnotexist")) {}
 }
 
 INSTANTIATE_TEST_CASE_P(ParamReaderTest, ReaderTest,

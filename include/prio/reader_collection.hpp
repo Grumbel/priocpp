@@ -37,6 +37,8 @@ public:
 
   std::vector<ReaderObject> get_objects() const;
 
+  explicit operator bool() const { return static_cast<bool>(m_impl); }
+
 private:
   std::unique_ptr<ReaderCollectionImpl> m_impl;
 };

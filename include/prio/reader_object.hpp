@@ -37,6 +37,8 @@ public:
   std::string get_name() const;
   ReaderMapping get_mapping() const;
 
+  explicit operator bool() const { return static_cast<bool>(m_impl); }
+
 private:
   std::unique_ptr<ReaderObjectImpl> m_impl;
 };

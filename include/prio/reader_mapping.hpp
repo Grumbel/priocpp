@@ -87,6 +87,8 @@ public:
     return fallback;
   }
 
+  explicit operator bool() const { return static_cast<bool>(m_impl); }
+
 private:
   std::unique_ptr<ReaderMappingImpl> m_impl;
 };
