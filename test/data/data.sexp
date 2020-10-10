@@ -6,7 +6,7 @@
 
  (boolvalues #t #f #t)
  (intvalues 1 2 3 4)
- (floatvalues 1.0 2.0 3.0 4.0)
+ (floatvalues 1.5 2.5 3.5 4.5)
  (stringvalues "Hello" "World")
 
  (enumvalue "C")
