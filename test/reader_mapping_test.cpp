@@ -29,9 +29,9 @@ class ReaderMappingTest : public ::testing::TestWithParam<std::string>
 {
 public:
   ReaderMappingTest() :
-    doc(ReaderDocument::from_file("test/data/data" + GetParam(), false)),
+    doc(ReaderDocument::from_file("test/data/data" + GetParam(), ErrorHandler::IGNORE)),
     map(doc.get_root().get_mapping()),
-    doc_pedantic(ReaderDocument::from_file("test/data/data" + GetParam(), true)),
+    doc_pedantic(ReaderDocument::from_file("test/data/data" + GetParam(), ErrorHandler::THROW)),
     map_pedantic(doc_pedantic.get_root().get_mapping())
   {}
 

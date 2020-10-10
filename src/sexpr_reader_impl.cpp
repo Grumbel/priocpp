@@ -32,9 +32,10 @@
 
 namespace prio {
 
-SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx, bool pedantic, std::optional<std::string> filename) :
+SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx, ErrorHandler error_handler,
+                                                 std::optional<std::string> filename) :
   m_sx(std::move(sx)),
-  m_pedantic(pedantic),
+  m_error_handler(error_handler),
   m_filename(std::move(filename))
 {
 }
@@ -48,10 +49,16 @@ SExprReaderDocumentImpl::get_root() const
 void
 SExprReaderDocumentImpl::error(sexp::Value const& sx, std::string_view message) const
 {
-  if (m_pedantic) {
-    throw ReaderError(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));
-  } else {
-    log_error("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message);
+  switch (m_error_handler) {
+    case ErrorHandler::THROW:
+      throw ReaderError(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));
+
+    case ErrorHandler::LOG:
+      log_error("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message);
+      break;
+
+    case ErrorHandler::IGNORE:
+      break;
   }
 }
 

@@ -19,6 +19,7 @@
 
 #include <sexp/value.hpp>
 
+#include "error_handler.hpp"
 #include "reader_impl.hpp"
 
 namespace prio {
@@ -26,7 +27,8 @@ namespace prio {
 class SExprReaderDocumentImpl final : public ReaderDocumentImpl
 {
 public:
-  SExprReaderDocumentImpl(sexp::Value sx, bool pedantic, std::optional<std::string> filename);
+  SExprReaderDocumentImpl(sexp::Value sx, ErrorHandler error_handler,
+                          std::optional<std::string> filename);
 
   ReaderObject get_root() const override;
   std::optional<std::string> get_filename() const override { return m_filename; }
@@ -35,7 +37,7 @@ public:
 
 private:
   sexp::Value m_sx;
-  bool m_pedantic;
+  ErrorHandler m_error_handler;
   std::optional<std::string> m_filename;
 };
 

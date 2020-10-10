@@ -25,34 +25,34 @@ class ReaderDocumentTest : public ::testing::TestWithParam<std::string> {};
 
 TEST_P(ReaderDocumentTest, from_file)
 {
-  EXPECT_NO_THROW(ReaderDocument::from_file("test/data/data" + GetParam(), true));
-  EXPECT_NO_THROW(ReaderDocument::from_file("test/data/data" + GetParam(), false));
+  EXPECT_NO_THROW(ReaderDocument::from_file("test/data/data" + GetParam()));
+  EXPECT_NO_THROW(ReaderDocument::from_file("test/data/data" + GetParam(), ErrorHandler::IGNORE));
 }
 
 TEST_P(ReaderDocumentTest, from_file_fail)
 {
-  EXPECT_THROW(ReaderDocument::from_file("does-not-exist", true), ReaderError);
-  EXPECT_THROW(ReaderDocument::from_file("does-not-exist", false), ReaderError);
+  EXPECT_THROW(ReaderDocument::from_file("does-not-exist"), ReaderError);
+  EXPECT_THROW(ReaderDocument::from_file("does-not-exist", ErrorHandler::IGNORE), ReaderError);
 
-  EXPECT_THROW(ReaderDocument::from_file("test/data/data-corrupt" + GetParam(), true), ReaderError);
-  EXPECT_THROW(ReaderDocument::from_file("test/data/data-corrupt" + GetParam(), false), ReaderError);
+  EXPECT_THROW(ReaderDocument::from_file("test/data/data-corrupt" + GetParam()), ReaderError);
+  EXPECT_THROW(ReaderDocument::from_file("test/data/data-corrupt" + GetParam(), ErrorHandler::IGNORE), ReaderError);
 }
 
 TEST_P(ReaderDocumentTest, get_filename)
 {
-  ReaderDocument doc = ReaderDocument::from_file("test/data/data" + GetParam(), true);
+  ReaderDocument doc = ReaderDocument::from_file("test/data/data" + GetParam());
   EXPECT_EQ(doc.get_filename(), "test/data/data" + GetParam());
 }
 
 TEST_P(ReaderDocumentTest, get_directory)
 {
-  ReaderDocument doc = ReaderDocument::from_file("test/data/data" + GetParam(), true);
+  ReaderDocument doc = ReaderDocument::from_file("test/data/data" + GetParam());
   EXPECT_EQ(doc.get_directory(), "test/data");
 }
 
 TEST_P(ReaderDocumentTest, get_root)
 {
-  ReaderDocument doc = ReaderDocument::from_file("test/data/data" + GetParam(), true);
+  ReaderDocument doc = ReaderDocument::from_file("test/data/data" + GetParam());
   EXPECT_EQ(doc.get_root().get_name(), "test-document");
 }
 

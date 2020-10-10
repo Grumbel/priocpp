@@ -30,9 +30,10 @@
 
 namespace prio {
 
-JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, bool pedantic, std::optional<std::string> filename) :
+JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, ErrorHandler error_handler,
+                                               std::optional<std::string> filename) :
   m_value(std::move(value)),
-  m_pedantic(pedantic),
+  m_error_handler(error_handler),
   m_filename(std::move(filename))
 {
 }
@@ -40,10 +41,16 @@ JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, bool pedantic,
 void
 JsonReaderDocumentImpl::error(Json::Value const& json, std::string_view message) const
 {
-  if (m_pedantic) {
-    throw ReaderError(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message));
-  } else {
-    log_error("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message);
+  switch (m_error_handler) {
+    case ErrorHandler::THROW:
+      throw ReaderError(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message));
+
+    case ErrorHandler::LOG:
+      log_error("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message);
+      break;
+
+    case ErrorHandler::IGNORE:
+      break;
   }
 }
 

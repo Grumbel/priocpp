@@ -36,14 +36,16 @@
 namespace prio {
 
 ReaderDocument
-ReaderDocument::from_string(std::string_view text, bool pedantic, std::optional<std::string> const& filename)
+ReaderDocument::from_string(std::string_view text, ErrorHandler error_handler,
+                            std::optional<std::string> const& filename)
 {
   std::istringstream in{std::string(text)};
-  return ReaderDocument::from_stream(in, pedantic, filename);
+  return ReaderDocument::from_stream(in, error_handler, filename);
 }
 
 ReaderDocument
-ReaderDocument::from_stream(std::istream& stream, bool pedantic, std::optional<std::string> const& filename)
+ReaderDocument::from_stream(std::istream& stream, ErrorHandler error_handler,
+                            std::optional<std::string> const& filename)
 {
   int c = stream.get();
   stream.unget();
@@ -53,7 +55,7 @@ ReaderDocument::from_stream(std::istream& stream, bool pedantic, std::optional<s
     std::string errs;
     Json::Value root;
     if (Json::parseFromStream(builder, stream, &root, &errs)) {
-      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), pedantic, filename));
+      return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), error_handler, filename));
     } else {
       throw ReaderError(fmt::format("json parse error: {}", errs));
     }
@@ -62,7 +64,7 @@ ReaderDocument::from_stream(std::istream& stream, bool pedantic, std::optional<s
   { // sexp
     try {
       auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
-      return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), pedantic, filename));
+      return ReaderDocument(std::make_unique<SExprReaderDocumentImpl>(std::move(sx), error_handler, filename));
     } catch(std::exception const& err) {
       std::throw_with_nested(ReaderError(fmt::format("{}: ReaderDocument::from_stream() failed", filename ?  *filename : "<unknown>")));
     }
@@ -70,13 +72,13 @@ ReaderDocument::from_stream(std::istream& stream, bool pedantic, std::optional<s
 }
 
 ReaderDocument
-ReaderDocument::from_file(const std::string& filename, bool pedantic)
+ReaderDocument::from_file(const std::string& filename, ErrorHandler error_handler)
 {
   std::ifstream fin(filename);
   if (!fin) {
     throw ReaderError(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
   } else {
-    return from_stream(fin, pedantic, filename);
+    return from_stream(fin, error_handler, filename);
   }
 }
 

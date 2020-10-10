@@ -136,8 +136,8 @@ int main(int argc, char** argv)
     for (auto const& filename : opts.files) {
       try {
         ReaderDocument doc = (filename == "-") ?
-          ReaderDocument::from_stream(std::cin, false) :
-          ReaderDocument::from_file(filename, false);
+          ReaderDocument::from_stream(std::cin) :
+          ReaderDocument::from_file(filename);
 
         ReaderObject const& root = doc.get_root();
 

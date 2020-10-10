@@ -23,6 +23,7 @@
 #include <string_view>
 #include <vector>
 
+#include "error_handler.hpp"
 #include "reader_object.hpp"
 
 namespace prio {
@@ -39,9 +40,14 @@ class ReaderDocumentImpl;
 class ReaderDocument final
 {
 public:
-  static ReaderDocument from_stream(std::istream& stream, bool pedantic, std::optional<std::string> const& filename = {});
-  static ReaderDocument from_file(const std::string& filename, bool pedantic);
-  static ReaderDocument from_string(std::string_view text, bool pedantic, std::optional<std::string> const& filename = {});
+  static ReaderDocument from_stream(std::istream& stream,
+                                    ErrorHandler error_handler = ErrorHandler::THROW,
+                                    std::optional<std::string> const& filename = {});
+  static ReaderDocument from_file(const std::string& filename,
+                                  ErrorHandler error_handler = ErrorHandler::THROW);
+  static ReaderDocument from_string(std::string_view text,
+                                    ErrorHandler error_handler = ErrorHandler::THROW,
+                                    std::optional<std::string> const& filename = {});
 
   /** Reads multiple trees from a file, for use with files that don't
       contain a root element */

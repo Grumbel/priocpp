@@ -21,12 +21,14 @@
 
 #include <json/value.h>
 
+#include "error_handler.hpp"
+
 namespace prio {
 
 class JsonReaderDocumentImpl final : public ReaderDocumentImpl
 {
 public:
-  JsonReaderDocumentImpl(Json::Value value, bool pedantic, std::optional<std::string> filename);
+  JsonReaderDocumentImpl(Json::Value value, ErrorHandler error_handler, std::optional<std::string> filename);
 
   ReaderObject get_root() const override;
   std::optional<std::string> get_filename() const override { return m_filename; }
@@ -35,7 +37,7 @@ public:
 
 private:
   Json::Value m_value;
-  bool m_pedantic;
+  ErrorHandler m_error_handler;
   std::optional<std::string> m_filename;
 };
 
