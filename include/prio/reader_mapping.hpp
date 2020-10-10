@@ -73,6 +73,7 @@ public:
   }
 
   template<typename T>
+  [[nodiscard]]
   T get(std::string_view key, T fallback = {}) const {
     read(key, fallback);
     return fallback;
@@ -80,6 +81,7 @@ public:
 
   template<typename Enum, typename String2Enum,
            typename std::enable_if_t<std::is_enum<Enum>::value, int> = 0>
+  [[nodiscard]]
   Enum get(std::string_view key, String2Enum string2enum, Enum fallback = {}) const {
     read(key, fallback, string2enum);
     return fallback;
