@@ -17,9 +17,10 @@
 #ifndef HEADER_PRIO_FILE_WRITER_HPP
 #define HEADER_PRIO_FILE_WRITER_HPP
 
+#include <memory>
+#include <span>
 #include <string>
 #include <vector>
-#include <memory>
 
 namespace prio {
 
@@ -62,10 +63,15 @@ public:
   void write(std::string_view key, std::string_view value);
   void write(std::string_view key, std::string const& value);
 
-  void write(std::string_view key, std::vector<bool> const&);
-  void write(std::string_view key, std::vector<int> const&);
-  void write(std::string_view key, std::vector<float> const&);
-  void write(std::string_view key, std::vector<std::string> const&);
+  void write(std::string_view key, std::span<bool const> values);
+  void write(std::string_view key, std::span<int const> values);
+  void write(std::string_view key, std::span<float const> values);
+  void write(std::string_view key, std::span<std::string const> values);
+
+  void write(std::string_view key, std::vector<bool> const& values);
+  void write(std::string_view key, std::vector<int> const& values);
+  void write(std::string_view key, std::vector<float> const& values);
+  void write(std::string_view key, std::vector<std::string> const& values);
 
   template<typename T>
   void write(std::string_view key, T const& value) {

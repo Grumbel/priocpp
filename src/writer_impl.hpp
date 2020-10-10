@@ -18,6 +18,7 @@
 #define HEADER_PRIO_FILE_WRITER_IMPL_HPP
 
 #include <string>
+#include <span>
 #include <vector>
 
 namespace prio {
@@ -41,16 +42,18 @@ public:
   virtual void begin_keyvalue(std::string_view key) = 0;
   virtual void end_keyvalue() = 0;
 
-  virtual void write(std::string_view key, bool) = 0;
-  virtual void write(std::string_view key, int) = 0;
-  virtual void write(std::string_view key, float) = 0;
-  virtual void write(std::string_view key, char const* text) = 0;
-  virtual void write(std::string_view key, std::string_view) = 0;
+  virtual void write(std::string_view key, bool value) = 0;
+  virtual void write(std::string_view key, int value) = 0;
+  virtual void write(std::string_view key, float value) = 0;
+  virtual void write(std::string_view key, char const* value) = 0;
+  virtual void write(std::string_view key, std::string_view value) = 0;
 
-  virtual void write(std::string_view key, std::vector<bool> const&) = 0;
-  virtual void write(std::string_view key, std::vector<int> const&) = 0;
-  virtual void write(std::string_view key, std::vector<float> const&) = 0;
-  virtual void write(std::string_view key, std::vector<std::string> const&) = 0;
+  virtual void write(std::string_view key, std::span<bool const> values) = 0;
+  virtual void write(std::string_view key, std::span<int const> values) = 0;
+  virtual void write(std::string_view key, std::span<float const> values) = 0;
+  virtual void write(std::string_view key, std::span<std::string const> values) = 0;
+
+  virtual void write(std::string_view key, std::vector<bool> const& values) = 0;
 };
 
 } // namespace prio

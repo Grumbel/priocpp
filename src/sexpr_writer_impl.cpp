@@ -158,7 +158,7 @@ SExprWriterImpl::write(std::string_view key, std::string_view value)
 }
 
 void
-SExprWriterImpl::write(std::string_view key, std::vector<bool> const& values)
+SExprWriterImpl::write(std::string_view key, std::span<bool const> values)
 {
   (*out) << "\n" << indent() << "(" << key;
   for (bool const value : values) {
@@ -168,7 +168,7 @@ SExprWriterImpl::write(std::string_view key, std::vector<bool> const& values)
 }
 
 void
-SExprWriterImpl::write(std::string_view key, std::vector<int> const& values)
+SExprWriterImpl::write(std::string_view key, std::span<int const> values)
 {
   (*out) << "\n" << indent() << "(" << key;
   for (int const value : values) {
@@ -178,7 +178,7 @@ SExprWriterImpl::write(std::string_view key, std::vector<int> const& values)
 }
 
 void
-SExprWriterImpl::write(std::string_view key, std::vector<float> const& values)
+SExprWriterImpl::write(std::string_view key, std::span<float const> values)
 {
   (*out) << "\n" << indent() << "(" << key;
   for (float const value : values) {
@@ -188,12 +188,22 @@ SExprWriterImpl::write(std::string_view key, std::vector<float> const& values)
 }
 
 void
-SExprWriterImpl::write(std::string_view key, std::vector<std::string> const& values)
+SExprWriterImpl::write(std::string_view key, std::span<std::string const> values)
 {
   (*out) << "\n" << indent() << "(" << key;
   for (std::string const& value : values) {
     (*out) << ' ';
     write_escaped(*out, value);
+  }
+  (*out) << ")";
+}
+
+void
+SExprWriterImpl::write(std::string_view key, std::vector<bool> const& values)
+{
+  (*out) << "\n" << indent() << "(" << key;
+  for (bool const value : values) {
+    (*out) << ' ' << (value ? "#t" : "#f");
   }
   (*out) << ")";
 }

@@ -74,7 +74,7 @@ ReaderMapping::read(std::string_view key, std::string& value) const
 }
 
 bool
-ReaderMapping::read  (std::string_view key, std::vector<bool>& values) const
+ReaderMapping::read(std::string_view key, std::vector<bool>& values) const
 {
  if (!m_impl) { return false; }
 

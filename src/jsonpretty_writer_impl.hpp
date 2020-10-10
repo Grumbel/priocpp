@@ -51,16 +51,18 @@ public:
   void begin_keyvalue(std::string_view key) override;
   void end_keyvalue() override;
 
-  void write(std::string_view key, bool) override;
-  void write(std::string_view key, int) override;
-  void write(std::string_view key, float) override;
-  void write(std::string_view key, char const* text) override;
-  void write(std::string_view key, std::string_view) override;
+  void write(std::string_view key, bool value) override;
+  void write(std::string_view key, int value) override;
+  void write(std::string_view key, float value) override;
+  void write(std::string_view key, char const* value) override;
+  void write(std::string_view key, std::string_view value) override;
 
-  void write(std::string_view key, std::vector<bool> const&) override;
-  void write(std::string_view key, std::vector<int> const&) override;
-  void write(std::string_view key, std::vector<float> const&) override;
-  void write(std::string_view key, std::vector<std::string> const&) override;
+  void write(std::string_view key, std::span<bool const> values) override;
+  void write(std::string_view key, std::span<int const> values) override;
+  void write(std::string_view key, std::span<float const> values) override;
+  void write(std::string_view key, std::span<std::string const> values) override;
+
+  void write(std::string_view key, std::vector<bool> const& values) override;
 
 private:
   inline void write_indent();

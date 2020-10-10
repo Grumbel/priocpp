@@ -16,6 +16,8 @@
 
 #include "writer.hpp"
 
+#include <assert.h>
+
 #include "sexpr_writer_impl.hpp"
 #include "json_writer_impl.hpp"
 #include "jsonpretty_writer_impl.hpp"
@@ -167,6 +169,38 @@ Writer::write(std::string_view key, std::string const& value)
 }
 
 void
+Writer::write(std::string_view key, std::span<bool const> values)
+{
+  assert(m_impl);
+
+  m_impl->write(key, values);
+}
+
+void
+Writer::write(std::string_view key, std::span<int const> values)
+{
+  assert(m_impl);
+
+  m_impl->write(key, values);
+}
+
+void
+Writer::write(std::string_view key, std::span<float const> values)
+{
+  assert(m_impl);
+
+  m_impl->write(key, values);
+}
+
+void
+Writer::write(std::string_view key, std::span<std::string const> values)
+{
+  assert(m_impl);
+
+  m_impl->write(key, values);
+}
+
+void
 Writer::write(std::string_view key, std::vector<bool> const& values)
 {
   assert(m_impl);
@@ -175,31 +209,23 @@ Writer::write(std::string_view key, std::vector<bool> const& values)
 }
 
 void
-Writer::write(std::string_view key, std::span<bool> values)
+Writer::write(std::string_view key, std::vector<int> const& values)
 {
   assert(m_impl);
 
-  m_impl->write(key, values);
+  m_impl->write(key, std::span(values));
 }
 
 void
-Writer::write(std::string_view key, std::span<int> values)
+Writer::write(std::string_view key, std::vector<float> const& values)
 {
   assert(m_impl);
 
-  m_impl->write(key, values);
+  m_impl->write(key, std::span(values));
 }
 
 void
-Writer::write(std::string_view key, std::span<float> values)
-{
-  assert(m_impl);
-
-  m_impl->write(key, values);
-}
-
-void
-Writer::write(std::string_view key, std::span<std::string> values)
+Writer::write(std::string_view key, std::vector<std::string> const& values)
 {
   assert(m_impl);
 

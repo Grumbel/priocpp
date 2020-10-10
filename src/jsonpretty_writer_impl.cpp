@@ -224,13 +224,13 @@ JsonPrettyWriterImpl::write(std::string_view key, std::string_view value)
 }
 
 void
-JsonPrettyWriterImpl::write(std::string_view key, std::vector<bool> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::span<bool const> values)
 {
   write_indent();
   write_quoted_string(key);
   m_out << ": [";
   size_t index = 0;
-  for(auto const&& value : values) {
+  for(auto const& value : values) {
     m_out << (value ? "true" : "false");
     if (index != values.size() - 1) {
       m_out << ", ";
@@ -242,7 +242,7 @@ JsonPrettyWriterImpl::write(std::string_view key, std::vector<bool> const& value
 }
 
 void
-JsonPrettyWriterImpl::write(std::string_view key, std::vector<int> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::span<int const> values)
 {
   write_indent();
   write_quoted_string(key);
@@ -258,7 +258,7 @@ JsonPrettyWriterImpl::write(std::string_view key, std::vector<int> const& values
 }
 
 void
-JsonPrettyWriterImpl::write(std::string_view key, std::vector<float> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::span<float const> values)
 {
   write_indent();
   write_quoted_string(key);
@@ -274,7 +274,7 @@ JsonPrettyWriterImpl::write(std::string_view key, std::vector<float> const& valu
 }
 
 void
-JsonPrettyWriterImpl::write(std::string_view key, std::vector<std::string> const& values)
+JsonPrettyWriterImpl::write(std::string_view key, std::span<std::string const> values)
 {
   write_indent();
   write_quoted_string(key);
@@ -306,6 +306,24 @@ JsonPrettyWriterImpl::write_indent()
   {
     m_out.write("  ", 2);
   }
+}
+
+void
+JsonPrettyWriterImpl::write(std::string_view key, std::vector<bool> const& values)
+{
+  write_indent();
+  write_quoted_string(key);
+  m_out << ": [";
+  size_t index = 0;
+  for(auto const&& value : values) {
+    m_out << (value ? "true" : "false");
+    if (index != values.size() - 1) {
+      m_out << ", ";
+    }
+    index += 1;
+  }
+  m_out << "]";
+  write_separator();
 }
 
 void
