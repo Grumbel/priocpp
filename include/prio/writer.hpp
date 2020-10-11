@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PRIO_FILE_WRITER_HPP
-#define HEADER_PRIO_FILE_WRITER_HPP
+#ifndef HEADER_PRIO_WRITER_HPP
+#define HEADER_PRIO_WRITER_HPP
 
 #include <filesystem>
 #include <memory>

@@ -14,11 +14,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_PRIO_PRIO_HPP
-#define HEADER_PRIO_PRIO_HPP
+#ifndef HEADER_PRIO_READER_HPP
+#define HEADER_PRIO_READER_HPP
 
-#include "reader.hpp"
-#include "writer.hpp"
+#include "override_reader_mapping.hpp"
+#include "reader_collection.hpp"
+#include "reader_document.hpp"
+#include "reader_error.hpp"
+#include "reader_mapping.hpp"
+#include "reader_object.hpp"
 
 #endif
 
