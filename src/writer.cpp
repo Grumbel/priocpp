@@ -31,7 +31,7 @@
 namespace prio {
 
 Writer
-Writer::from_file(std::filesystem::path const& filename, Format format)
+Writer::from_file(Format format, std::filesystem::path const& filename)
 {
   std::ofstream fout(filename);
   if (!fout) {
@@ -40,19 +40,19 @@ Writer::from_file(std::filesystem::path const& filename, Format format)
     throw std::runtime_error(oss.str());
   }
 
-  return from_stream(std::make_unique<std::ofstream>(std::move(fout)), format);
+  return from_stream(format, std::make_unique<std::ofstream>(std::move(fout)));
 }
 
 Writer
-Writer::from_stream(std::unique_ptr<std::ostream> out, Format format)
+Writer::from_stream(Format format, std::unique_ptr<std::ostream> out)
 {
-  Writer writer = from_stream(*out, format);
+  Writer writer = from_stream(format, *out);
   writer.m_owned = std::move(out);
   return writer;
 }
 
 Writer
-Writer::from_stream(std::ostream& out, Format format)
+Writer::from_stream(Format format, std::ostream& out)
 {
   switch (format) {
     case Format::FASTJSON:
@@ -68,6 +68,24 @@ Writer::from_stream(std::ostream& out, Format format)
     default:
       throw std::invalid_argument("invalid format");
   }
+}
+
+Writer
+Writer::from_file(std::filesystem::path const& filename)
+{
+  return from_file(Format::AUTO, filename);
+}
+
+Writer
+Writer::from_stream(std::ostream& out)
+{
+  return from_stream(Format::AUTO, out);
+}
+
+Writer
+Writer::from_stream(std::unique_ptr<std::ostream> out)
+{
+  return from_stream(Format::AUTO, std::move(out));
 }
 
 Writer::Writer(std::ostream& out) :

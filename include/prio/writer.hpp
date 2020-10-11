@@ -40,9 +40,13 @@ void write_custom(Writer& writer, std::string_view key, T const& value)
 class Writer final
 {
 public:
-  static Writer from_file(std::filesystem::path const& filename, Format format = Format::AUTO);
-  static Writer from_stream(std::ostream& out, Format format = Format::AUTO);
-  static Writer from_stream(std::unique_ptr<std::ostream> out, Format format = Format::AUTO);
+  static Writer from_file(Format format, std::filesystem::path const& filename);
+  static Writer from_stream(Format format, std::ostream& out);
+  static Writer from_stream(Format format, std::unique_ptr<std::ostream> out);
+
+  static Writer from_file(std::filesystem::path const& filename);
+  static Writer from_stream(std::ostream& out);
+  static Writer from_stream(std::unique_ptr<std::ostream> out);
 
 public:
   Writer(std::ostream& out);

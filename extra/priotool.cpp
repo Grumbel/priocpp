@@ -141,7 +141,7 @@ int main(int argc, char** argv)
 
         ReaderObject const& root = doc.get_root();
 
-        Writer writer = Writer::from_stream(std::cout, opts.format);
+        Writer writer = Writer::from_stream(opts.format, std::cout);
         writer.begin_object(root.get_name());
         write(writer, root.get_mapping());
         writer.end_object();
