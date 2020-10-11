@@ -25,17 +25,27 @@ using namespace prio;
 
 TEST(WriterTest, from_stream)
 {
+  enum class CustomEnum { NONE, ONE };
+
   std::ostringstream out;
   Writer writer = Writer::from_stream(out);
   writer.begin_object("testfile")
     .write("foo", 10)
     .write("bar", 5)
+    .write("customenum", CustomEnum::ONE,
+           [](CustomEnum v) {
+             switch (v) {
+               case CustomEnum::NONE: return "none";
+               case CustomEnum::ONE: return "one";
+               default: return "fail";
+             }})
     .end_object();
 
   ASSERT_EQ(out.str(),
             "(testfile\n"
             "  (foo 10)\n"
-            "  (bar 5))\n"
+            "  (bar 5)\n"
+            "  (customenum \"one\"))\n"
             "\n"
             ";; EOF ;;\n");
 }

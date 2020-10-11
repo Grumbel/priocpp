@@ -93,7 +93,7 @@ public:
   }
 
   template<typename Enum, typename Enum2String,
-           std::enable_if_t<std::is_enum<Enum>::value> = 0>
+           std::enable_if_t<std::is_enum<Enum>::value, int> = 0>
   Writer& write(std::string_view key, Enum const& value, Enum2String enum2string)
   {
     write(key, enum2string(value));
