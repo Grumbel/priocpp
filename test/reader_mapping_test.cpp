@@ -320,6 +320,31 @@ TEST_P(ReaderMappingTest, get_mapping)
   if (ReaderMapping mapping = map.get<ReaderMapping>("submap-doesnotexist")) {}
 }
 
+TEST_P(ReaderMappingTest, must_read)
+{
+  int value;
+  EXPECT_THROW(map.must_read("doesnotexist", value), ReaderError);
+}
+
+TEST_P(ReaderMappingTest, must_get)
+{
+  EXPECT_THROW(map.must_get<int>("doesnotexist"), ReaderError);
+}
+
+TEST_P(ReaderMappingTest, must_read_enum)
+{
+  MyEnum enumvalue = MyEnum::A;
+  EXPECT_THROW(map.must_read("doesnotexist", enumvalue, string2enum), ReaderError);
+  map.must_read("enumvalue", enumvalue, string2enum);
+  EXPECT_EQ(enumvalue, MyEnum::C);
+}
+
+TEST_P(ReaderMappingTest, must_get_enum)
+{
+  EXPECT_THROW(map.must_get<MyEnum>("doesnotexist", string2enum), ReaderError);
+  EXPECT_EQ(map.must_get<MyEnum>("enumvalue", string2enum), MyEnum::C);
+}
+
 TEST_P(ReaderMappingTest, get_keys)
 {
   auto const& keys = map.get_keys();

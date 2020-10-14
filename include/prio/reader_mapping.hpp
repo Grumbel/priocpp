@@ -18,6 +18,7 @@
 #define HEADER_PRIO_READER_MAPPING_HPP
 
 #include <memory>
+#include <sstream>
 #include <vector>
 
 namespace prio {
@@ -43,10 +44,13 @@ public:
   ReaderMapping(std::unique_ptr<ReaderMappingImpl> impl);
   ~ReaderMapping();
 
+  explicit operator bool() const { return static_cast<bool>(m_impl); }
+
   ReaderMapping& operator=(ReaderMapping&&) noexcept;
 
   std::vector<std::string> get_keys() const;
 
+  // regular readers
   bool read(std::string_view key, bool& value) const;
   bool read(std::string_view key, int& value) const;
   bool read(std::string_view key, float& value) const;
@@ -80,6 +84,7 @@ public:
     return read_custom<T>(*this, key, value);
   }
 
+  // regular getters
   template<typename T>
   [[nodiscard]]
   T get(std::string_view key, T fallback = {}) const {
@@ -95,7 +100,49 @@ public:
     return fallback;
   }
 
-  explicit operator bool() const { return static_cast<bool>(m_impl); }
+  // must readers
+  template<typename T>
+  void must_read(std::string_view key, T& value) const {
+    if (!read(key, value)) {
+      missing_key_error(key);
+    }
+  }
+
+  template<typename Enum, typename String2Enum,
+           typename std::enable_if_t<std::is_enum<Enum>::value, int> = 0>
+  void must_read(std::string_view key, Enum& value, String2Enum string2enum) const
+  {
+    if (!read(key, value, string2enum)) {
+      missing_key_error(key);
+    }
+  }
+
+  // must getters
+  template<typename T>
+  T must_get(std::string_view key) const {
+    T value;
+    if (!read(key, value)) {
+      missing_key_error(key);
+    }
+    return value;
+  }
+
+  template<typename Enum, typename String2Enum,
+           typename std::enable_if_t<std::is_enum<Enum>::value, int> = 0>
+  Enum must_get(std::string_view key, String2Enum string2enum) const
+  {
+    Enum value;
+    if (!read(key, value, string2enum)) {
+      missing_key_error(key);
+    }
+    return value;
+  }
+
+  /** report error with key that can be ignored */
+  void error(std::string_view key, std::string_view message) const;
+
+  /** report error with key that must not be ignored */
+  void missing_key_error(std::string_view key) const;
 
 private:
   std::unique_ptr<ReaderMappingImpl> m_impl;

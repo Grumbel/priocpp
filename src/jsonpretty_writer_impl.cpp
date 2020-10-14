@@ -32,6 +32,7 @@ JsonPrettyWriterImpl::JsonPrettyWriterImpl(std::ostream& out) :
 
 JsonPrettyWriterImpl::~JsonPrettyWriterImpl()
 {
+  assert(m_context.size() == 0);
 }
 
 void

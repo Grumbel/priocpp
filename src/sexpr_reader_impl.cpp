@@ -49,7 +49,13 @@ SExprReaderDocumentImpl::get_root() const
 void
 SExprReaderDocumentImpl::error(sexp::Value const& sx, std::string_view message) const
 {
-  switch (m_error_handler) {
+  error(m_error_handler, sx, message);
+}
+
+void
+SExprReaderDocumentImpl::error(ErrorHandler error_handler, sexp::Value const& sx, std::string_view message) const
+{
+  switch (error_handler) {
     case ErrorHandler::THROW:
       throw ReaderError(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));
 
@@ -308,6 +314,20 @@ SExprReaderMappingImpl::read(std::string_view key, ReaderMapping& value) const
 
   value = ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_doc, *cur));
   return true;
+}
+
+void
+SExprReaderMappingImpl::error(std::string_view key, std::string_view message) const
+{
+  m_doc.error(m_sx, message);
+}
+
+void
+SExprReaderMappingImpl::missing_key_error(std::string_view key) const
+{
+  std::ostringstream oss;
+  oss << "required key not found: " << key;
+  m_doc.error(ErrorHandler::THROW, m_sx, oss.str());
 }
 
 sexp::Value const*

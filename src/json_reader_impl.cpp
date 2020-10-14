@@ -41,7 +41,13 @@ JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, ErrorHandler e
 void
 JsonReaderDocumentImpl::error(Json::Value const& json, std::string_view message) const
 {
-  switch (m_error_handler) {
+  error(m_error_handler, json, message);
+}
+
+void
+JsonReaderDocumentImpl::error(ErrorHandler error_handler, Json::Value const& json, std::string_view message) const
+{
+  switch (error_handler) {
     case ErrorHandler::THROW:
       throw ReaderError(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message));
 
@@ -90,7 +96,7 @@ JsonReaderObjectImpl::get_mapping() const
 
 
 JsonReaderCollectionImpl::JsonReaderCollectionImpl(JsonReaderDocumentImpl const& doc, Json::Value const& json) :
-m_doc(doc),
+  m_doc(doc),
   m_json(json)
 {
   if (!m_json.isArray())
@@ -146,11 +152,11 @@ JsonReaderMappingImpl::get_keys() const
   value = element.getter();                                     \
   return true
 
-bool
-JsonReaderMappingImpl::read(std::string_view key, bool& value) const
-{
-  GET_VALUE_MACRO("bool", isBool, asBool);
-}
+  bool
+  JsonReaderMappingImpl::read(std::string_view key, bool& value) const
+  {
+    GET_VALUE_MACRO("bool", isBool, asBool);
+  }
 
 bool
 JsonReaderMappingImpl::read(std::string_view key, int& value) const
@@ -172,32 +178,32 @@ JsonReaderMappingImpl::read(std::string_view key, std::string& value) const
 
 #undef GET_VALUE_MACRO
 
-#define GET_VALUES_MACRO(type_, checker_, getter_)                      \
-  const Json::Value& element = m_json[std::string(key)];                \
-  if (element.isNull()) { return false; }                               \
-  if (!element.isArray()) {                                             \
-    m_doc.error(element, "expected array");                             \
-    return false;                                                       \
-  }                                                                     \
-                                                                        \
-  for(Json::Value::ArrayIndex i = 0; i < element.size(); ++i) {         \
-    if (!element[i].checker_()) {                                       \
-      m_doc.error(element[i], "expected " type_);                       \
-      return false;                                                     \
-    }                                                                   \
-  }                                                                     \
-                                                                        \
-  values.resize(element.size());                                        \
-  for(Json::Value::ArrayIndex i = 0; i < element.size(); ++i) {         \
-    values[i] = element[i].getter_();                                   \
-  }                                                                     \
+#define GET_VALUES_MACRO(type_, checker_, getter_)              \
+  const Json::Value& element = m_json[std::string(key)];        \
+  if (element.isNull()) { return false; }                       \
+  if (!element.isArray()) {                                     \
+    m_doc.error(element, "expected array");                     \
+    return false;                                               \
+  }                                                             \
+                                                                \
+  for(Json::Value::ArrayIndex i = 0; i < element.size(); ++i) { \
+    if (!element[i].checker_()) {                               \
+      m_doc.error(element[i], "expected " type_);               \
+      return false;                                             \
+    }                                                           \
+  }                                                             \
+                                                                \
+  values.resize(element.size());                                \
+  for(Json::Value::ArrayIndex i = 0; i < element.size(); ++i) { \
+    values[i] = element[i].getter_();                           \
+  }                                                             \
   return true
 
-bool
-JsonReaderMappingImpl::read(std::string_view key, std::vector<bool>& values) const
-{
-  GET_VALUES_MACRO("bool", isBool, asBool);
-}
+  bool
+  JsonReaderMappingImpl::read(std::string_view key, std::vector<bool>& values) const
+  {
+    GET_VALUES_MACRO("bool", isBool, asBool);
+  }
 
 bool
 JsonReaderMappingImpl::read(std::string_view key, std::vector<int>& values) const
@@ -262,6 +268,20 @@ JsonReaderMappingImpl::read(std::string_view key, ReaderObject& value) const
   {
     return false;
   }
+}
+
+void
+JsonReaderMappingImpl::error(std::string_view key, std::string_view message) const
+{
+  m_doc.error(m_json, message);
+}
+
+void
+JsonReaderMappingImpl::missing_key_error(std::string_view key) const
+{
+  std::ostringstream oss;
+  oss << "required key not found: " << key;
+  m_doc.error(ErrorHandler::THROW, m_json, oss.str());
 }
 
 } // namespace prio

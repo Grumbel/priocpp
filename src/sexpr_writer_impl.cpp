@@ -16,6 +16,7 @@
 
 #include "sexpr_writer_impl.hpp"
 
+#include <assert.h>
 #include <map>
 
 namespace prio {
@@ -53,6 +54,7 @@ SExprWriterImpl::SExprWriterImpl(std::ostream& out_) :
 
 SExprWriterImpl::~SExprWriterImpl()
 {
+  assert(level == 0);
 }
 
 std::string

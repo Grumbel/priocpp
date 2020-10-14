@@ -56,6 +56,9 @@ public:
 
   Writer& write_comment(std::string_view text);
 
+  Writer& begin_document(std::string_view type);
+  void end_document();
+
   /** collections contain an ordered sequence of objects */
   Writer& begin_collection(std::string_view key);
   void end_collection();

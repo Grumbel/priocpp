@@ -111,6 +111,23 @@ Writer::write_comment(std::string_view text)
 }
 
 Writer&
+Writer::begin_document(std::string_view type)
+{
+  assert(m_impl);
+  m_impl->begin_object(type);
+  return *this;
+}
+
+void
+Writer::end_document()
+{
+  assert(m_impl);
+  m_impl->end_object();
+
+  // flush here
+}
+
+Writer&
 Writer::begin_collection(std::string_view key)
 {
   assert(m_impl);

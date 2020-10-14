@@ -34,6 +34,7 @@ public:
   std::optional<std::string> get_filename() const override { return m_filename; }
 
   void error(sexp::Value const& sx, std::string_view message) const;
+  void error(ErrorHandler error_handler, sexp::Value const& sx, std::string_view message) const;
 
 private:
   sexp::Value m_sx;
@@ -89,6 +90,9 @@ public:
   bool read(std::string_view key, ReaderMapping&) const override;
   bool read(std::string_view key, ReaderCollection&) const override;
   bool read(std::string_view key, ReaderObject&) const override;
+
+  void error(std::string_view key, std::string_view message) const override;
+  void missing_key_error(std::string_view key) const override;
 
 private:
   sexp::Value const* get_subsection_item(std::string_view key) const;

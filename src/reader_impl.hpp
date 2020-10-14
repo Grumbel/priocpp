@@ -74,6 +74,9 @@ public:
   virtual bool read(std::string_view key, ReaderMapping&) const = 0;
   virtual bool read(std::string_view key, ReaderCollection&) const = 0;
   virtual bool read(std::string_view key, ReaderObject&) const = 0;
+
+  virtual void error(std::string_view key, std::string_view message) const = 0;
+  virtual void missing_key_error(std::string_view key) const = 0;
 };
 
 } // namespace prio

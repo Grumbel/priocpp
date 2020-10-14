@@ -34,6 +34,7 @@ public:
   std::optional<std::string> get_filename() const override { return m_filename; }
 
   void error(Json::Value const& json, std::string_view message) const;
+  void error(ErrorHandler error_handler, Json::Value const& json, std::string_view message) const;
 
 private:
   Json::Value m_value;
@@ -89,6 +90,9 @@ public:
   bool read(std::string_view key, ReaderMapping&) const override;
   bool read(std::string_view key, ReaderCollection&) const override;
   bool read(std::string_view key, ReaderObject&) const override;
+
+  void error(std::string_view key, std::string_view message) const override;
+  void missing_key_error(std::string_view key) const override;
 
 private:
   JsonReaderDocumentImpl const& m_doc;

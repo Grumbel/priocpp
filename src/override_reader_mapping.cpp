@@ -162,6 +162,16 @@ public:
       return m_reader.read(key, result);
     }
   }
+
+  void error(std::string_view key, std::string_view message) const override
+  {
+    m_reader.error(key, message);
+  }
+
+  void missing_key_error(std::string_view key) const override
+  {
+    m_reader.missing_key_error(key);
+  }
 };
 
 ReaderMapping

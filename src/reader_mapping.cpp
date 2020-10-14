@@ -137,6 +137,22 @@ ReaderMapping::get_keys() const
   return m_impl->get_keys();
 }
 
+void
+ReaderMapping::error(std::string_view key, std::string_view message) const
+{
+  if (!m_impl) { return; }
+
+  m_impl->error(key, message);
+}
+
+void
+ReaderMapping::missing_key_error(std::string_view key) const
+{
+  if (!m_impl) { return; }
+
+  m_impl->missing_key_error(key);
+}
+
 } // namespace prio
 
 /* EOF */
