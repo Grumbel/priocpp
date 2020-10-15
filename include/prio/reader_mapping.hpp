@@ -131,7 +131,7 @@ public:
            typename std::enable_if_t<std::is_enum<Enum>::value, int> = 0>
   Enum must_get(std::string_view key, String2Enum string2enum) const
   {
-    Enum value;
+    Enum value{};
     if (!read(key, value, string2enum)) {
       missing_key_error(key);
     }
