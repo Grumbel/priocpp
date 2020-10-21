@@ -97,6 +97,12 @@ if(BUILD_EXTRA)
     target_compile_options(${EXTRA_EXE} PRIVATE ${WARNINGS_CXX_FLAGS})
     target_link_libraries(${EXTRA_EXE} prio)
   endforeach(EXTRA_SOURCE)
+
+  if(BUILD_TESTS)
+    add_test(NAME priotool
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+      COMMAND ${CMAKE_CURRENT_BINARY_DIR}/extra/priotool test/data/data.sexp)
+  endif()
 endif()
 
 install(TARGETS prio

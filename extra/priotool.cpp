@@ -23,64 +23,75 @@ using namespace prio;
 
 namespace {
 
+void write(Writer& writer, ReaderMapping const& body, std::string_view key);
+
 void write(Writer& writer, ReaderMapping const& body)
 {
   for(auto const& key : body.get_keys()) {
-    bool bool_value;
-    int int_value;
-    float float_value;
-    std::string string_value;
-
-    std::vector<bool> bool_values;
-    std::vector<int> int_values;
-    std::vector<float> float_values;
-    std::vector<std::string> string_values;
-
-    ReaderMapping mapping;
-    ReaderObject object;
-    ReaderCollection collection;
-
-    if (body.read(key, bool_value)) {
-      writer.write(key, bool_value);
-    } else  if (body.read(key, int_value)) {
-      writer.write(key, int_value);
-    } else if (body.read(key, float_value)) {
-      writer.write(key, float_value);
-    } else if (body.read(key, string_value)) {
-      writer.write(key, string_value);
+    try {
+      write(writer, body, key);
+    } catch(ReaderError const& err) {
+      std::cerr << "error while processing '" << key << "': " << err.what() << std::endl;
     }
+  }
+}
 
-    else if (body.read(key, bool_values)) {
-      writer.write(key, bool_values);
-    } else  if (body.read(key, int_values)) {
-      writer.write(key, int_values);
-    } else if (body.read(key, float_values)) {
-      writer.write(key, float_values);
-    } else if (body.read(key, string_values)) {
-      writer.write(key, string_values);
-    }
+void write(Writer& writer, ReaderMapping const& body, std::string_view key)
+{
+  bool bool_value;
+  int int_value;
+  float float_value;
+  std::string string_value;
 
-    else if (body.read(key, mapping)) {
-      writer.begin_mapping(key);
-      write(writer, mapping);
-      writer.end_mapping();
-    } else if (body.read(key, collection)) {
-      writer.begin_collection(key);
-      for (auto const& obj : collection.get_objects()) {
-        writer.begin_object(obj.get_name());
-        write(writer, obj.get_mapping());
-        writer.end_object();
-      }
-      writer.end_collection();
-    } else if (body.read(key, object)) {
-      writer.begin_keyvalue(key);
-      writer.begin_object(object.get_name());
-      write(writer, object.get_mapping());
+  std::vector<bool> bool_values;
+  std::vector<int> int_values;
+  std::vector<float> float_values;
+  std::vector<std::string> string_values;
+
+  ReaderMapping mapping;
+  ReaderObject object;
+  ReaderCollection collection;
+
+  if (body.read(key, bool_value)) {
+    writer.write(key, bool_value);
+  } else  if (body.read(key, int_value)) {
+    writer.write(key, int_value);
+  } else if (body.read(key, float_value)) {
+    writer.write(key, float_value);
+  } else if (body.read(key, string_value)) {
+    writer.write(key, string_value);
+  }
+
+  else if (body.read(key, bool_values)) {
+    writer.write(key, bool_values);
+  } else  if (body.read(key, int_values)) {
+    writer.write(key, int_values);
+  } else if (body.read(key, float_values)) {
+    writer.write(key, float_values);
+  } else if (body.read(key, string_values)) {
+    writer.write(key, string_values);
+  }
+
+  else if (body.read(key, mapping)) {
+    writer.begin_mapping(key);
+    write(writer, mapping);
+    writer.end_mapping();
+  } else if (body.read(key, collection)) {
+    writer.begin_collection(key);
+    for (auto const& obj : collection.get_objects()) {
+      writer.begin_object(obj.get_name());
+      write(writer, obj.get_mapping());
       writer.end_object();
-      writer.end_keyvalue();
-    } else {
-      std::cerr << "unknown thing at key: " << key << std::endl;
     }
+    writer.end_collection();
+  } else if (body.read(key, object)) {
+    writer.begin_keyvalue(key);
+    writer.begin_object(object.get_name());
+    write(writer, object.get_mapping());
+    writer.end_object();
+    writer.end_keyvalue();
+  } else {
+    std::cerr << "unknown thing at key: " << key << std::endl;
   }
 }
 
@@ -130,14 +141,15 @@ Options parse_args(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
+  bool errors = false;
   try {
     Options opts = parse_args(argc, argv);
 
     for (auto const& filename : opts.files) {
       try {
         ReaderDocument doc = (filename == "-") ?
-          ReaderDocument::from_stream(std::cin) :
-          ReaderDocument::from_file(filename);
+          ReaderDocument::from_stream(std::cin, ErrorHandler::IGNORE) :
+          ReaderDocument::from_file(filename, ErrorHandler::IGNORE);
 
         ReaderObject const& root = doc.get_root();
 
@@ -147,12 +159,19 @@ int main(int argc, char** argv)
         writer.end_object();
       } catch (std::exception& err) {
         std::cerr << filename << ": " << err.what() << std::endl;
+        errors = true;
       }
     }
   } catch (std::exception const& err) {
     std::cerr << err.what() << std::endl;
+    errors = true;
   }
-  return 0;
+
+  if (errors) {
+    return EXIT_FAILURE;
+  } else {
+    return EXIT_SUCCESS;
+  }
 }
 
 /* EOF */
