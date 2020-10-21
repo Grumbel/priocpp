@@ -45,7 +45,7 @@ private:
 class JsonReaderObjectImpl final : public ReaderObjectImpl
 {
 public:
-  JsonReaderObjectImpl(JsonReaderDocumentImpl const& doc, Json::Value const& value);
+  JsonReaderObjectImpl(JsonReaderDocumentImpl const& doc, Json::Value const& json);
   ~JsonReaderObjectImpl() override;
 
   std::string get_name() const override;
@@ -59,7 +59,7 @@ private:
 class JsonReaderCollectionImpl final : public ReaderCollectionImpl
 {
 public:
-  JsonReaderCollectionImpl(JsonReaderDocumentImpl const& doc, Json::Value const& value);
+  JsonReaderCollectionImpl(JsonReaderDocumentImpl const& doc, Json::Value const& json);
   ~JsonReaderCollectionImpl() override;
 
   std::vector<ReaderObject> get_objects() const override;
@@ -72,24 +72,24 @@ private:
 class JsonReaderMappingImpl final : public ReaderMappingImpl
 {
 public:
-  JsonReaderMappingImpl(JsonReaderDocumentImpl const& doc, Json::Value const& value);
+  JsonReaderMappingImpl(JsonReaderDocumentImpl const& doc, Json::Value const& json);
   ~JsonReaderMappingImpl() override;
 
   std::vector<std::string> get_keys() const override;
 
-  bool read(std::string_view key, bool&) const override;
-  bool read(std::string_view key, int&) const override;
-  bool read(std::string_view key, float&) const override;
-  bool read(std::string_view key, std::string&) const override;
+  bool read(std::string_view key, bool& value) const override;
+  bool read(std::string_view key, int& value) const override;
+  bool read(std::string_view key, float& value) const override;
+  bool read(std::string_view key, std::string& value) const override;
 
-  bool read(std::string_view key, std::vector<bool>& v) const override;
-  bool read(std::string_view key, std::vector<int>& v) const override;
-  bool read(std::string_view key, std::vector<float>& v) const override;
-  bool read(std::string_view key, std::vector<std::string>& v) const override;
+  bool read(std::string_view key, std::vector<bool>& values) const override;
+  bool read(std::string_view key, std::vector<int>& values) const override;
+  bool read(std::string_view key, std::vector<float>& values) const override;
+  bool read(std::string_view key, std::vector<std::string>& values) const override;
 
-  bool read(std::string_view key, ReaderMapping&) const override;
-  bool read(std::string_view key, ReaderCollection&) const override;
-  bool read(std::string_view key, ReaderObject&) const override;
+  bool read(std::string_view key, ReaderMapping& value) const override;
+  bool read(std::string_view key, ReaderCollection& value) const override;
+  bool read(std::string_view key, ReaderObject& value) const override;
 
   void error(std::string_view key, std::string_view message) const override;
   void missing_key_error(std::string_view key) const override;

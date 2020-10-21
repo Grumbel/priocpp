@@ -212,10 +212,10 @@ Writer::write(std::string_view key, float value)
 }
 
 Writer&
-Writer::write(std::string_view key, char const* text)
+Writer::write(std::string_view key, char const* value)
 {
   assert(m_impl);
-  m_impl->write(key, text);
+  m_impl->write(key, value);
   return *this;
 }
 

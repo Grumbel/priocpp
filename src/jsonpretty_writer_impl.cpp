@@ -32,7 +32,7 @@ JsonPrettyWriterImpl::JsonPrettyWriterImpl(std::ostream& out) :
 
 JsonPrettyWriterImpl::~JsonPrettyWriterImpl()
 {
-  assert(m_context.size() == 0);
+  assert(m_context.empty());
 }
 
 void
@@ -207,9 +207,9 @@ JsonPrettyWriterImpl::write(std::string_view key, float value)
 }
 
 void
-JsonPrettyWriterImpl::write(std::string_view key, char const* text)
+JsonPrettyWriterImpl::write(std::string_view key, char const* value)
 {
-  write(key, std::string_view(text));
+  write(key, std::string_view(value));
 }
 
 void

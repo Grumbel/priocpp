@@ -66,9 +66,9 @@ SExprWriterImpl::indent() const
 void
 SExprWriterImpl::begin_mapping(std::string_view key)
 {
-  if (level != 0)
+  if (level != 0) {
     (*out) << std::endl;
-
+  }
   (*out) << indent() << "(" << key;
   ++level;
 }
@@ -89,9 +89,9 @@ SExprWriterImpl::end_mapping()
 void
 SExprWriterImpl::begin_keyvalue(std::string_view key)
 {
-  if (level != 0)
+  if (level != 0) {
     (*out) << std::endl;
-
+  }
   (*out) << indent() << "(" << key;
   ++level;
 }
@@ -146,9 +146,9 @@ SExprWriterImpl::write(std::string_view key, float value)
 }
 
 void
-SExprWriterImpl::write(std::string_view key, char const* text)
+SExprWriterImpl::write(std::string_view key, char const* value)
 {
-  write(key, std::string_view(text));
+  write(key, std::string_view(value));
 }
 
 void

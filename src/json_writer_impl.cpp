@@ -171,9 +171,9 @@ JsonWriterImpl::write(std::string_view key, float value)
 }
 
 void
-JsonWriterImpl::write(std::string_view key, char const* text)
+JsonWriterImpl::write(std::string_view key, char const* value)
 {
-  write(key, std::string_view(text));
+  write(key, std::string_view(value));
 }
 
 void

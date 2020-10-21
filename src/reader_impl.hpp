@@ -61,19 +61,19 @@ public:
 
   virtual std::vector<std::string> get_keys() const = 0;
 
-  virtual bool read(std::string_view key, bool&) const = 0;
-  virtual bool read(std::string_view key, int&) const = 0;
-  virtual bool read(std::string_view key, float&) const = 0;
-  virtual bool read(std::string_view key, std::string&) const = 0;
+  virtual bool read(std::string_view key, bool& value) const = 0;
+  virtual bool read(std::string_view key, int& value) const = 0;
+  virtual bool read(std::string_view key, float& value) const = 0;
+  virtual bool read(std::string_view key, std::string& value) const = 0;
 
-  virtual bool read(std::string_view key, std::vector<bool>& v) const = 0;
-  virtual bool read(std::string_view key, std::vector<int>& v) const = 0;
-  virtual bool read(std::string_view key, std::vector<float>& v) const = 0;
-  virtual bool read(std::string_view key, std::vector<std::string>& v) const = 0;
+  virtual bool read(std::string_view key, std::vector<bool>& values) const = 0;
+  virtual bool read(std::string_view key, std::vector<int>& values) const = 0;
+  virtual bool read(std::string_view key, std::vector<float>& values) const = 0;
+  virtual bool read(std::string_view key, std::vector<std::string>& values) const = 0;
 
-  virtual bool read(std::string_view key, ReaderMapping&) const = 0;
-  virtual bool read(std::string_view key, ReaderCollection&) const = 0;
-  virtual bool read(std::string_view key, ReaderObject&) const = 0;
+  virtual bool read(std::string_view key, ReaderMapping& mapping) const = 0;
+  virtual bool read(std::string_view key, ReaderCollection& collection) const = 0;
+  virtual bool read(std::string_view key, ReaderObject& object) const = 0;
 
   virtual void error(std::string_view key, std::string_view message) const = 0;
   virtual void missing_key_error(std::string_view key) const = 0;
