@@ -353,7 +353,7 @@ TEST_P(ReaderMappingTest, get_keys)
       "boolvalue", "intvalue", "floatvalue", "stringvalue",
       "boolvalues", "intvalues", "floatvalues", "stringvalues",
       "enumvalue", "customvalue", "submap",
-      "collection", "object", "vector", "vectors"});
+      "collection", "object", "vector"});
   ASSERT_EQ(expected, result);
 }
 
