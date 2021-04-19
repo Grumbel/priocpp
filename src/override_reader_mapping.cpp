@@ -51,50 +51,22 @@ public:
 
   bool read(std::string_view key, bool& v) const override
   {
-    if (m_overrides.read(key, v))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read(key, v);
-    }
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
   bool read(std::string_view key, int& v) const override
   {
-    if (m_overrides.read(key, v))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read(key, v);
-    }
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
   bool read(std::string_view key, float& v) const override
   {
-    if (m_overrides.read(key, v))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read(key, v);
-    }
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
-  bool read(std::string_view key, std::string& str) const override
+  bool read(std::string_view key, std::string& v) const override
   {
-    if (m_overrides.read(key, str))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read(key, str);
-    }
+    return m_overrides.read(key, v) || m_reader.read(key, v);
   }
 
   bool read(std::string_view key, std::vector<bool>& v) const override
@@ -141,26 +113,12 @@ public:
 
   bool read(std::string_view key, ReaderCollection& result) const override
   {
-    if (m_overrides.read(key, result))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read(key, result);
-    }
+    return m_overrides.read(key, result) || m_reader.read(key, result);
   }
 
   bool read(std::string_view key, ReaderObject& result) const override
   {
-    if (m_overrides.read(key, result))
-    {
-      return true;
-    }
-    else
-    {
-      return m_reader.read(key, result);
-    }
+    return m_overrides.read(key, result) || m_reader.read(key, result);
   }
 
   void error(std::string_view key, std::string_view message) const override
