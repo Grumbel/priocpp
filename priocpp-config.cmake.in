@@ -1,0 +1,13 @@
+get_filename_component(PRIOCPP_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+include(CMakeFindDependencyMacro)
+
+find_package(PkgConfig REQUIRED)
+pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
+
+
+if(NOT TARGET prio)
+  include("${PRIOCPP_CMAKE_DIR}/priocpp-targets.cmake")
+endif()
+
+# EOF #

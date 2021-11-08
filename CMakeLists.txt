@@ -17,7 +17,10 @@
 cmake_minimum_required(VERSION 3.6)
 project(prio)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/)
+set(TINYCMMC_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/modules/")
+find_package(tinycmmc CONFIG)
+message(STATUS "tinycmmc module path: ${TINYCMMC_MODULE_PATH}")
+list(APPEND CMAKE_MODULE_PATH ${TINYCMMC_MODULE_PATH})
 
 option(BUILD_TESTS "Build test cases" OFF)
 option(BUILD_EXTRA "Build extra stuff" OFF)
@@ -31,9 +34,13 @@ pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
 
 function(build_dependencies)
   set(BUILD_TESTS OFF)
+
+  find_package(sexp QUIET)
   if(NOT TARGET sexp)
     add_subdirectory(external/sexp-cpp/ EXCLUDE_FROM_ALL)
   endif()
+
+  find_package(logmich QUIET)
   if(NOT TARGET logmich)
     add_subdirectory(external/logmich/ EXCLUDE_FROM_ALL)
   endif()
@@ -51,13 +58,32 @@ set_target_properties(prio PROPERTIES
   CXX_STANDARD_REQUIRED ON
   CXX_EXTENSIONS OFF)
 target_compile_options(prio PRIVATE ${WARNINGS_CXX_FLAGS})
-target_include_directories(prio INTERFACE include/)
+target_include_directories(prio INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 target_include_directories(prio PRIVATE src/ include/prio/)
 set_target_properties(prio PROPERTIES PUBLIC_HEADER "${PRIO_HEADERS}")
 target_link_libraries(prio PUBLIC
   logmich
   sexp
   PkgConfig::JSONCPP)
+
+
+install(TARGETS prio
+  EXPORT priocpp-targets
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
+
+# CMake integration
+configure_file(priocpp-config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/priocpp-config.cmake" @ONLY)
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/priocpp-config.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/priocpp/")
+export(TARGETS prio
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/priocpp-targets.cmake")
+export(PACKAGE priocpp)
+install(EXPORT priocpp-targets
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/priocpp/")
 
 if(BUILD_TESTS)
   if(NOT TARGET GTest)
@@ -104,8 +130,5 @@ if(BUILD_EXTRA)
       COMMAND ${CMAKE_CURRENT_BINARY_DIR}/extra/priotool test/data/data.sexp)
   endif()
 endif()
-
-install(TARGETS prio
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
 
 # EOF #
