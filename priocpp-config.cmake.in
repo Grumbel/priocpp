@@ -5,6 +5,8 @@ include(CMakeFindDependencyMacro)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
 
+find_dependency(sexp QUIET)
+find_dependency(logmich QUIET)
 
 if(NOT TARGET prio)
   include("${PRIOCPP_CMAKE_DIR}/priocpp-targets.cmake")

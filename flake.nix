@@ -42,9 +42,10 @@
             ];
             buildInputs = [
               tinycmmc.defaultPackage.${system}
+            ];
+            propagatedBuildInputs = [
               logmich.defaultPackage.${system}
               sexpcpp.defaultPackage.${system}
-              pkgs.glm
               pkgs.jsoncpp
             ];
            };
