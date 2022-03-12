@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.6)
-project(prio)
+project(prio VERSION 0.0.0)
 
 set(TINYCMMC_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/modules/")
 find_package(tinycmmc CONFIG)
@@ -68,23 +68,6 @@ target_link_libraries(prio PUBLIC
   sexp
   PkgConfig::JSONCPP)
 
-
-install(TARGETS prio
-  EXPORT priocpp-targets
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
-
-# CMake integration
-configure_file(priocpp-config.cmake.in
-  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/priocpp-config.cmake" @ONLY)
-install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/priocpp-config.cmake"
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/priocpp/")
-export(TARGETS prio
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/priocpp-targets.cmake")
-export(PACKAGE priocpp)
-install(EXPORT priocpp-targets
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/priocpp/")
-
 if(BUILD_TESTS)
   if(NOT TARGET GTest)
     find_package(GTest REQUIRED)
@@ -130,5 +113,7 @@ if(BUILD_EXTRA)
       COMMAND ${CMAKE_CURRENT_BINARY_DIR}/extra/priotool test/data/data.sexp)
   endif()
 endif()
+
+include(ExportAndInstallLibrary)
 
 # EOF #
