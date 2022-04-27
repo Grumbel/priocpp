@@ -9,7 +9,7 @@ find_dependency(sexp QUIET)
 find_dependency(logmich QUIET)
 
 if(NOT TARGET prio)
-  include("${PRIOCPP_CMAKE_DIR}/priocpp-targets.cmake")
+  include("${PRIOCPP_CMAKE_DIR}/prio-targets.cmake")
 endif()
 
 # EOF #
