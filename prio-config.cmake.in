@@ -1,15 +1,15 @@
-get_filename_component(PRIOCPP_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+@PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
 
-find_package(PkgConfig REQUIRED)
+find_dependency(fmt)
+find_dependency(PkgConfig)
 pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
 
-find_dependency(sexp QUIET)
-find_dependency(logmich QUIET)
+find_dependency(sexp)
+find_dependency(logmich)
 
-if(NOT TARGET prio)
-  include("${PRIOCPP_CMAKE_DIR}/prio-targets.cmake")
-endif()
+include("${CMAKE_CURRENT_LIST_DIR}/prio-config-version.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/prio-targets.cmake")
 
 # EOF #

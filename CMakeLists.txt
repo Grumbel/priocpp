@@ -29,6 +29,7 @@ include(GNUInstallDirs)
 include(MaximumWarnings)
 include(ClangTidy)
 
+find_package(fmt REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
 
@@ -64,8 +65,9 @@ target_include_directories(prio INTERFACE
 target_include_directories(prio PRIVATE src/ include/prio/)
 set_target_properties(prio PROPERTIES PUBLIC_HEADER "${PRIO_HEADERS}")
 target_link_libraries(prio PUBLIC
-  logmich
-  sexp
+  logmich::logmich
+  sexp::sexp
+  fmt::fmt
   PkgConfig::JSONCPP)
 
 if(BUILD_TESTS)
