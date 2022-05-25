@@ -32,8 +32,6 @@
             src = nixpkgs.lib.cleanSource ./.;
             nativeBuildInputs = [
               pkgs.cmake
-              pkgs.ninja
-              pkgs.gcc
               pkgs.pkgconfig
             ];
             buildInputs = [
@@ -42,6 +40,8 @@
             propagatedBuildInputs = [
               logmich.defaultPackage.${system}
               sexpcpp.defaultPackage.${system}
+
+              pkgs.fmt
               pkgs.jsoncpp
             ];
            };

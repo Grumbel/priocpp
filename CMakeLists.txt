@@ -84,7 +84,7 @@ if(BUILD_TESTS)
   target_compile_options(test_prio PRIVATE ${WARNINGS_CXX_FLAGS})
   target_include_directories(test_prio PRIVATE src/)
   target_link_libraries(test_prio
-    prio
+    prio::prio
     GTest::GTest
     GTest::Main)
 
