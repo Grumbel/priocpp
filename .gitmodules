@@ -1,9 +1,9 @@
 [submodule "external/tinycmmc"]
 	path = external/tinycmmc
-	url = https://gitlab.com/grumbel/cmake-modules.git
+	url = https://github.com/grumbel/tinycmmc.git
 [submodule "external/logmich"]
 	path = external/logmich
-	url = https://gitlab.com/logmich/logmich.git
+	url = https://github.com/logmich/logmich.git
 [submodule "external/sexpcpp"]
 	path = external/sexpcpp
-	url = https://gitlab.com/lispparser/sexp-cpp.git
+	url = https://github.com/lispparser/sexp-cpp.git

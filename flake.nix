@@ -24,8 +24,8 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-      in rec {
-        packages = flake-utils.lib.flattenTree {
+      in {
+        packages = flake-utils.lib.flattenTree rec {
           priocpp = pkgs.stdenv.mkDerivation {
             pname = "priocpp";
             version = "0.0.0";
@@ -35,17 +35,18 @@
               pkgs.pkgconfig
             ];
             buildInputs = [
-              tinycmmc.defaultPackage.${system}
+              tinycmmc.packages.${system}.default
             ];
             propagatedBuildInputs = [
-              logmich.defaultPackage.${system}
-              sexpcpp.defaultPackage.${system}
+              logmich.packages.${system}.default
+              sexpcpp.packages.${system}.default
 
               pkgs.fmt
               pkgs.jsoncpp
             ];
-           };
+          };
+          default = priocpp;
         };
-        defaultPackage = packages.priocpp;
-      });
+      }
+    );
 }
