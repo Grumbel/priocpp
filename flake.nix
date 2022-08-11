@@ -21,31 +21,15 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, tinycmmc, logmich, sexpcpp }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in {
+    tinycmmc.lib.eachSystemWithPkgs (pkgs:
+      {
         packages = flake-utils.lib.flattenTree rec {
-          priocpp = pkgs.stdenv.mkDerivation {
-            pname = "priocpp";
-            version = "0.0.0";
-            src = nixpkgs.lib.cleanSource ./.;
-            nativeBuildInputs = [
-              pkgs.cmake
-              pkgs.pkgconfig
-            ];
-            buildInputs = [
-              tinycmmc.packages.${system}.default
-            ];
-            propagatedBuildInputs = [
-              logmich.packages.${system}.default
-              sexpcpp.packages.${system}.default
-
-              pkgs.fmt
-              pkgs.jsoncpp
-            ];
-          };
           default = priocpp;
+          priocpp = pkgs.callPackage ./priocpp.nix {
+            logmich = logmich.packages.${pkgs.system}.default;
+            tinycmmc = tinycmmc.packages.${pkgs.system}.default;
+            sexpcpp = sexpcpp.packages.${pkgs.system}.default;
+          };
         };
       }
     );
