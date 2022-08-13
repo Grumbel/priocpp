@@ -17,6 +17,7 @@
 #ifndef HEADER_PRIO_READER_DOCUMENT_HPP
 #define HEADER_PRIO_READER_DOCUMENT_HPP
 
+#include <filesystem>
 #include <memory>
 #include <optional>
 #include <string>
@@ -42,7 +43,7 @@ class ReaderDocument final
 {
 public:
   static ReaderDocument from_file(Format format,
-                                  const std::string& filename,
+                                  std::filesystem::path const& filename,
                                   ErrorHandler error_handler = ErrorHandler::THROW);
   static ReaderDocument from_string(Format format,
                                     std::string_view text,
@@ -53,7 +54,7 @@ public:
                                     ErrorHandler error_handler = ErrorHandler::THROW,
                                     std::optional<std::string> const& filename = {});
 
-  static ReaderDocument from_file(const std::string& filename,
+  static ReaderDocument from_file(std::filesystem::path const& filename,
                                   ErrorHandler error_handler = ErrorHandler::THROW);
   static ReaderDocument from_string(std::string_view text,
                                     ErrorHandler error_handler = ErrorHandler::THROW,

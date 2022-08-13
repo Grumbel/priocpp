@@ -46,13 +46,13 @@ ReaderDocument::from_string(Format format,
 
 ReaderDocument
 ReaderDocument::from_file(Format format,
-                          const std::string& filename, ErrorHandler error_handler)
+                          std::filesystem::path const& filename, ErrorHandler error_handler)
 {
   std::ifstream fin(filename);
   if (!fin) {
     throw ReaderError(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
   } else {
-    return from_stream(format, fin, error_handler, filename);
+    return from_stream(format, fin, error_handler, filename.string());
   }
 }
 
@@ -113,7 +113,7 @@ ReaderDocument::from_stream(std::istream& stream, ErrorHandler error_handler,
 }
 
 ReaderDocument
-ReaderDocument::from_file(const std::string& filename, ErrorHandler error_handler)
+ReaderDocument::from_file(std::filesystem::path const& filename, ErrorHandler error_handler)
 {
   return from_file(Format::AUTO, filename, error_handler);
 }
@@ -201,9 +201,9 @@ ReaderDocument::get_directory() const
   if (!m_impl) { return {}; }
 
   if (!m_impl->get_filename()) {
-    return std::filesystem::path("/");
+    return std::filesystem::path("/").string();
   } else {
-    return std::filesystem::path(*m_impl->get_filename()).parent_path();
+    return std::filesystem::path(*m_impl->get_filename()).parent_path().string();
   }
 }
 
