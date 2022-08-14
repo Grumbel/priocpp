@@ -17,17 +17,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(prio VERSION 0.0.0)
 
-set(TINYCMMC_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/modules/")
-find_package(tinycmmc CONFIG)
-message(STATUS "tinycmmc module path: ${TINYCMMC_MODULE_PATH}")
-list(APPEND CMAKE_MODULE_PATH ${TINYCMMC_MODULE_PATH})
-
-option(BUILD_TESTS "Build test cases" OFF)
-option(BUILD_EXTRA "Build extra stuff" OFF)
-
-include(GNUInstallDirs)
-include(MaximumWarnings)
-include(ClangTidy)
+include(mk/cmake/TinyCMMC.cmake)
 
 find_package(fmt REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -116,6 +106,6 @@ if(BUILD_EXTRA)
   endif()
 endif()
 
-include(ExportAndInstallLibrary)
+tinycmmc_export_and_install_library(prio)
 
 # EOF #
