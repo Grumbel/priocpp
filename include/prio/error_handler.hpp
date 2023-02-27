@@ -17,12 +17,16 @@
 #ifndef HEADER_PRIO_ERROR_HANDLER_HPP
 #define HEADER_PRIO_ERROR_HANDLER_HPP
 
+namespace prio {
+
 enum class ErrorHandler
 {
   IGNORE,
   LOG,
   THROW
 };
+
+} // namespace prio
 
 #endif
 
