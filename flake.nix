@@ -23,7 +23,7 @@
   outputs = { self, nixpkgs, flake-utils, tinycmmc, logmich, sexpcpp }:
     tinycmmc.lib.eachSystemWithPkgs (pkgs:
       {
-        packages = flake-utils.lib.flattenTree rec {
+        packages = rec {
           default = priocpp;
           priocpp = pkgs.callPackage ./priocpp.nix {
             logmich = logmich.packages.${pkgs.system}.default;
