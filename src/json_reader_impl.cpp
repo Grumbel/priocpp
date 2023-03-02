@@ -34,7 +34,8 @@ JsonReaderDocumentImpl::JsonReaderDocumentImpl(Json::Value value, ErrorHandler e
                                                std::optional<std::string> filename) :
   m_value(std::move(value)),
   m_error_handler(error_handler),
-  m_filename(std::move(filename))
+  m_filename(std::move(filename)),
+  m_parent(nullptr)
 {
 }
 

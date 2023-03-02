@@ -25,6 +25,7 @@
 namespace prio {
 
 class ReaderCollection;
+class ReaderDocument;
 class ReaderMapping;
 class ReaderObject;
 
@@ -35,6 +36,8 @@ public:
 
   virtual ReaderObject get_root() const = 0;
   virtual std::optional<std::string> get_filename() const = 0;
+  virtual void set_parent(ReaderDocument const* parent) = 0;
+  virtual ReaderDocument const& get_parent() const = 0;
 };
 
 class ReaderObjectImpl
@@ -44,6 +47,7 @@ public:
 
   virtual std::string get_name() const = 0;
   virtual ReaderMapping get_mapping() const = 0;
+  virtual ReaderDocumentImpl const& get_document() const = 0;
 };
 
 class ReaderCollectionImpl
@@ -52,6 +56,7 @@ public:
   virtual ~ReaderCollectionImpl() {}
 
   virtual std::vector<ReaderObject> get_objects() const = 0;
+  virtual ReaderDocumentImpl const& get_document() const = 0;
 };
 
 class ReaderMappingImpl
@@ -77,6 +82,8 @@ public:
 
   virtual void error(std::string_view key, std::string_view message) const = 0;
   virtual void missing_key_error(std::string_view key) const = 0;
+
+  virtual ReaderDocumentImpl const& get_document() const = 0;
 };
 
 } // namespace prio

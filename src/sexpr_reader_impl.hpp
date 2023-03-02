@@ -17,6 +17,7 @@
 #ifndef HEADER_PRIO_SEXPR_READER_HPP
 #define HEADER_PRIO_SEXPR_READER_HPP
 
+#include <assert.h>
 #include <sexp/value.hpp>
 
 #include "error_handler.hpp"
@@ -32,6 +33,8 @@ public:
 
   ReaderObject get_root() const override;
   std::optional<std::string> get_filename() const override { return m_filename; }
+  void set_parent(ReaderDocument const* parent) override { m_parent = parent; }
+  ReaderDocument const& get_parent() const { assert(m_parent != nullptr); return *m_parent; }
 
   void error(sexp::Value const& sx, std::string_view message) const;
   void error(ErrorHandler error_handler, sexp::Value const& sx, std::string_view message) const;
@@ -40,6 +43,7 @@ private:
   sexp::Value m_sx;
   ErrorHandler m_error_handler;
   std::optional<std::string> m_filename;
+  ReaderDocument const* m_parent;
 };
 
 class SExprReaderObjectImpl final : public ReaderObjectImpl
@@ -48,6 +52,7 @@ public:
   SExprReaderObjectImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& sx);
   ~SExprReaderObjectImpl() override;
 
+  SExprReaderDocumentImpl const& get_document() const override { return m_doc; }
   std::string get_name() const override;
   ReaderMapping get_mapping() const override;
 
@@ -62,6 +67,7 @@ public:
   SExprReaderCollectionImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& m_sx);
   ~SExprReaderCollectionImpl() override;
 
+  SExprReaderDocumentImpl const& get_document() const override { return m_doc; }
   std::vector<ReaderObject> get_objects() const override;
 
 private:
@@ -75,6 +81,7 @@ public:
   SExprReaderMappingImpl(SExprReaderDocumentImpl const& doc, sexp::Value const& m_sx);
   ~SExprReaderMappingImpl() override;
 
+  SExprReaderDocumentImpl const& get_document() const override { return m_doc; }
   std::vector<std::string> get_keys() const override;
 
   bool read(std::string_view key, bool& value) const override;

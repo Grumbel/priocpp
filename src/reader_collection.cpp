@@ -40,6 +40,12 @@ ReaderCollection::~ReaderCollection()
 ReaderCollection&
 ReaderCollection::operator=(ReaderCollection&&) noexcept = default;
 
+ReaderDocument const&
+ReaderCollection::get_document() const
+{
+  return m_impl->get_document().get_parent();
+}
+
 std::vector<ReaderObject>
 ReaderCollection::get_objects() const
 {

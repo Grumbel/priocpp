@@ -21,6 +21,7 @@
 
 namespace prio {
 
+class ReaderDocument;
 class ReaderObjectImpl;
 class ReaderMapping;
 
@@ -31,6 +32,8 @@ public:
   ReaderObject(ReaderObject&&) noexcept;
   ReaderObject(std::unique_ptr<ReaderObjectImpl> impl);
   ~ReaderObject();
+
+  ReaderDocument const& get_document() const;
 
   ReaderObject& operator=(ReaderObject&&) noexcept;
 

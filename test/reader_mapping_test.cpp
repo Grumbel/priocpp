@@ -29,13 +29,15 @@ class ReaderMappingTest : public ::testing::TestWithParam<std::string>
 {
 public:
   ReaderMappingTest() :
-    doc(ReaderDocument::from_file("test/data/data" + GetParam(), ErrorHandler::IGNORE)),
+    filename("test/data/data" + GetParam()),
+    doc(ReaderDocument::from_file(filename, ErrorHandler::IGNORE)),
     map(doc.get_root().get_mapping()),
     doc_pedantic(ReaderDocument::from_file("test/data/data" + GetParam(), ErrorHandler::THROW)),
     map_pedantic(doc_pedantic.get_root().get_mapping())
   {}
 
 protected:
+  std::string filename;
   ReaderDocument const doc;
   ReaderMapping const map;
 
@@ -48,6 +50,11 @@ TEST_P(ReaderMappingTest, operator_bool)
   ASSERT_TRUE(map);
   ASSERT_TRUE(map_pedantic);
   ASSERT_FALSE(ReaderMapping());
+}
+
+TEST_P(ReaderMappingTest, document)
+{
+  EXPECT_EQ(map.get_document().get_filename(), filename);
 }
 
 TEST_P(ReaderMappingTest, read_bool)

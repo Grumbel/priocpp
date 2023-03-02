@@ -41,6 +41,12 @@ ReaderMapping::~ReaderMapping()
 ReaderMapping&
 ReaderMapping::operator=(ReaderMapping&&) noexcept = default;
 
+ReaderDocument const&
+ReaderMapping::get_document() const
+{
+  return m_impl->get_document().get_parent();
+}
+
 bool
 ReaderMapping::read(std::string_view key, bool& value) const
 {

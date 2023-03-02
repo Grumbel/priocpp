@@ -17,6 +17,7 @@
 #ifndef HEADER_PRIO_READER_DOCUMENT_HPP
 #define HEADER_PRIO_READER_DOCUMENT_HPP
 
+#include <assert.h>
 #include <filesystem>
 #include <memory>
 #include <optional>
@@ -88,6 +89,8 @@ public:
   std::string get_directory() const;
 
   explicit operator bool() const { return static_cast<bool>(m_impl); }
+
+  ReaderDocumentImpl const& get_impl() const { assert(m_impl != nullptr); return *m_impl; }
 
 private:
   std::unique_ptr<ReaderDocumentImpl> m_impl;

@@ -40,6 +40,12 @@ ReaderObject::~ReaderObject()
 ReaderObject&
 ReaderObject::operator=(ReaderObject&&) noexcept = default;
 
+ReaderDocument const&
+ReaderObject::get_document() const
+{
+  return m_impl->get_document().get_parent();
+}
+
 std::string
 ReaderObject::get_name() const
 {

@@ -23,6 +23,7 @@
 namespace prio {
 
 class ReaderCollectionImpl;
+class ReaderDocument;
 class ReaderObject;
 
 class ReaderCollection final
@@ -33,6 +34,7 @@ public:
   ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl);
   ~ReaderCollection();
 
+  ReaderDocument const& get_document() const;
   ReaderCollection& operator=(ReaderCollection&&) noexcept;
 
   std::vector<ReaderObject> get_objects() const;

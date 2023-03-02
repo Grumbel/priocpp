@@ -19,6 +19,7 @@
 
 #include "reader_impl.hpp"
 
+#include <assert.h>
 #include <json/value.h>
 
 #include "error_handler.hpp"
@@ -32,6 +33,8 @@ public:
 
   ReaderObject get_root() const override;
   std::optional<std::string> get_filename() const override { return m_filename; }
+  void set_parent(ReaderDocument const* parent) override { m_parent = parent; }
+  ReaderDocument const& get_parent() const { assert(m_parent != nullptr); return *m_parent; }
 
   void error(Json::Value const& json, std::string_view message) const;
   void error(ErrorHandler error_handler, Json::Value const& json, std::string_view message) const;
@@ -40,6 +43,7 @@ private:
   Json::Value m_value;
   ErrorHandler m_error_handler;
   std::optional<std::string> m_filename;
+  ReaderDocument const* m_parent;
 };
 
 class JsonReaderObjectImpl final : public ReaderObjectImpl
@@ -48,6 +52,7 @@ public:
   JsonReaderObjectImpl(JsonReaderDocumentImpl const& doc, Json::Value const& json);
   ~JsonReaderObjectImpl() override;
 
+  JsonReaderDocumentImpl const& get_document() const override { return m_doc; }
   std::string get_name() const override;
   ReaderMapping get_mapping() const override;
 
@@ -62,6 +67,7 @@ public:
   JsonReaderCollectionImpl(JsonReaderDocumentImpl const& doc, Json::Value const& json);
   ~JsonReaderCollectionImpl() override;
 
+  JsonReaderDocumentImpl const& get_document() const override { return m_doc; }
   std::vector<ReaderObject> get_objects() const override;
 
 private:
@@ -75,6 +81,7 @@ public:
   JsonReaderMappingImpl(JsonReaderDocumentImpl const& doc, Json::Value const& json);
   ~JsonReaderMappingImpl() override;
 
+  JsonReaderDocumentImpl const& get_document() const override { return m_doc; }
   std::vector<std::string> get_keys() const override;
 
   bool read(std::string_view key, bool& value) const override;

@@ -148,9 +148,14 @@ ReaderDocument:: ReaderDocument() :
 ReaderDocument::ReaderDocument(std::unique_ptr<ReaderDocumentImpl> impl) :
   m_impl(std::move(impl))
 {
+  m_impl->set_parent(this);
 }
 
-ReaderDocument::ReaderDocument(ReaderDocument&&) noexcept = default;
+ReaderDocument::ReaderDocument(ReaderDocument&& other) noexcept :
+  m_impl(std::move(other.m_impl))
+{
+  m_impl->set_parent(this);
+}
 
 ReaderDocument::~ReaderDocument()
 {

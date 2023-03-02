@@ -24,6 +24,7 @@
 namespace prio {
 
 class ReaderCollection;
+class ReaderDocument;
 class ReaderMapping;
 class ReaderMappingImpl;
 class ReaderObject;
@@ -48,6 +49,7 @@ public:
 
   ReaderMapping& operator=(ReaderMapping&&) noexcept;
 
+  ReaderDocument const& get_document() const;
   std::vector<std::string> get_keys() const;
 
   // regular readers

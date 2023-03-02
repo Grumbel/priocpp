@@ -36,7 +36,8 @@ SExprReaderDocumentImpl::SExprReaderDocumentImpl(sexp::Value sx, ErrorHandler er
                                                  std::optional<std::string> filename) :
   m_sx(std::move(sx)),
   m_error_handler(error_handler),
-  m_filename(std::move(filename))
+  m_filename(std::move(filename)),
+  m_parent(nullptr)
 {
 }
 

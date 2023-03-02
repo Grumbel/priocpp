@@ -18,6 +18,7 @@
 
 #include <set>
 
+#include "reader_document.hpp"
 #include "reader_mapping.hpp"
 #include "reader_impl.hpp"
 
@@ -35,6 +36,11 @@ public:
     m_reader(reader),
     m_overrides(overrides)
   {
+  }
+
+  ReaderDocumentImpl const& get_document() const override
+  {
+    return m_reader.get_document().get_impl();
   }
 
   std::vector<std::string> get_keys() const override
