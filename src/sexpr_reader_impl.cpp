@@ -292,26 +292,28 @@ SExprReaderMappingImpl::read(std::string_view key, ReaderMapping& value) const
 
   assert(cur->is_array());
 
+#ifdef FIXME_WRONG_PLACE_TO_VALIDATE
   std::set<std::string> keys;
   for (size_t i = 1; i < cur->as_array().size(); ++i) {
-    sexp::Value const& keyvalue = cur->as_array()[i];
-    if (!keyvalue.is_array() || keyvalue.as_array().empty()) {
-      m_doc.error(keyvalue, "malformed key/value pair");
+    sexp::Value const& keyvalue_pair = cur->as_array()[i];
+    if (!keyvalue_pair.is_array() || keyvalue_pair.as_array().empty()) {
+      m_doc.error(keyvalue_pair, "malformed key/value pair");
       return false;
     }
 
-    if (!keyvalue.as_array()[0].is_symbol()) {
-      m_doc.error(keyvalue.as_array()[0], "expected symbol for key");
+    if (!keyvalue_pair.as_array()[0].is_symbol()) {
+      m_doc.error(keyvalue_pair.as_array()[0], "expected symbol for key");
       return false;
     }
 
-    if (keys.find(keyvalue.as_array()[0].as_string()) != keys.end()) {
+    if (keys.find(keyvalue_pair.as_array()[0].as_string()) != keys.end()) {
       m_doc.error(*cur, "duplicate key in mapping");
       return false;
     }
 
-    keys.insert(keyvalue.as_array()[0].as_string());
+    keys.insert(keyvalue_pair.as_array()[0].as_string());
   }
+#endif
 
   value = ReaderMapping(std::make_unique<SExprReaderMappingImpl>(m_doc, *cur));
   return true;
