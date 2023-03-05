@@ -46,6 +46,7 @@ public:
   ~ReaderMapping();
 
   explicit operator bool() const { return static_cast<bool>(m_impl); }
+  ReaderMappingImpl const& get_impl() const { return *m_impl; }
 
   ReaderMapping& operator=(ReaderMapping&&) noexcept;
 

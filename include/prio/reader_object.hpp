@@ -33,14 +33,15 @@ public:
   ReaderObject(std::unique_ptr<ReaderObjectImpl> impl);
   ~ReaderObject();
 
+  explicit operator bool() const { return static_cast<bool>(m_impl); }
+  ReaderObjectImpl const& get_impl() const { return *m_impl; }
+
   ReaderDocument const& get_document() const;
 
   ReaderObject& operator=(ReaderObject&&) noexcept;
 
   std::string get_name() const;
   ReaderMapping get_mapping() const;
-
-  explicit operator bool() const { return static_cast<bool>(m_impl); }
 
 private:
   std::unique_ptr<ReaderObjectImpl> m_impl;

@@ -34,12 +34,13 @@ public:
   ReaderCollection(std::unique_ptr<ReaderCollectionImpl> impl);
   ~ReaderCollection();
 
+  explicit operator bool() const { return static_cast<bool>(m_impl); }
+  ReaderCollectionImpl const& get_impl() const { return *m_impl; }
+
   ReaderDocument const& get_document() const;
   ReaderCollection& operator=(ReaderCollection&&) noexcept;
 
   std::vector<ReaderObject> get_objects() const;
-
-  explicit operator bool() const { return static_cast<bool>(m_impl); }
 
 private:
   std::unique_ptr<ReaderCollectionImpl> m_impl;
