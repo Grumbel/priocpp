@@ -39,6 +39,8 @@ public:
   void error(sexp::Value const& sx, std::string_view message) const;
   void error(ErrorHandler error_handler, sexp::Value const& sx, std::string_view message) const;
 
+  sexp::Value const& get_sx() const { return m_sx; }
+
 private:
   sexp::Value m_sx;
   ErrorHandler m_error_handler;
@@ -56,6 +58,8 @@ public:
   std::string get_name() const override;
   ReaderMapping get_mapping() const override;
 
+  sexp::Value const& get_sx() const { return m_sx; }
+
 private:
   SExprReaderDocumentImpl const& m_doc;
   sexp::Value const& m_sx;
@@ -69,6 +73,8 @@ public:
 
   SExprReaderDocumentImpl const& get_document() const override { return m_doc; }
   std::vector<ReaderObject> get_objects() const override;
+
+  sexp::Value const& get_sx() const { return m_sx; }
 
 private:
   SExprReaderDocumentImpl const& m_doc;
@@ -100,6 +106,8 @@ public:
 
   void error(std::string_view key, std::string_view message) const override;
   void missing_key_error(std::string_view key) const override;
+
+  sexp::Value const& get_sx() const { return m_sx; }
 
 private:
   sexp::Value const* get_subsection_item(std::string_view key) const;
