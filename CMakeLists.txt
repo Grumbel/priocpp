@@ -167,6 +167,9 @@ if(BUILD_EXTRA)
     set_target_properties(${EXTRA_EXE} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "extra/")
     target_compile_options(${EXTRA_EXE} PRIVATE ${WARNINGS_CXX_FLAGS})
     target_link_libraries(${EXTRA_EXE} prio)
+
+    install(TARGETS ${EXTRA_EXE}
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
   endforeach(EXTRA_SOURCE)
 
   if(BUILD_TESTS)
