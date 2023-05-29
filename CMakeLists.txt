@@ -106,10 +106,12 @@ target_link_libraries(prio PUBLIC
 
 if(USE_SEXPCPP)
   target_link_libraries(prio PUBLIC sexp::sexp)
+  target_compile_definitions(prio PUBLIC "-DUSE_SEXPCPP=1")
 endif()
 
 if(USE_JSONCPP)
   target_link_libraries(prio PUBLIC PkgConfig::JSONCPP)
+  target_compile_definitions(prio PUBLIC "-DUSE_JSONCPP=1")
 endif()
 
 if(BUILD_TESTS)
@@ -117,7 +119,23 @@ if(BUILD_TESTS)
     find_package(GTest REQUIRED)
   endif()
 
-  file(GLOB TEST_PRIO_SOURCES test/*_test.cpp)
+  set(TEST_PRIO_SOURCES
+    test/reader_test.cpp
+    test/writer_test.cpp
+    test/reader_document_test.cpp
+    test/reader_mapping_test.cpp)
+
+  if(USE_JSONCPP)
+    list(APPEND TEST_PRIO_SOURCES
+      test/jsonpretty_writer_impl_test.cpp
+      test/json_writer_impl_test.cpp)
+  endif()
+
+  if(USE_SEXPCPP)
+    list(APPEND TEST_PRIO_SOURCES
+      test/sexpr_writer_impl_test.cpp)
+  endif()
+
   add_executable(test_prio ${TEST_PRIO_SOURCES})
   set_target_properties(test_prio PROPERTIES
     CXX_STANDARD 20

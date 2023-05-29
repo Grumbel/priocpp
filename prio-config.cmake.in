@@ -4,10 +4,16 @@ include(CMakeFindDependencyMacro)
 
 find_dependency(fmt)
 find_dependency(PkgConfig)
-pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
 
-find_dependency(sexp)
 find_dependency(logmich)
+
+if(USE_JSONCPP)
+  pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
+endif()
+
+if(USE_SEXPCPP)
+  find_dependency(sexp)
+endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/prio-config-version.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/prio-targets.cmake")

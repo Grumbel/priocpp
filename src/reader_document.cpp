@@ -21,17 +21,23 @@
 #include <sstream>
 #include <utility>
 
-#include <json/reader.h>
 #include <logmich/log.hpp>
-#include <sexp/parser.hpp>
 
-#include "json_reader_impl.hpp"
+#ifdef USE_JSONCPP
+#  include <json/reader.h>
+#  include "json_reader_impl.hpp"
+#endif
+
+#ifdef USE_SEXPCPP
+#  include <sexp/parser.hpp>
+#  include "sexpr_reader_impl.hpp"
+#endif
+
 #include "reader_collection.hpp"
 #include "reader_error.hpp"
 #include "reader_impl.hpp"
 #include "reader_mapping.hpp"
 #include "reader_object.hpp"
-#include "sexpr_reader_impl.hpp"
 
 namespace prio {
 
@@ -73,6 +79,7 @@ ReaderDocument::from_stream(Format format,
       }
     }
 
+#ifdef USE_JSONCPP
     case Format::FASTJSON:
     case Format::JSON: {
       Json::CharReaderBuilder builder;
@@ -83,7 +90,9 @@ ReaderDocument::from_stream(Format format,
       }
       return ReaderDocument(std::make_unique<JsonReaderDocumentImpl>(std::move(root), error_handler, filename));
     }
+#endif
 
+#ifdef USE_SEXPCPP
     case Format::SEXPR: {
       try {
         auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);
@@ -92,6 +101,7 @@ ReaderDocument::from_stream(Format format,
         std::throw_with_nested(ReaderError(fmt::format("{}: ReaderDocument::from_stream() failed", filename ?  *filename : "<unknown>")));
       }
     }
+#endif
 
     default:
       throw std::invalid_argument("unknown format");

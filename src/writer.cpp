@@ -24,9 +24,14 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "sexpr_writer_impl.hpp"
-#include "json_writer_impl.hpp"
-#include "jsonpretty_writer_impl.hpp"
+#ifdef USE_JSONCPP
+#  include "json_writer_impl.hpp"
+#  include "jsonpretty_writer_impl.hpp"
+#endif
+
+#ifdef USE_SEXPCPP
+#  include "sexpr_writer_impl.hpp"
+#endif
 
 namespace prio {
 
@@ -55,15 +60,22 @@ Writer
 Writer::from_stream(Format format, std::ostream& out)
 {
   switch (format) {
+#ifdef USE_JSONCPP
+#ifndef USE_SEXPCPP
+    case Format::AUTO:
+#endif
     case Format::FASTJSON:
       return Writer(std::make_unique<JsonWriterImpl>(out));
 
     case Format::JSON:
       return Writer(std::make_unique<JsonPrettyWriterImpl>(out));
+#endif
 
+#ifdef USE_SEXPCPP
     case Format::AUTO:
     case Format::SEXPR:
       return Writer(std::make_unique<SExprWriterImpl>(out));
+#endif
 
     default:
       throw std::invalid_argument("invalid format");
@@ -88,11 +100,21 @@ Writer::from_stream(std::unique_ptr<std::ostream> out)
   return from_stream(Format::AUTO, std::move(out));
 }
 
+#ifdef USE_SEXPCPP
 Writer::Writer(std::ostream& out) :
   m_impl(std::make_unique<SExprWriterImpl>(out)),
   m_owned()
 {
 }
+#elif USE_JSONCPP
+Writer::Writer(std::ostream& out) :
+  m_impl(std::make_unique<JsonPrettyWriterImpl>(out)),
+  m_owned()
+{
+}
+#else
+#  error "No syntax library available"
+#endif
 
 Writer::Writer(std::unique_ptr<WriterImpl> impl) :
   m_impl(std::move(impl)),

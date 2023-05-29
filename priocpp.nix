@@ -11,6 +11,9 @@
 , logmich
 , sexpcpp
 , tinycmmc
+
+, withSexpcpp ? true
+, withJsoncpp ? true
 }:
 
 stdenv.mkDerivation {
@@ -22,7 +25,9 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DBUILD_EXTRA=ON"
     "-DBUILD_TESTS=ON"
-  ];
+  ]
+  ++ [(if withJsoncpp then "-DUSE_JSONCPP=ON" else "-DUSE_JSONCPP=OFF")]
+  ++ [(if withSexpcpp then "-DUSE_SEXPCPP=ON" else "-DUSE_SEXPCPP=OFF")];
 
   postFixup = ""
   + (lib.optionalString stdenv.targetPlatform.isWindows ''
@@ -31,9 +36,10 @@ stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/issues/38451
     mkdir -p $out/bin/
 
-    ln -sfv ${jsoncpp}/bin/*.dll $out/bin/
     ln -sfv ${fmt_8}/bin/*.dll $out/bin/
-  '');
+  ''
+  + (lib.optionalString withJsoncpp
+    ''ln -sfv ${jsoncpp}/bin/*.dll $out/bin/''));
 
   nativeBuildInputs = [
     cmake
@@ -43,10 +49,10 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [
     fmt_8
     gtest
-    jsoncpp
 
     logmich
-    sexpcpp
     tinycmmc
-  ];
+  ]
+  ++ (lib.optional withJsoncpp jsoncpp)
+  ++ (lib.optional withSexpcpp sexpcpp);
 }

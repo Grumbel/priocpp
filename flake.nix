@@ -30,6 +30,24 @@
             tinycmmc = tinycmmc.packages.${pkgs.system}.default;
             sexpcpp = sexpcpp.packages.${pkgs.system}.default;
           };
+
+          priocpp-sexp = pkgs.callPackage ./priocpp.nix {
+            logmich = logmich.packages.${pkgs.system}.default;
+            tinycmmc = tinycmmc.packages.${pkgs.system}.default;
+            sexpcpp = sexpcpp.packages.${pkgs.system}.default;
+
+            withJsoncpp = false;
+            withSexpcpp = true;
+          };
+
+          priocpp-json = pkgs.callPackage ./priocpp.nix {
+            logmich = logmich.packages.${pkgs.system}.default;
+            tinycmmc = tinycmmc.packages.${pkgs.system}.default;
+            sexpcpp = null;
+
+            withJsoncpp = true;
+            withSexpcpp = false;
+          };
         };
       }
     );
