@@ -2,7 +2,7 @@
   description = "A S-Expression Parser for C++";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
 
     tinycmmc.url = "github:grumbel/tinycmmc";
@@ -11,7 +11,6 @@
 
     logmich.url = "github:logmich/logmich";
     logmich.inputs.nixpkgs.follows = "nixpkgs";
-    logmich.inputs.flake-utils.follows = "flake-utils";
     logmich.inputs.tinycmmc.follows = "tinycmmc";
 
     sexpcpp.url = "github:lispparser/sexp-cpp";
@@ -25,8 +24,8 @@
       {
         packages = rec {
           default = priocpp;
+
           priocpp = pkgs.callPackage ./priocpp.nix {
-            stdenv = pkgs.gcc12Stdenv;
             logmich = logmich.packages.${pkgs.system}.default;
             tinycmmc = tinycmmc.packages.${pkgs.system}.default;
             sexpcpp = sexpcpp.packages.${pkgs.system}.default;
