@@ -15,33 +15,79 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.6)
-project(prio VERSION 0.0.0)
+project(prio)
 
 include(mk/cmake/TinyCMMC.cmake)
 
+option(USE_JSONCPP "Enable support for jsoncpp" ON)
+option(USE_SEXPCPP "Enable support for sexp-cpp" ON)
+
 find_package(fmt REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
+
+if(USE_JSONCPP)
+  pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
+endif()
 
 function(build_dependencies)
   set(BUILD_TESTS OFF)
 
-  find_package(sexp QUIET)
-  if(NOT TARGET sexp::sexp)
-    add_subdirectory(external/sexp-cpp/ EXCLUDE_FROM_ALL)
+  if(USE_SEXPCPP)
+    find_package(sexp QUIET)
+    if(NOT TARGET sexp::sexp)
+      add_subdirectory(external/sexp-cpp/ EXCLUDE_FROM_ALL)
+    endif()
   endif()
 
-  find_package(logmich QUIET)
+find_package(logmich QUIET)
   if(NOT TARGET logmich::logmich)
     add_subdirectory(external/logmich/ EXCLUDE_FROM_ALL)
   endif()
 endfunction()
 build_dependencies()
 
-file(GLOB PRIO_HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-  include/prio/*.hpp)
-file(GLOB PRIO_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-  src/*.cpp)
+set(PRIO_HEADERS
+  include/prio/error_handler.hpp
+  include/prio/format.hpp
+  include/prio/fwd.hpp
+  include/prio/override_reader_mapping.hpp
+  include/prio/prio.hpp
+  include/prio/reader_collection.hpp
+  include/prio/reader_document.hpp
+  include/prio/reader_error.hpp
+  include/prio/reader.hpp
+  include/prio/reader_impl.hpp
+  include/prio/reader_mapping.hpp
+  include/prio/reader_object.hpp
+  include/prio/writer.hpp)
+
+set(PRIO_SOURCES
+  src/override_reader_mapping.cpp
+  src/reader_collection.cpp
+  src/reader_document.cpp
+  src/reader_error.cpp
+  src/reader_mapping.cpp
+  src/reader_object.cpp
+  src/writer.cpp)
+
+if(USE_JSONCPP)
+  list(APPEND PRIO_HEADERS
+    include/prio/json_reader_impl.hpp)
+
+  list(APPEND PRIO_SOURCES
+    src/jsonpretty_writer_impl.cpp
+    src/json_reader_impl.cpp
+    src/json_writer_impl.cpp)
+endif()
+
+if(USE_SEXPCPP)
+  list(APPEND PRIO_HEADERS
+    include/prio/sexpr_reader_impl.hpp)
+
+  list(APPEND PRIO_SOURCES
+    src/sexpr_reader_impl.cpp
+    src/sexpr_writer_impl.cpp)
+endif()
 
 add_library(prio STATIC ${PRIO_SOURCES})
 set_target_properties(prio PROPERTIES
@@ -56,9 +102,15 @@ target_include_directories(prio PRIVATE src/ include/prio/)
 set_target_properties(prio PROPERTIES PUBLIC_HEADER "${PRIO_HEADERS}")
 target_link_libraries(prio PUBLIC
   logmich::logmich
-  sexp::sexp
-  fmt::fmt
-  PkgConfig::JSONCPP)
+  fmt::fmt)
+
+if(USE_SEXPCPP)
+  target_link_libraries(prio PUBLIC sexp::sexp)
+endif()
+
+if(USE_JSONCPP)
+  target_link_libraries(prio PUBLIC PkgConfig::JSONCPP)
+endif()
 
 if(BUILD_TESTS)
   if(NOT TARGET GTest)
