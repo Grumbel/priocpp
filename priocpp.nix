@@ -26,8 +26,8 @@ stdenv.mkDerivation {
     "-DBUILD_EXTRA=ON"
     "-DBUILD_TESTS=ON"
   ]
-  ++ [(if withJsoncpp then "-DUSE_JSONCPP=ON" else "-DUSE_JSONCPP=OFF")]
-  ++ [(if withSexpcpp then "-DUSE_SEXPCPP=ON" else "-DUSE_SEXPCPP=OFF")];
+  ++ [(if withJsoncpp then "-DPRIO_USE_JSONCPP=ON" else "-DPRIO_USE_JSONCPP=OFF")]
+  ++ [(if withSexpcpp then "-DPRIO_USE_SEXPCPP=ON" else "-DPRIO_USE_SEXPCPP=OFF")];
 
   postFixup = ""
   + (lib.optionalString stdenv.targetPlatform.isWindows ''

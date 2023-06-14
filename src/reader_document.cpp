@@ -23,12 +23,12 @@
 
 #include <logmich/log.hpp>
 
-#ifdef USE_JSONCPP
+#ifdef PRIO_USE_JSONCPP
 #  include <json/reader.h>
 #  include "json_reader_impl.hpp"
 #endif
 
-#ifdef USE_SEXPCPP
+#ifdef PRIO_USE_SEXPCPP
 #  include <sexp/parser.hpp>
 #  include "sexpr_reader_impl.hpp"
 #endif
@@ -79,7 +79,7 @@ ReaderDocument::from_stream(Format format,
       }
     }
 
-#ifdef USE_JSONCPP
+#ifdef PRIO_USE_JSONCPP
     case Format::FASTJSON:
     case Format::JSON: {
       Json::CharReaderBuilder builder;
@@ -92,7 +92,7 @@ ReaderDocument::from_stream(Format format,
     }
 #endif
 
-#ifdef USE_SEXPCPP
+#ifdef PRIO_USE_SEXPCPP
     case Format::SEXPR: {
       try {
         auto sx = sexp::Parser::from_stream(stream, sexp::Parser::USE_ARRAYS);

@@ -19,20 +19,20 @@ project(prio)
 
 include(mk/cmake/TinyCMMC.cmake)
 
-option(USE_JSONCPP "Enable support for jsoncpp" ON)
-option(USE_SEXPCPP "Enable support for sexp-cpp" ON)
+option(PRIO_USE_JSONCPP "Enable support for jsoncpp" ON)
+option(PRIO_USE_SEXPCPP "Enable support for sexp-cpp" ON)
 
 find_package(fmt REQUIRED)
 find_package(PkgConfig REQUIRED)
 
-if(USE_JSONCPP)
+if(PRIO_USE_JSONCPP)
   pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
 endif()
 
 function(build_dependencies)
   set(BUILD_TESTS OFF)
 
-  if(USE_SEXPCPP)
+  if(PRIO_USE_SEXPCPP)
     find_package(sexp QUIET)
     if(NOT TARGET sexp::sexp)
       add_subdirectory(external/sexp-cpp/ EXCLUDE_FROM_ALL)
@@ -70,7 +70,7 @@ set(PRIO_SOURCES
   src/reader_object.cpp
   src/writer.cpp)
 
-if(USE_JSONCPP)
+if(PRIO_USE_JSONCPP)
   list(APPEND PRIO_HEADERS
     include/prio/json_reader_impl.hpp)
 
@@ -80,7 +80,7 @@ if(USE_JSONCPP)
     src/json_writer_impl.cpp)
 endif()
 
-if(USE_SEXPCPP)
+if(PRIO_USE_SEXPCPP)
   list(APPEND PRIO_HEADERS
     include/prio/sexpr_reader_impl.hpp)
 
@@ -104,14 +104,14 @@ target_link_libraries(prio PUBLIC
   logmich::logmich
   fmt::fmt)
 
-if(USE_SEXPCPP)
+if(PRIO_USE_SEXPCPP)
   target_link_libraries(prio PUBLIC sexp::sexp)
-  target_compile_definitions(prio PUBLIC "-DUSE_SEXPCPP=1")
+  target_compile_definitions(prio PUBLIC "-DPRIO_USE_SEXPCPP=1")
 endif()
 
-if(USE_JSONCPP)
+if(PRIO_USE_JSONCPP)
   target_link_libraries(prio PUBLIC PkgConfig::JSONCPP)
-  target_compile_definitions(prio PUBLIC "-DUSE_JSONCPP=1")
+  target_compile_definitions(prio PUBLIC "-DPRIO_USE_JSONCPP=1")
 endif()
 
 if(BUILD_TESTS)
@@ -125,13 +125,13 @@ if(BUILD_TESTS)
     test/reader_document_test.cpp
     test/reader_mapping_test.cpp)
 
-  if(USE_JSONCPP)
+  if(PRIO_USE_JSONCPP)
     list(APPEND TEST_PRIO_SOURCES
       test/jsonpretty_writer_impl_test.cpp
       test/json_writer_impl_test.cpp)
   endif()
 
-  if(USE_SEXPCPP)
+  if(PRIO_USE_SEXPCPP)
     list(APPEND TEST_PRIO_SOURCES
       test/sexpr_writer_impl_test.cpp)
   endif()

@@ -24,12 +24,12 @@
 #include <sstream>
 #include <stdexcept>
 
-#ifdef USE_JSONCPP
+#ifdef PRIO_USE_JSONCPP
 #  include "json_writer_impl.hpp"
 #  include "jsonpretty_writer_impl.hpp"
 #endif
 
-#ifdef USE_SEXPCPP
+#ifdef PRIO_USE_SEXPCPP
 #  include "sexpr_writer_impl.hpp"
 #endif
 
@@ -60,8 +60,8 @@ Writer
 Writer::from_stream(Format format, std::ostream& out)
 {
   switch (format) {
-#ifdef USE_JSONCPP
-#ifndef USE_SEXPCPP
+#ifdef PRIO_USE_JSONCPP
+#ifndef PRIO_USE_SEXPCPP
     case Format::AUTO:
 #endif
     case Format::FASTJSON:
@@ -71,7 +71,7 @@ Writer::from_stream(Format format, std::ostream& out)
       return Writer(std::make_unique<JsonPrettyWriterImpl>(out));
 #endif
 
-#ifdef USE_SEXPCPP
+#ifdef PRIO_USE_SEXPCPP
     case Format::AUTO:
     case Format::SEXPR:
       return Writer(std::make_unique<SExprWriterImpl>(out));
@@ -100,13 +100,13 @@ Writer::from_stream(std::unique_ptr<std::ostream> out)
   return from_stream(Format::AUTO, std::move(out));
 }
 
-#ifdef USE_SEXPCPP
+#ifdef PRIO_USE_SEXPCPP
 Writer::Writer(std::ostream& out) :
   m_impl(std::make_unique<SExprWriterImpl>(out)),
   m_owned()
 {
 }
-#elif USE_JSONCPP
+#elif PRIO_USE_JSONCPP
 Writer::Writer(std::ostream& out) :
   m_impl(std::make_unique<JsonPrettyWriterImpl>(out)),
   m_owned()
