@@ -7,11 +7,11 @@ find_dependency(PkgConfig)
 
 find_dependency(logmich)
 
-if(PRIO_USE_JSONCPP)
+if(@PRIO_USE_JSONCPP@)
   pkg_search_module(JSONCPP REQUIRED jsoncpp IMPORTED_TARGET)
 endif()
 
-if(PRIO_USE_SEXPCPP)
+if(@PRIO_USE_SEXPCPP@)
   find_dependency(sexp)
 endif()
 
