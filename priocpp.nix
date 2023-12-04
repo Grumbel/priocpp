@@ -1,12 +1,11 @@
-{ self
-, stdenv
+{ stdenv
 , lib
 
 , cmake
 , fmt_8
 , gtest
 , jsoncpp
-, pkgconfig
+, pkg-config
 
 , logmich
 , sexpcpp
@@ -43,7 +42,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   propagatedBuildInputs = [
