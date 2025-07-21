@@ -2,7 +2,7 @@
 , lib
 
 , cmake
-, fmt_8
+, fmt
 , gtest
 , jsoncpp
 , pkg-config
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/issues/38451
     mkdir -p $out/bin/
 
-    ln -sfv ${fmt_8}/bin/*.dll $out/bin/
+    ln -sfv ${fmt}/bin/*.dll $out/bin/
   ''
   + (lib.optionalString withJsoncpp
     ''ln -sfv ${jsoncpp}/bin/*.dll $out/bin/''));
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   ];
 
   propagatedBuildInputs = [
-    fmt_8
+    fmt
     gtest
 
     logmich
