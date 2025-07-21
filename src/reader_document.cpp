@@ -56,7 +56,7 @@ ReaderDocument::from_file(Format format,
 {
   std::ifstream fin(filename);
   if (!fin) {
-    throw ReaderError(fmt::format("{}: failed to open: {}", filename, strerror(errno)));
+    throw ReaderError(fmt::format("{}: failed to open: {}", fmt::streamed(filename), strerror(errno)));
   } else {
     return from_stream(format, fin, error_handler, filename.string());
   }

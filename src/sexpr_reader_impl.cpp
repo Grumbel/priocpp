@@ -58,10 +58,10 @@ SExprReaderDocumentImpl::error(ErrorHandler error_handler, sexp::Value const& sx
 {
   switch (error_handler) {
     case ErrorHandler::THROW:
-      throw ReaderError(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message));
+      throw ReaderError(fmt::format("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), fmt::streamed(sx), message));
 
     case ErrorHandler::LOG:
-      log_error("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), sx, message);
+      log_error("{}:{}: {}: {}", m_filename ? *m_filename : "<unknown>", sx.get_line(), fmt::streamed(sx), message);
       break;
 
     case ErrorHandler::IGNORE:

@@ -50,10 +50,10 @@ JsonReaderDocumentImpl::error(ErrorHandler error_handler, Json::Value const& jso
 {
   switch (error_handler) {
     case ErrorHandler::THROW:
-      throw ReaderError(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message));
+      throw ReaderError(fmt::format("{}: {}: {}", m_filename ? *m_filename : "<unknown>", fmt::streamed(json), message));
 
     case ErrorHandler::LOG:
-      log_error("{}: {}: {}", m_filename ? *m_filename : "<unknown>", json, message);
+      log_error("{}: {}: {}", m_filename ? *m_filename : "<unknown>", fmt::streamed(json), message);
       break;
 
     case ErrorHandler::IGNORE:
