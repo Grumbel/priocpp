@@ -5,15 +5,15 @@
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
-    tinycmmc.url = "github:grumbel/tinycmmc";
+    tinycmmc.url = "git+https://github.com/grumbel/tinycmmc.git";
     tinycmmc.inputs.nixpkgs.follows = "nixpkgs";
     tinycmmc.inputs.flake-utils.follows = "flake-utils";
 
-    logmich.url = "github:logmich/logmich";
+    logmich.url = "git+https://github.com/logmich/logmich.git";
     logmich.inputs.nixpkgs.follows = "nixpkgs";
     logmich.inputs.tinycmmc.follows = "tinycmmc";
 
-    sexpcpp.url = "github:lispparser/sexp-cpp";
+    sexpcpp.url = "git+https://github.com/lispparser/sexp-cpp.git";
     sexpcpp.inputs.nixpkgs.follows = "nixpkgs";
     sexpcpp.inputs.flake-utils.follows = "flake-utils";
     sexpcpp.inputs.tinycmmc.follows = "tinycmmc";
