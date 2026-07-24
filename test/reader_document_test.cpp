@@ -18,6 +18,8 @@
 
 #include <prio/reader_document.hpp>
 #include <prio/reader_error.hpp>
+#include <prio/reader_mapping.hpp>
+#include <prio/reader_object.hpp>
 
 using namespace prio;
 
@@ -67,5 +69,33 @@ TEST_P(ReaderDocumentTest, get_root)
 
 INSTANTIATE_TEST_CASE_P(ParamReaderDocumentTest, ReaderDocumentTest,
                         ::testing::Values(".sexp", ".json"));
+
+#ifdef PRIO_USE_SEXPCPP
+TEST(ReaderDocumentTest, parse_many)
+{
+  std::vector<ReaderDocument> documents = ReaderDocument::parse_many("test/data/data-many.sexp");
+  ASSERT_EQ(documents.size(), 3);
+
+  for (size_t i = 0; i < documents.size(); ++i) {
+    EXPECT_EQ(documents[i].get_root().get_name(), "test-document");
+
+    int intvalue = 0;
+    ASSERT_TRUE(documents[i].get_root().get_mapping().read("intvalue", intvalue));
+    EXPECT_EQ(intvalue, static_cast<int>(i) + 1);
+  }
+}
+
+TEST(ReaderDocumentTest, parse_many__single)
+{
+  std::vector<ReaderDocument> documents = ReaderDocument::parse_many("test/data/data.sexp");
+  ASSERT_EQ(documents.size(), 1);
+  EXPECT_EQ(documents[0].get_root().get_name(), "test-document");
+}
+
+TEST(ReaderDocumentTest, parse_many__fail)
+{
+  EXPECT_THROW(ReaderDocument::parse_many("does-not-exist"), ReaderError);
+}
+#endif
 
 /* EOF */
