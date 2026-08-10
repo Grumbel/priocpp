@@ -9,7 +9,6 @@
 
 , logmich
 , sexpcpp
-, tinycmmc
 
 , withSexpcpp ? true
 , withJsoncpp ? true
@@ -34,16 +33,17 @@ stdenv.mkDerivation {
   ++ [(if withJsoncpp then "-DPRIO_USE_JSONCPP=ON" else "-DPRIO_USE_JSONCPP=OFF")]
   ++ [(if withSexpcpp then "-DPRIO_USE_SEXPCPP=ON" else "-DPRIO_USE_SEXPCPP=OFF")];
 
-  postFixup = ""
-  + (lib.optionalString stdenv.hostPlatform.isWindows ''
-    # This is rather ugly, but functional. Nix has a 'win-dll-link.sh'
-    # for this, but that's currently broken:
-    # https://github.com/NixOS/nixpkgs/issues/38451
-    mkdir -p $out/bin/
-
-  ''
-  + (lib.optionalString withJsoncpp
-    ''ln -sfv ${jsoncpp}/bin/*.dll $out/bin/''));
+  postFixup = lib.optionalString stdenv.hostPlatform.isWindows (
+    ''
+      # This is rather ugly, but functional. Nix has a 'win-dll-link.sh'
+      # for this, but that's currently broken:
+      # https://github.com/NixOS/nixpkgs/issues/38451
+      mkdir -p $out/bin/
+    ''
+    + lib.optionalString withJsoncpp ''
+      ln -sfv ${jsoncpp}/bin/*.dll $out/bin/
+    ''
+  );
 
   nativeBuildInputs = [
     cmake
@@ -52,10 +52,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     gtest
-
     logmich
-    tinycmmc
   ]
-  ++ (lib.optional withJsoncpp jsoncpp)
-  ++ (lib.optional withSexpcpp sexpcpp);
+  ++ lib.optional withJsoncpp jsoncpp
+  ++ lib.optional withSexpcpp sexpcpp;
 }
