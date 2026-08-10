@@ -18,6 +18,8 @@
 #include <fmt/format.h>
 
 #include <prio/prio.hpp>
+#include <utility>
+#include <cstring>
 
 using namespace prio;
 
