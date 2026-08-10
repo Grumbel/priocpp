@@ -1,4 +1,5 @@
-{ stdenv
+{ self
+, stdenv
 , lib
 
 , cmake
@@ -14,15 +15,21 @@
 , withJsoncpp ? true
 }:
 
+let
+  versionBase = lib.strings.removeSuffix "\n" (builtins.readFile ./VERSION);
+  gitRev = "${self.shortRev or self.dirtyShortRev or "dirty"}";
+  version = "${versionBase}+g${gitRev}";
+in
 stdenv.mkDerivation {
   pname = "priocpp";
-  version = "0.0.0";
+  inherit version;
 
   src = lib.cleanSource ./.;
 
   cmakeFlags = [
     "-DBUILD_EXTRA=ON"
     "-DBUILD_TESTS=ON"
+    "-DPROJECT_VERSION_FULL=${version}"
   ]
   ++ [(if withJsoncpp then "-DPRIO_USE_JSONCPP=ON" else "-DPRIO_USE_JSONCPP=OFF")]
   ++ [(if withSexpcpp then "-DPRIO_USE_SEXPCPP=ON" else "-DPRIO_USE_SEXPCPP=OFF")];

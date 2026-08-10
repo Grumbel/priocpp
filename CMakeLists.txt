@@ -17,6 +17,12 @@
 cmake_minimum_required(VERSION 3.10)
 project(prio)
 
+# Source of truth: top-level VERSION file (e.g. "0.1.0-dev"), or
+# -DPROJECT_VERSION_FULL=... from the packaging (Nix flake appends +g<rev>).
+if(NOT DEFINED PROJECT_VERSION_FULL)
+  file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" PROJECT_VERSION_FULL LIMIT_COUNT 1)
+endif()
+
 include(mk/cmake/TinyCMMC.cmake)
 
 option(PRIO_USE_JSONCPP "Enable support for jsoncpp" ON)
@@ -113,6 +119,8 @@ if(PRIO_USE_JSONCPP)
   target_link_libraries(prio PUBLIC PkgConfig::JSONCPP)
   target_compile_definitions(prio PUBLIC "-DPRIO_USE_JSONCPP=1")
 endif()
+
+target_compile_definitions(prio PUBLIC "-DPRIO_VERSION=\"${PROJECT_VERSION_FULL}\"")
 
 if(BUILD_TESTS)
   if(NOT TARGET GTest)

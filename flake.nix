@@ -26,12 +26,14 @@
           default = priocpp;
 
           priocpp = pkgs.callPackage ./priocpp.nix {
+            inherit self;
             logmich = logmich.packages.${pkgs.stdenv.hostPlatform.system}.default;
             tinycmmc = tinycmmc.packages.${pkgs.stdenv.hostPlatform.system}.default;
             sexpcpp = sexpcpp.packages.${pkgs.stdenv.hostPlatform.system}.default;
           };
 
           priocpp-sexp = pkgs.callPackage ./priocpp.nix {
+            inherit self;
             logmich = logmich.packages.${pkgs.stdenv.hostPlatform.system}.default;
             tinycmmc = tinycmmc.packages.${pkgs.stdenv.hostPlatform.system}.default;
             sexpcpp = sexpcpp.packages.${pkgs.stdenv.hostPlatform.system}.default;
@@ -41,6 +43,7 @@
           };
 
           priocpp-json = pkgs.callPackage ./priocpp.nix {
+            inherit self;
             logmich = logmich.packages.${pkgs.stdenv.hostPlatform.system}.default;
             tinycmmc = tinycmmc.packages.${pkgs.stdenv.hostPlatform.system}.default;
             sexpcpp = null;
