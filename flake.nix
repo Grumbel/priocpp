@@ -18,31 +18,48 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+
+        logmichPkg = logmich.packages.${system}.default;
+        sexpcppPkg = sexpcpp.packages.${system}.default;
+
+        mkPriocpp = args: pkgs.callPackage ./priocpp.nix ({
+          inherit self;
+          logmich = logmichPkg;
+          sexpcpp = sexpcppPkg;
+        } // args);
       in
       {
         packages = rec {
           default = priocpp;
 
-          priocpp = pkgs.callPackage ./priocpp.nix {
-            inherit self;
-            logmich = logmich.packages.${system}.default;
-            sexpcpp = sexpcpp.packages.${system}.default;
-          };
+          # Default: both backends, tests + extras
+          priocpp = mkPriocpp { };
 
-          priocpp-sexp = pkgs.callPackage ./priocpp.nix {
-            inherit self;
-            logmich = logmich.packages.${system}.default;
-            sexpcpp = sexpcpp.packages.${system}.default;
+          # Feature variants (still with tests)
+          priocpp-sexp = mkPriocpp {
             withJsoncpp = false;
             withSexpcpp = true;
           };
 
-          priocpp-json = pkgs.callPackage ./priocpp.nix {
-            inherit self;
-            logmich = logmich.packages.${system}.default;
-            sexpcpp = null;
+          priocpp-json = mkPriocpp {
             withJsoncpp = true;
             withSexpcpp = false;
+            sexpcpp = null;
+          };
+        };
+
+        checks = {
+          # Full default configuration (json + sexp), runs ctest
+          priocpp = self.packages.${system}.priocpp;
+
+          # Backend-only variants
+          priocpp-sexp = self.packages.${system}.priocpp-sexp;
+          priocpp-json = self.packages.${system}.priocpp-json;
+
+          # Strict build: maximum warnings treated as errors
+          priocpp-werror = mkPriocpp {
+            enableWarnings = true;
+            enableWerror = true;
           };
         };
       }

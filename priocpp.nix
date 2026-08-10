@@ -12,6 +12,10 @@
 
 , withSexpcpp ? true
 , withJsoncpp ? true
+, buildTests ? true
+, buildExtra ? true
+, enableWarnings ? false
+, enableWerror ? false
 }:
 
 let
@@ -26,12 +30,17 @@ stdenv.mkDerivation {
   src = lib.cleanSource ./.;
 
   cmakeFlags = [
-    "-DBUILD_EXTRA=ON"
-    "-DBUILD_TESTS=ON"
     "-DPROJECT_VERSION_FULL=${version}"
-  ]
-  ++ [(if withJsoncpp then "-DPRIO_USE_JSONCPP=ON" else "-DPRIO_USE_JSONCPP=OFF")]
-  ++ [(if withSexpcpp then "-DPRIO_USE_SEXPCPP=ON" else "-DPRIO_USE_SEXPCPP=OFF")];
+    (if buildExtra then "-DBUILD_EXTRA=ON" else "-DBUILD_EXTRA=OFF")
+    (if buildTests then "-DBUILD_TESTS=ON" else "-DBUILD_TESTS=OFF")
+    (if withJsoncpp then "-DPRIO_USE_JSONCPP=ON" else "-DPRIO_USE_JSONCPP=OFF")
+    (if withSexpcpp then "-DPRIO_USE_SEXPCPP=ON" else "-DPRIO_USE_SEXPCPP=OFF")
+    (if enableWarnings then "-DWARNINGS=ON" else "-DWARNINGS=OFF")
+    (if enableWerror then "-DWERROR=ON" else "-DWERROR=OFF")
+  ];
+
+  # Run ctest (test_prio + priotool smoke test when BUILD_EXTRA is on).
+  doCheck = buildTests;
 
   postFixup = lib.optionalString stdenv.hostPlatform.isWindows (
     ''
@@ -50,8 +59,10 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+  # gtest is only needed to build/run the test binary, not by consumers of the library.
+  buildInputs = lib.optionals buildTests [ gtest ];
+
   propagatedBuildInputs = [
-    gtest
     logmich
   ]
   ++ lib.optional withJsoncpp jsoncpp
