@@ -274,7 +274,7 @@ if(BUILD_EXTRA)
   file(GLOB PRIO_EXTRA_SOURCES_CXX RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     extra/*.cpp)
   foreach(EXTRA_SOURCE ${PRIO_EXTRA_SOURCES_CXX})
-    string(REGEX REPLACE ".*/\\([^/]*\\).cpp" "\\1" EXTRA_EXE ${EXTRA_SOURCE})
+    get_filename_component(EXTRA_EXE ${EXTRA_SOURCE} NAME_WE)
     add_executable(${EXTRA_EXE} ${EXTRA_SOURCE})
     set_target_properties(${EXTRA_EXE} PROPERTIES
       CXX_STANDARD 20
