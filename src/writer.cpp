@@ -129,7 +129,7 @@ Writer::~Writer()
 }
 
 Writer&
-Writer::write_comment(std::string_view text)
+Writer::write_comment(std::string_view /*text*/)
 {
   return *this;
 }

@@ -322,7 +322,7 @@ SExprReaderMappingImpl::read(std::string_view key, ReaderMapping& value) const
 }
 
 void
-SExprReaderMappingImpl::error(std::string_view key, std::string_view message) const
+SExprReaderMappingImpl::error(std::string_view /*key*/, std::string_view message) const
 {
   m_doc.error(m_sx, message);
 }

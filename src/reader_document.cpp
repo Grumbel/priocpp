@@ -132,7 +132,7 @@ ReaderDocument::from_file(std::filesystem::path const& filename, ErrorHandler er
 }
 
 std::vector<ReaderDocument>
-ReaderDocument::parse_many(const std::string& pathname)
+ReaderDocument::parse_many(const std::string& /*pathname*/)
 {
 #if 0
   std::shared_ptr<lisp::Lisp> sexpr = lisp::Parser::parse(pathname.get_sys_path());
