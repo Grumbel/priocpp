@@ -22,7 +22,6 @@ include(mk/cmake/TinyCMMC.cmake)
 option(PRIO_USE_JSONCPP "Enable support for jsoncpp" ON)
 option(PRIO_USE_SEXPCPP "Enable support for sexp-cpp" ON)
 
-find_package(fmt REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 if(PRIO_USE_JSONCPP)
@@ -49,6 +48,7 @@ build_dependencies()
 set(PRIO_HEADERS
   include/prio/error_handler.hpp
   include/prio/format.hpp
+  include/prio/format_util.hpp
   include/prio/fwd.hpp
   include/prio/override_reader_mapping.hpp
   include/prio/prio.hpp
@@ -102,7 +102,7 @@ target_include_directories(prio PRIVATE src/ include/prio/)
 set_target_properties(prio PROPERTIES PUBLIC_HEADER "${PRIO_HEADERS}")
 target_link_libraries(prio PUBLIC
   logmich::logmich
-  fmt::fmt)
+)
 
 if(PRIO_USE_SEXPCPP)
   target_link_libraries(prio PUBLIC sexp::sexp)
