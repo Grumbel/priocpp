@@ -129,8 +129,10 @@ Writer::~Writer()
 }
 
 Writer&
-Writer::write_comment(std::string_view /*text*/)
+Writer::write_comment(std::string_view text)
 {
+  assert(m_impl);
+  m_impl->write_comment(text);
   return *this;
 }
 
