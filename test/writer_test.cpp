@@ -103,17 +103,17 @@ struct CustomType {};
 
 } // namespace
 
+#ifdef PRIO_USE_SEXPCPP
 namespace prio {
 
 template<>
-void write_custom(Writer& writer, std::string_view key, CustomType const& value)
+void write_custom(Writer& writer, std::string_view key, CustomType const& /* value */)
 {
   writer.write(key, "foobar");
 }
 
 } // namespace prio
 
-#ifdef PRIO_USE_SEXPCPP
 TEST(WriterTest, write_custom_sexp)
 {
   std::ostringstream out;
