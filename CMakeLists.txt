@@ -14,20 +14,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.15)
-project(prio)
+cmake_minimum_required(VERSION 3.15...4.1)
 
 # Source of truth: top-level VERSION file (e.g. "0.1.0-dev"), or
-# -DPROJECT_VERSION_FULL=... from the packaging (Nix flake appends +g<rev>).
+# -DPROJECT_VERSION_FULL=... from packaging (Nix may append .<revCount>+g<rev>).
 if(NOT DEFINED PROJECT_VERSION_FULL)
   file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" PROJECT_VERSION_FULL LIMIT_COUNT 1)
 endif()
 
-# PROJECT_VERSION is used by write_basic_package_version_file; keep it
-# free of the optional +g<rev> suffix that packaging may append.
-if(NOT DEFINED PROJECT_VERSION)
-  string(REGEX REPLACE "\\+g.*" "" PROJECT_VERSION "${PROJECT_VERSION_FULL}")
-endif()
+# CMake project() VERSION expects major[.minor[.patch[.tweak]]]; strip
+# any -dev / +git suffix for the numeric project version.
+string(REGEX MATCH "^[0-9]+(\\.[0-9]+)*" _project_version_cmake "${PROJECT_VERSION_FULL}")
+
+project(prio VERSION ${_project_version_cmake} LANGUAGES CXX)
 
 message(STATUS "Project Name: ${PROJECT_NAME}")
 message(STATUS "Project Version: ${PROJECT_VERSION}")
