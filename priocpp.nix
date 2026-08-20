@@ -25,9 +25,10 @@ let
   versionBase = lib.strings.removeSuffix "\n" (builtins.readFile ./VERSION);
   gitRev = "${self.shortRev or self.dirtyShortRev or "dirty"}";
   isDev = lib.strings.hasInfix "-dev" versionBase;
+  # revCount is not always present (shallow clones, some path flakes).
   version =
     if isDev then
-      "${versionBase}.${toString self.revCount}+g${gitRev}"
+      "${versionBase}.${toString (self.revCount or 0)}+g${gitRev}"
     else
       versionBase;
 in
