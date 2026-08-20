@@ -18,6 +18,8 @@
 
 #include <prio/reader_document.hpp>
 #include <prio/reader_error.hpp>
+#include <prio/reader_mapping.hpp>
+#include <prio/reader_object.hpp>
 
 using namespace prio;
 
@@ -78,5 +80,46 @@ INSTANTIATE_TEST_CASE_P(ParamReaderDocumentTest, ReaderDocumentTest,
 INSTANTIATE_TEST_CASE_P(ParamReaderDocumentTest, ReaderDocumentTest,
                         ::testing::Values(".json"));
 #endif
+
+
+#ifdef PRIO_USE_JSONCPP
+TEST(ReaderDocumentTest, parse_many_json_lines)
+{
+  auto docs = ReaderDocument::parse_many("test/data/many.jsonl");
+  ASSERT_EQ(docs.size(), 3u);
+  EXPECT_EQ(docs[0].get_root().get_name(), "doc-a");
+  EXPECT_EQ(docs[1].get_root().get_name(), "doc-b");
+  EXPECT_EQ(docs[2].get_root().get_name(), "doc-c");
+
+  int id = 0;
+  ASSERT_TRUE(docs[0].get_root().get_mapping().read("id", id));
+  EXPECT_EQ(id, 1);
+}
+
+TEST(ReaderDocumentTest, parse_many_json_compact)
+{
+  // Concatenated JSON values without newlines between them
+  auto docs = ReaderDocument::parse_many("test/data/many-compact.json");
+  ASSERT_EQ(docs.size(), 2u);
+  EXPECT_EQ(docs[0].get_root().get_name(), "doc-a");
+  EXPECT_EQ(docs[1].get_root().get_name(), "doc-b");
+}
+#endif
+
+#ifdef PRIO_USE_SEXPCPP
+TEST(ReaderDocumentTest, parse_many_sexp)
+{
+  auto docs = ReaderDocument::parse_many("test/data/many.sexp");
+  ASSERT_EQ(docs.size(), 3u);
+  EXPECT_EQ(docs[0].get_root().get_name(), "doc-a");
+  EXPECT_EQ(docs[1].get_root().get_name(), "doc-b");
+  EXPECT_EQ(docs[2].get_root().get_name(), "doc-c");
+}
+#endif
+
+TEST(ReaderDocumentTest, parse_many_missing_file)
+{
+  EXPECT_THROW(ReaderDocument::parse_many("does-not-exist"), ReaderError);
+}
 
 /* EOF */
