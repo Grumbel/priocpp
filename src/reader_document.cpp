@@ -23,7 +23,7 @@
 
 #include <logmich/log.hpp>
 
-#ifdef PRIO_USE_JSONCPP
+#if defined(PRIO_USE_JSONCPP) && PRIO_USE_JSONCPP
 #  include <json/reader.h>
 #  include "json_reader_impl.hpp"
 #endif
@@ -82,7 +82,7 @@ ReaderDocument::from_stream(Format format,
       }
     }
 
-#ifdef PRIO_USE_JSONCPP
+#if defined(PRIO_USE_JSONCPP) && PRIO_USE_JSONCPP
     case Format::FASTJSON:
     case Format::JSON: {
       Json::CharReaderBuilder builder;
@@ -225,10 +225,21 @@ ReaderDocument::get_directory() const
   if (!m_impl) { return {}; }
 
   if (!m_impl->get_filename()) {
-    return std::filesystem::path("/").string();
-  } else {
-    return std::filesystem::path(*m_impl->get_filename()).parent_path().string();
+    return "/";
   }
+
+  // Pure string dirname — do not use std::filesystem::path::parent_path().
+  // On R36S (GCC 15 headers + _GLIBCXX_USE_CXX11_ABI=0 + ArkOS libstdc++),
+  // path::parent_path can fail to strip the filename, producing broken joins
+  // like "images/engine/menu/mousecursor.sprite/mousecursor.png".
+  // get_filename() returns optional by value — copy, do not bind a reference
+  // to the temporary (dangling → segfault in tests / R36S).
+  std::string const filename = *m_impl->get_filename();
+  auto p = filename.find_last_of("/\\");
+  if (p == std::string::npos) {
+    return ".";
+  }
+  return filename.substr(0, p);
 }
 
 } // namespace prio
