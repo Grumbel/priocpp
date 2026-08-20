@@ -91,11 +91,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787239164,
-        "narHash": "sha256-sy6F9xqJsNizYT1gZ8Tdj+w7nz65efM16wDzCZCZu+Y=",
+        "lastModified": 1787244669,
+        "narHash": "sha256-BFM01H34HeJsShBaTLcLXuJZaqsvIMXPtytYuFkv8ng=",
         "ref": "refs/heads/master",
-        "rev": "0b526d7655cca0f72a641ea16761698be768c53c",
-        "revCount": 343,
+        "rev": "556b73606cadd1667ab63bf18585d8f90483afc9",
+        "revCount": 346,
         "type": "git",
         "url": "https://github.com/lispparser/sexp-cpp.git"
       },
