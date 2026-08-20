@@ -40,11 +40,14 @@ TEST_P(ReaderDocumentTest, from_file__fail)
 
 TEST(ReaderDocumentTest, from_file__format)
 {
+#ifdef PRIO_USE_JSONCPP
   EXPECT_THROW(ReaderDocument::from_file(Format::JSON, "test/data/data.sexp"), ReaderError);
-  EXPECT_THROW(ReaderDocument::from_file(Format::SEXPR, "test/data/data.json"), ReaderError);
-
-  EXPECT_NO_THROW(ReaderDocument::from_file(Format::SEXPR, "test/data/data.sexp"));
   EXPECT_NO_THROW(ReaderDocument::from_file(Format::JSON, "test/data/data.json"));
+#endif
+#ifdef PRIO_USE_SEXPCPP
+  EXPECT_THROW(ReaderDocument::from_file(Format::SEXPR, "test/data/data.json"), ReaderError);
+  EXPECT_NO_THROW(ReaderDocument::from_file(Format::SEXPR, "test/data/data.sexp"));
+#endif
 }
 
 TEST_P(ReaderDocumentTest, get_filename)
@@ -65,7 +68,15 @@ TEST_P(ReaderDocumentTest, get_root)
   EXPECT_EQ(doc.get_root().get_name(), "test-document");
 }
 
+#if defined(PRIO_USE_SEXPCPP) && defined(PRIO_USE_JSONCPP)
 INSTANTIATE_TEST_CASE_P(ParamReaderDocumentTest, ReaderDocumentTest,
                         ::testing::Values(".sexp", ".json"));
+#elif defined(PRIO_USE_SEXPCPP)
+INSTANTIATE_TEST_CASE_P(ParamReaderDocumentTest, ReaderDocumentTest,
+                        ::testing::Values(".sexp"));
+#elif defined(PRIO_USE_JSONCPP)
+INSTANTIATE_TEST_CASE_P(ParamReaderDocumentTest, ReaderDocumentTest,
+                        ::testing::Values(".json"));
+#endif
 
 /* EOF */

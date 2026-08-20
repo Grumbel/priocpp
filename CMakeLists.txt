@@ -47,6 +47,10 @@ option(PRIO_USE_SEXPCPP "Enable support for sexp-cpp" ON)
 option(WARNINGS "Enable extra compiler warnings" OFF)
 option(WERROR "Treat warnings as errors" OFF)
 
+if(NOT PRIO_USE_JSONCPP AND NOT PRIO_USE_SEXPCPP)
+  message(FATAL_ERROR "At least one of PRIO_USE_JSONCPP or PRIO_USE_SEXPCPP must be ON")
+endif()
+
 # --- compiler warnings (inlined from former tinycmmc MaximumWarnings) ---
 set(WARNINGS_CXX_FLAGS "")
 if(WERROR)
@@ -224,12 +228,12 @@ target_compile_definitions(prio PUBLIC "-DPRIO_VERSION=\"${PROJECT_VERSION_FULL}
 
 if(PRIO_USE_SEXPCPP)
   target_link_libraries(prio PUBLIC sexp::sexp)
-  target_compile_definitions(prio PUBLIC "-DPRIO_USE_SEXPCPP=1")
+  target_compile_definitions(prio PUBLIC PRIO_USE_SEXPCPP)
 endif()
 
 if(PRIO_USE_JSONCPP)
   target_link_libraries(prio PUBLIC PkgConfig::JSONCPP)
-  target_compile_definitions(prio PUBLIC "-DPRIO_USE_JSONCPP=1")
+  target_compile_definitions(prio PUBLIC PRIO_USE_JSONCPP)
 endif()
 
 if(BUILD_TESTS)
