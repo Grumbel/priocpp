@@ -292,9 +292,16 @@ if(BUILD_EXTRA)
   endforeach()
 
   if(BUILD_TESTS)
-    add_test(NAME priotool
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      COMMAND ${CMAKE_CURRENT_BINARY_DIR}/extra/priotool test/data/data.sexp)
+    # Round-trip smoke test: prefer sexpr input when available, else json.
+    if(PRIO_USE_SEXPCPP)
+      add_test(NAME priotool
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/extra/priotool --sexp test/data/data.sexp)
+    elseif(PRIO_USE_JSONCPP)
+      add_test(NAME priotool
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/extra/priotool --json test/data/data.json)
+    endif()
   endif()
 endif()
 
