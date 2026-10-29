@@ -157,6 +157,7 @@ set(PRIO_HEADERS
   include/prio/writer.hpp)
 
 set(PRIO_SOURCES
+  src/float_format.cpp
   src/override_reader_mapping.cpp
   src/reader_collection.cpp
   src/reader_document.cpp
@@ -218,6 +219,7 @@ if(BUILD_TESTS)
   find_package(GTest REQUIRED)
 
   set(TEST_PRIO_SOURCES
+    test/float_format_test.cpp
     test/reader_test.cpp
     test/writer_test.cpp
     test/reader_document_test.cpp
